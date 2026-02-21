@@ -119,7 +119,7 @@ function App() {
     setCurrentTime(cur);
 
     // Ensure we have a valid duration to calculate sync
-    if (dur && dur > 0 && dur !== Infinity) {
+    if (dur && dur > 0 && isFinite(dur)) {
       if (duration !== dur) setDuration(dur);
 
       if (currentMode === 'chalisa') {
@@ -138,7 +138,10 @@ function App() {
   };
 
   const handleLoadedMetadata = () => {
-    if (audioRef.current) setDuration(audioRef.current.duration);
+    const audio = audioRef.current;
+    if (audio && audio.duration && isFinite(audio.duration)) {
+      setDuration(audio.duration);
+    }
   };
 
   const handleSeek = (e) => {
@@ -233,6 +236,17 @@ function App() {
   };
 
 
+  // Reset playback when song changes
+  useEffect(() => {
+    setCurrentTime(0);
+    setDuration(0);
+    setCurrentRepeat(0);
+    setIsPlaying(false);
+    if (audioRef.current) {
+      audioRef.current.currentTime = 0;
+      audioRef.current.pause();
+    }
+  }, [currentMode, activeItemIndex]);
 
   const startReading = (mode) => {
     triggerHaptic(ImpactStyle.Light);
@@ -277,7 +291,10 @@ function App() {
         onEnded={() => {
           if (currentRepeat + 1 < repeatCount) {
             setCurrentRepeat(prev => prev + 1);
-            audioRef.current.play();
+            if (audioRef.current) {
+              audioRef.current.currentTime = 0;
+              audioRef.current.play().catch(() => { });
+            }
           } else {
             setIsPlaying(false);
             setCurrentRepeat(0);
