@@ -105,18 +105,7 @@ function App() {
     }
   };
 
-  const shareQuote = () => {
-    const text = `✨ *Daily Thought from SODEV POOJA* ✨\n\n"${dailyQuote[language] || dailyQuote.gujarati}"\n\n🙏 Read more sacred prayers at: ${window.location.href}`;
-    if (navigator.share) {
-      navigator.share({
-        title: 'Daily Thought',
-        text: text
-      }).catch(console.error);
-    } else {
-      const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
-      window.open(whatsappUrl, '_blank');
-    }
-  };
+
 
 
   // Update Progress
@@ -299,13 +288,8 @@ function App() {
           {!isLyricsVisible && !isFocusMode && (dailyQuote.gujarati || dailyQuote.hindi) && (
             <div className="daily-quote-card glass-panel">
               <div className="quote-header">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}>
-                  <span className="quote-icon">❝</span>
-                  <span className="quote-label">{language === 'gujarati' ? 'આજનો વિચાર' : 'आज का विचार'}</span>
-                </div>
-                <button className="quote-share-btn" onClick={shareQuote} title="Share to WhatsApp">
-                  📤
-                </button>
+                <span className="quote-icon">❝</span>
+                <span className="quote-label">{language === 'gujarati' ? 'આજનો વિચાર' : 'आज का विचार'}</span>
               </div>
               <div className="quote-content">
                 <div className="main-quote">
