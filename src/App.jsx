@@ -108,39 +108,40 @@ function App() {
 
 
 
-  // Update Progress
-  const handleTimeUpdate = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
+  // High-Speed Smooth Sync
+  useEffect(() => {
+    let rafId;
 
-    const cur = audio.currentTime;
-    const dur = audio.duration;
+    const updateSmoothProgress = () => {
+      if (audioRef.current && isPlaying) {
+        const cur = audioRef.current.currentTime;
+        const dur = audioRef.current.duration;
 
-    // Snap to end visually if very close
-    if (dur - cur < 0.2) {
-      setCurrentTime(dur);
-    } else {
-      setCurrentTime(cur);
-    }
+        setCurrentTime(cur);
 
-    // Ensure we have a valid duration to calculate sync
-    if (dur && dur > 0 && isFinite(dur)) {
-      if (duration !== dur) setDuration(dur);
+        if (dur && isFinite(dur) && dur > 0) {
+          if (duration !== dur) setDuration(dur);
 
-      if (currentMode === 'chalisa') {
-        const verseCount = chalisaData.lyrics.length;
-        // Calculation: (current_time / total_duration) * number_of_verses
-        const index = Math.floor((cur / dur) * verseCount);
-
-        // Bounds check
-        const safeIndex = Math.min(index, verseCount - 1);
-
-        if (safeIndex !== activeVerse) {
-          setActiveVerse(safeIndex);
+          // Lyrics Sync
+          if (currentMode === 'chalisa') {
+            const verseCount = chalisaData.lyrics.length;
+            const index = Math.floor((cur / dur) * verseCount);
+            const safeIndex = Math.min(index, verseCount - 1);
+            if (safeIndex !== activeVerse) setActiveVerse(safeIndex);
+          }
         }
+        rafId = requestAnimationFrame(updateSmoothProgress);
       }
+    };
+
+    if (isPlaying) {
+      rafId = requestAnimationFrame(updateSmoothProgress);
+    } else {
+      cancelAnimationFrame(rafId);
     }
-  };
+
+    return () => cancelAnimationFrame(rafId);
+  }, [isPlaying, currentMode, duration, activeVerse]);
 
   const handleLoadedMetadata = () => {
     const audio = audioRef.current;
@@ -291,7 +292,7 @@ function App() {
                 currentMode === 'aartis' ? (aartis[activeItemIndex]?.audio || "/assets/audio/aarti.mp3") :
                   (stutis[activeItemIndex]?.audio || "/assets/audio/stuti.mp3")
         }
-        onTimeUpdate={handleTimeUpdate}
+        onTimeUpdate={null} // Using RAF for smoother sync
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={() => {
           if (currentRepeat + 1 < repeatCount) {
