@@ -232,12 +232,7 @@ function App() {
       {/* Diya (Lamp) */}
       <div className={`diya-container ${isDiyaLit ? 'lit' : ''}`}>
         <div className="diya-glow"></div>
-        <div className="diya-base">
-          <img src="/assets/images/diya-base.png" alt="Diya" className="diya-img" />
-          <div className="diya-flame">
-            <img src="/assets/images/diya-flame.png" alt="Flame" />
-          </div>
-        </div>
+        <div className="diya-base">🪔</div>
       </div>
       {/* Ambient Particles */}
       <div className="particles-container">
