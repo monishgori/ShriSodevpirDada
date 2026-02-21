@@ -132,7 +132,6 @@ function App() {
 
         if (safeIndex !== activeVerse) {
           setActiveVerse(safeIndex);
-          console.log("Verse Synced to:", safeIndex);
         }
       }
     }
@@ -153,6 +152,36 @@ function App() {
     const sec = Math.floor(time % 60);
     return `${min}:${sec < 10 ? '0' : ''}${sec}`;
   };
+
+  // Digital Darshan: Auto-hide UI during playback
+  useEffect(() => {
+    let hideTimer;
+    const resetTimer = () => {
+      setIsUIHidden(false);
+      if (hideTimer) clearTimeout(hideTimer);
+      if (isPlaying && !isLyricsVisible && !isLibraryOpen) {
+        hideTimer = setTimeout(() => setIsUIHidden(true), 10000);
+      }
+    };
+
+    if (isPlaying) {
+      window.addEventListener('mousemove', resetTimer);
+      window.addEventListener('touchstart', resetTimer);
+      window.addEventListener('click', resetTimer);
+      window.addEventListener('keydown', resetTimer);
+      resetTimer();
+    } else {
+      setIsUIHidden(false);
+    }
+
+    return () => {
+      window.removeEventListener('mousemove', resetTimer);
+      window.removeEventListener('touchstart', resetTimer);
+      window.removeEventListener('click', resetTimer);
+      window.removeEventListener('keydown', resetTimer);
+      if (hideTimer) clearTimeout(hideTimer);
+    };
+  }, [isPlaying, isLyricsVisible, isLibraryOpen]);
 
   // Auto-scroll logic: When activeVerse changes, scroll the lyrics container
   useEffect(() => {
@@ -185,7 +214,7 @@ function App() {
     setIsBellRinging(true);
     if (bellAudioRef.current) {
       bellAudioRef.current.currentTime = 0;
-      bellAudioRef.current.play().catch(e => console.log("Audio not loaded yet"));
+      bellAudioRef.current.play().catch(() => { });
     }
     setTimeout(() => setIsBellRinging(false), 500);
   };
@@ -194,7 +223,7 @@ function App() {
     triggerHaptic(ImpactStyle.Heavy);
     if (shankhAudioRef.current) {
       shankhAudioRef.current.currentTime = 0;
-      shankhAudioRef.current.play().catch(e => console.log("Audio not loaded yet"));
+      shankhAudioRef.current.play().catch(() => { });
     }
   };
 

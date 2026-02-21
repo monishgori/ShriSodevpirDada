@@ -57,7 +57,7 @@ body {
   align-items: center;
   justify-content: space-between;
   overflow: hidden;
-  transition: background 1s ease;
+  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .background-slider {
@@ -276,10 +276,19 @@ body {
 
 .ui-dimmed .glass-panel,
 .ui-dimmed .top-bar,
+.ui-dimmed .daily-quote-card,
 .ui-dimmed .bottom-dashboard-container {
-  opacity: 0.05;
+  opacity: 0;
   pointer-events: none;
-  transform: translateY(10px);
+  transform: translateY(20px) scale(0.98);
+  transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-panel,
+.top-bar,
+.daily-quote-card,
+.bottom-dashboard-container {
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Daily Quote Card */
