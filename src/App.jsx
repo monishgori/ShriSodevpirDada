@@ -160,7 +160,7 @@ function App() {
       setIsUIHidden(false);
       if (hideTimer) clearTimeout(hideTimer);
       if (isPlaying && !isLyricsVisible && !isLibraryOpen) {
-        hideTimer = setTimeout(() => setIsUIHidden(true), 10000);
+        hideTimer = setTimeout(() => setIsUIHidden(true), 6000);
       }
     };
 
@@ -232,9 +232,7 @@ function App() {
     setIsDiyaLit(!isDiyaLit);
   };
 
-  useEffect(() => {
-    setIsUIHidden(false); // UI always visible as per user request
-  }, [isLyricsVisible, isPlaying]);
+
 
   const startReading = (mode) => {
     triggerHaptic(ImpactStyle.Light);
