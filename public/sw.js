@@ -1,6 +1,6 @@
 // Premium Service Worker for Offline Devotional Experience
-const CACHE_NAME = 'pooja-v2'; // Bump version
-const ASSET_CACHE = 'pooja-assets-v2';
+const CACHE_NAME = 'pooja-v3'; // Bump version
+const ASSET_CACHE = 'pooja-assets-v3';
 
 // Assets to pre-cache for immediate offline use
 const PRECACHE_URLS = [
@@ -38,8 +38,8 @@ self.addEventListener('fetch', (event) => {
     const url = new URL(request.url);
 
     // Skip non-GET requests and Vite-internal development paths
-    if (request.method !== 'GET' || 
-        url.pathname.includes('/@vite/') || 
+    if (request.method !== 'GET' ||
+        url.pathname.includes('/@vite/') ||
         url.pathname.includes('/node_modules/') ||
         url.pathname.includes('/@id/') ||
         url.pathname.includes('react-refresh')) {
