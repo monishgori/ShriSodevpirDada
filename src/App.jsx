@@ -297,9 +297,9 @@ function App() {
       currentMode === 'chalisa' ? "/assets/audio/chalisa.mp3" :
         currentMode === 'mantras' ? (mantras[activeItemIndex]?.audio || "/assets/audio/mantra.mp3") :
           currentMode === 'bhajans' ? (bhajans[activeItemIndex]?.audio || "/assets/audio/bhajan.mp3") :
-            currentMode === 'aartis' ? (aartis[activeItemIndex]?.audio || "/assets/audio/aarti.mp3") :
+            currentMode === 'aartis' ? (aartis[activeItemIndex]?.audio || "/assets/audio/chalisa.mp3") :
               currentMode === 'videos' ? "" :
-                (stutis[activeItemIndex]?.audio || "/assets/audio/Stuti.mp3");
+                (stutis[activeItemIndex]?.audio || "/assets/audio/stuti.mp3");
 
     // Standardize URL to absolute for iOS compatibility with Cache Buster
     const currentAudioSrc = rawAudioSrc ?
