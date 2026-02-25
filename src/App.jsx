@@ -260,7 +260,7 @@ function App() {
   return (
     <div className={`app-container ${isLyricsVisible ? 'view-mode' : 'home-mode'}`}>
       {/* Diya (Lamp) */}
-      <div className={`diya-container ${isDiyaLit ? 'lit' : ''}`}>
+      <div className={`diya-container ${isDiyaLit ? 'lit' : ''} ${isLyricsVisible ? 'hidden-ritual' : ''}`}>
         <div className="diya-glow"></div>
         <div className="diya-base">🪔</div>
       </div>

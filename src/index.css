@@ -914,6 +914,10 @@ body {
   transition: opacity 0.8s ease;
 }
 
+.diya-container.hidden-ritual {
+  display: none !important;
+}
+
 .diya-container.lit {
   opacity: 1;
   animation: aarti-motion 6s linear infinite;
@@ -1188,6 +1192,7 @@ body {
     gap: 10px;
   }
 }
+
 .tab-switcher button {
   transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
   opacity: 0.6;
@@ -1199,6 +1204,7 @@ body {
   border: 1px solid var(--secondary) !important;
 }
 
-.life-story .verse, .incident-content .verse {
+.life-story .verse,
+.incident-content .verse {
   animation: fadeIn 0.5s ease-out forwards;
 }
