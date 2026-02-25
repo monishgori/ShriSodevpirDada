@@ -1,18 +1,130 @@
 export const videos = [
   {
     id: 1,
-    title: "Sodevpir Dada Darshan",
-    gujarati: "સોદેવપીર દાદા દર્શન",
-    hindi: "सोदेवपीर दादा दर्शन",
-    youtubeId: "dQw4w9WgXcQ", // Placeholder
-    thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg"
+    title: "Shree Sodevpeer Dada Bhajan Santwani 2025",
+    gujarati: "શ્રી સોદેવપીર દાદા ભજન સંતવાણી ૨૦૨૫",
+    hindi: "श्री सोदेवपीर दादा भजन संतवाणी २०२५",
+    youtubeId: "GOW7QiWAk2M",
+    thumbnail: "https://img.youtube.com/vi/GOW7QiWAk2M/mqdefault.jpg"
   },
   {
     id: 2,
-    title: "Dada Ni Aarti",
-    gujarati: "દાદા ની આરતી",
-    hindi: "દાદા કી આરતી",
-    youtubeId: "dQw4w9WgXcQ", // Placeholder
-    thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg"
+    title: "Shree Sodevpeer Dada Santwani 03",
+    gujarati: "શ્રી સોદેવપીર દાદા સંતવાણી ૦૩",
+    hindi: "श्री सोदेवपीर दादा संतवाणी ०३",
+    youtubeId: "jyGbXanNikk",
+    thumbnail: "https://img.youtube.com/vi/jyGbXanNikk/mqdefault.jpg"
+  },
+  {
+    id: 3,
+    title: "Shree Sodevpeer Dada Santwani 02",
+    gujarati: "શ્રી સોદેવપીર દાદા સંતવાણી ૦૨",
+    hindi: "श्री सोदेवपीर दादा संतवाणी ०૨",
+    youtubeId: "JiIv5wDs3UI",
+    thumbnail: "https://img.youtube.com/vi/JiIv5wDs3UI/mqdefault.jpg"
+  },
+  {
+    id: 4,
+    title: "Shree Sodevpeer Dada Santwani 04",
+    gujarati: "શ્રી સોદેવપીર દાદા સંતવાણી ૦૪",
+    hindi: "श्री सोदेवपीर दादा संतवाणी ०૪",
+    youtubeId: "wVL7xzrfeWo",
+    thumbnail: "https://img.youtube.com/vi/wVL7xzrfeWo/mqdefault.jpg"
+  },
+  {
+    id: 5,
+    title: "Shree Sodevpeer Dada Kori Juhu 03",
+    gujarati: "શ્રી સોદેવપીર દાદા કોરી જુહુ ૦૩",
+    hindi: "श्री सोदेवपीर दादा कोरी जुहू ०३",
+    youtubeId: "Yj8efoeil3I",
+    thumbnail: "https://img.youtube.com/vi/Yj8efoeil3I/mqdefault.jpg"
+  },
+  {
+    id: 6,
+    title: "Shree Sodevpeer Dada Kori Juhu 02",
+    gujarati: "શ્રી સોદેવપીર દાદા કોરી જુહુ ૦૨",
+    hindi: "श्री सोदेवपीर दादा कोरी जुहू ०૨",
+    youtubeId: "rPF1PsdVX2E",
+    thumbnail: "https://img.youtube.com/vi/rPF1PsdVX2E/mqdefault.jpg"
+  },
+  {
+    id: 7,
+    title: "Shree Sodevpeer Dada Kori Juhu 04",
+    gujarati: "શ્રી સોદેવપીર દાદા કોરી જુહુ ૦૪",
+    hindi: "श्री सोदेवपीર दादा कोरी जुहू ०૪",
+    youtubeId: "83Y5G3NYOpU",
+    thumbnail: "https://img.youtube.com/vi/83Y5G3NYOpU/mqdefault.jpg"
+  },
+  {
+    id: 8,
+    title: "Shree Sodevpir Dada Bhajan - Jigar Dama",
+    gujarati: "શ્રી સોદેવપીર દાદા ભજન - જીગર દામા",
+    hindi: "श्री सोदेवपीर दादा भजन - जिगर दामा",
+    youtubeId: "l2VPfJg0gAs",
+    thumbnail: "https://img.youtube.com/vi/l2VPfJg0gAs/mqdefault.jpg"
+  },
+  {
+    id: 9,
+    title: "Shree Sodevpir Dada Kori",
+    gujarati: "શ્રી સોદેવપીર દાદા કોરી",
+    hindi: "श्री सोदेवपीर दादा कोरी",
+    youtubeId: "iHm1lh-H1JM",
+    thumbnail: "https://img.youtube.com/vi/iHm1lh-H1JM/mqdefault.jpg"
+  },
+  {
+    id: 10,
+    title: "Shree Sodevpir Dada Na Bhajan - Jigar Dama",
+    gujarati: "શ્રી સોદેવપીર દાદા ના ભજન - જીગર દામા",
+    hindi: "श्री सोदेवपीर दादा के भजन - जिगर दामा",
+    youtubeId: "SZRCJFBEEcA",
+    thumbnail: "https://img.youtube.com/vi/SZRCJFBEEcA/mqdefault.jpg"
+  },
+  {
+    id: 11,
+    title: "Shree Sodevpir Dada Thal",
+    gujarati: "શ્રી સોદેવપીર દાદા થાળ",
+    hindi: "श्री सोदेवपीर दादा थाल",
+    youtubeId: "bWSlFBQC4ug",
+    thumbnail: "https://img.youtube.com/vi/bWSlFBQC4ug/mqdefault.jpg"
+  },
+  {
+    id: 12,
+    title: "Shree Sodevpir Dada Stuti",
+    gujarati: "શ્રી સોદેવપીર દાદા સ્તુતિ",
+    hindi: "श्री सोदेवपीर दादा स्तुति",
+    youtubeId: "CkhWFwhZn_Q",
+    thumbnail: "https://img.youtube.com/vi/CkhWFwhZn_Q/mqdefault.jpg"
+  },
+  {
+    id: 13,
+    title: "Shree Sodevpir Dada Chalisa",
+    gujarati: "શ્રી સોદેવપીર દાદા ચાલીસા",
+    hindi: "श्री सोदेवपीर दादा चालीसा",
+    youtubeId: "eqBU-aFysHQ",
+    thumbnail: "https://img.youtube.com/vi/eqBU-aFysHQ/mqdefault.jpg"
+  },
+  {
+    id: 14,
+    title: "Sodevpir Dada Bhajan",
+    gujarati: "સોદેવપીર દાદા ભજન",
+    hindi: "सोदेवपीर दादा भजन",
+    youtubeId: "cZlfRTUflL8",
+    thumbnail: "https://img.youtube.com/vi/cZlfRTUflL8/mqdefault.jpg"
+  },
+  {
+    id: 15,
+    title: "Shree Sodevpir Dada Kori 3",
+    gujarati: "શ્રી સોદેવપીર દાદા કોરી ૩",
+    hindi: "श्री सोदेवपीर दादा कोरी ३",
+    youtubeId: "QQX7Y6zUBIU",
+    thumbnail: "https://img.youtube.com/vi/QQX7Y6zUBIU/mqdefault.jpg"
+  },
+  {
+    id: 16,
+    title: "Shree Sodevpir Dada Kori 2",
+    gujarati: "શ્રી સોદેવપીર દાદા કોરી ૨",
+    hindi: "श्री सोदेवपीर दादा कोरी ૨",
+    youtubeId: "9psE9oAjraE",
+    thumbnail: "https://img.youtube.com/vi/9psE9oAjraE/mqdefault.jpg"
   }
 ];
