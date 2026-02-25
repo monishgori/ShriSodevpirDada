@@ -45,6 +45,24 @@ function App() {
   const [isDiyaLit, setIsDiyaLit] = useState(false);
   const [isSeeking, setIsSeeking] = useState(false);
   const [historyTab, setHistoryTab] = useState('story'); // 'story' or 'incidents'
+  const audioRef = useRef(null);
+  const bellAudioRef = useRef(null);
+  const shankhAudioRef = useRef(null);
+
+  const [isAudioInitialized, setIsAudioInitialized] = useState(false);
+
+  const initializeAudio = () => {
+    if (isAudioInitialized) return;
+    if (audioRef.current) {
+      audioRef.current.play().then(() => {
+        audioRef.current.pause();
+        setIsAudioInitialized(true);
+      }).catch(() => {
+        audioRef.current.load();
+        setIsAudioInitialized(true);
+      });
+    }
+  };
 
   // Save Preferences
   useEffect(() => {
@@ -57,10 +75,6 @@ function App() {
       console.warn("Saving to storage failed:", e);
     }
   }, [currentMode, language, repeatCount, activeItemIndex]);
-
-  const audioRef = useRef(null);
-  const bellAudioRef = useRef(null);
-  const shankhAudioRef = useRef(null);
 
   const backgroundImage = '/assets/images/1.png';
 
@@ -206,7 +220,8 @@ function App() {
   const showerFlowers = () => {
     if (!isAudioInitialized) initializeAudio();
     startFlowerShower();
-  };  // Global iOS Audio Unlock
+  };
+
   useEffect(() => {
     const unlock = () => {
       initializeAudio();
@@ -227,23 +242,6 @@ function App() {
   };
 
 
-  const [isAudioInitialized, setIsAudioInitialized] = useState(false);
-
-  const initializeAudio = () => {
-    if (isAudioInitialized) return;
-
-    // iOS/WebKit requires audio to be "primed" by a user gesture
-    if (audioRef.current) {
-      audioRef.current.play().then(() => {
-        audioRef.current.pause();
-        setIsAudioInitialized(true);
-      }).catch(() => {
-        // Fallback for strict browsers
-        audioRef.current.load();
-        setIsAudioInitialized(true);
-      });
-    }
-  };
 
   const togglePlay = () => {
     triggerHaptic(ImpactStyle.Medium);
