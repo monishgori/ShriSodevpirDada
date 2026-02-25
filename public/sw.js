@@ -16,9 +16,16 @@ self.addEventListener('activate', (event) => {
     );
 });
 
-// Fetch Event - Network First Strategy
+// Fetch Event
 self.addEventListener('fetch', (event) => {
+    // 1. Skip non-GET requests
     if (event.request.method !== 'GET') return;
+
+    // 2. ALWAYS fetch HTML (navigation) from network to ensure latest version
+    if (event.request.mode === 'navigate') {
+        event.respondWith(fetch(event.request));
+        return;
+    }
 
     // 🚨 iOS FIX: Do not intercept or cache media files (mp3, mp4, etc.)
     // Safari requires 'Range' requests which Service Workers break unless handled specifically.

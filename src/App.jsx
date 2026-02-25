@@ -243,31 +243,37 @@ function App() {
 
 
 
-  const togglePlay = () => {
+  const togglePlay = async () => {
     triggerHaptic(ImpactStyle.Medium);
     if (!audioRef.current) return;
 
-    // Ensure audio is initialized on interaction
-    if (!isAudioInitialized) {
-      initializeAudio();
-    }
-
     if (audioRef.current.paused) {
-      // iOS sometimes needs an explicit load if src changed
-      if (!audioRef.current.src || audioRef.current.src.includes('localhost')) {
-        audioRef.current.load();
-      }
-
-      const playPromise = audioRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise.then(() => {
-          setIsPlaying(true);
-        }).catch(error => {
-          console.error("Playback failed:", error);
-          // Auto-retry once on user gesture
+      try {
+        // Essential for iOS: ensure source is valid and primed
+        if (!audioRef.current.src || audioRef.current.src.includes('localhost') || audioRef.current.readyState === 0) {
           audioRef.current.load();
-          audioRef.current.play().catch(e => console.error("Retry failed:", e));
-        });
+        }
+
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          await playPromise;
+          setIsPlaying(true);
+        } else {
+          setIsPlaying(true);
+        }
+      } catch (error) {
+        console.error("Playback failed:", error);
+        // Nuclear fallback: Reset and Try Again
+        try {
+          audioRef.current.load();
+          await audioRef.current.play();
+          setIsPlaying(true);
+        } catch (retryError) {
+          console.error("Retry failed:", retryError);
+          alert(language === 'gujarati' ?
+            "ઓડિયો પ્લે કરવામાં ભૂલ આવી. કૃપયા નેટવર્ક ચેક કરો અથવા પેજ રિફ્રેશ કરો." :
+            "ऑडियो प्ले करने में त्रुटि। कृपया नेटवर्क चेक करें या पेज रिफ्रेश करें.");
+        }
       }
     } else {
       audioRef.current.pause();
@@ -277,13 +283,16 @@ function App() {
 
   // Reset playback only when the actual audio source changes
   useEffect(() => {
-    const currentAudioSrc =
+    const rawAudioSrc =
       currentMode === 'chalisa' ? "/assets/audio/chalisa.mp3" :
         currentMode === 'mantras' ? (mantras[activeItemIndex]?.audio || "/assets/audio/mantra.mp3") :
           currentMode === 'bhajans' ? (bhajans[activeItemIndex]?.audio || "/assets/audio/bhajan.mp3") :
             currentMode === 'aartis' ? (aartis[activeItemIndex]?.audio || "/assets/audio/aarti.mp3") :
               currentMode === 'videos' ? "" :
                 (stutis[activeItemIndex]?.audio || "/assets/audio/Stuti.mp3");
+
+    // Standardize URL for browser compatibility
+    const currentAudioSrc = rawAudioSrc ? encodeURI(rawAudioSrc) : "";
 
     const prevSrc = audioRef.current?.getAttribute('data-prev-src');
 
@@ -292,10 +301,11 @@ function App() {
       setDuration(0);
       setCurrentRepeat(0);
       setIsPlaying(false);
+
       if (audioRef.current) {
         audioRef.current.pause();
-        audioRef.current.src = currentAudioSrc; // Explicitly update src
-        audioRef.current.load(); // Force browser to fetch the new file properly
+        audioRef.current.src = currentAudioSrc;
+        audioRef.current.load();
         audioRef.current.setAttribute('data-prev-src', currentAudioSrc);
       }
     }
