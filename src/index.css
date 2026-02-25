@@ -80,7 +80,7 @@ body {
   object-position: 50% 20%;
   transition: opacity 3s ease-in-out;
   opacity: 0;
-  filter: brightness(1.1) contrast(1.1);
+  filter: brightness(0.6);
 }
 
 .bg-image.active {
@@ -94,21 +94,23 @@ body {
 
 @keyframes bg-pulse-sacred {
   0% {
-    filter: brightness(1.1) contrast(1.1);
+    transform: scale(1.1);
+    filter: brightness(0.6) contrast(1);
   }
 
   100% {
-    filter: brightness(1.3) contrast(1.2) drop-shadow(0 0 40px rgba(255, 215, 0, 0.4));
+    transform: scale(1.18);
+    filter: brightness(0.8) contrast(1.1) drop-shadow(0 0 20px rgba(255, 215, 0, 0.2));
   }
 }
 
 @keyframes bg-pan-zoom {
   0% {
-    transform: translate(0, 0);
+    transform: scale(1);
   }
 
   100% {
-    transform: translate(-1%, -1%);
+    transform: scale(1.1);
   }
 }
 
@@ -137,13 +139,13 @@ body {
 
 @keyframes light-leak {
   from {
-    opacity: 0.6;
+    opacity: 0.5;
     transform: scale(1);
   }
 
   to {
-    opacity: 0.9;
-    transform: scale(1.15);
+    opacity: 0.8;
+    transform: scale(1.1);
   }
 }
 
@@ -454,6 +456,7 @@ body {
 .bottom-dashboard-container {
   position: fixed;
   bottom: 0;
+  /* Seated on the floor */
   left: 0;
   width: 100%;
   z-index: 1000;
@@ -461,8 +464,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px 15px env(safe-area-inset-bottom, 15px) 15px;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 100%);
+  padding: 15px 15px env(safe-area-inset-bottom, 15px) 15px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, transparent 100%);
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -585,22 +588,6 @@ body {
   text-transform: uppercase;
 }
 
-.privacy-link {
-  display: block;
-  text-align: center;
-  margin-top: 30px;
-  color: rgba(255, 255, 255, 0.4);
-  font-size: 0.75rem;
-  text-decoration: none;
-  font-weight: 600;
-  letter-spacing: 1px;
-  transition: color 0.3s;
-}
-
-.privacy-link:hover {
-  color: var(--secondary);
-}
-
 /* Celestial Duo-Island Dock */
 .pooja-dock {
   width: 100%;
@@ -638,7 +625,7 @@ body {
   backdrop-filter: blur(40px) !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
   border-radius: 35px !important;
-  padding: 12px 20px !important;
+  padding: 15px 20px 0 20px !important;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
   pointer-events: auto;
   display: flex;
@@ -914,10 +901,6 @@ body {
   transition: opacity 0.8s ease;
 }
 
-.diya-container.hidden-ritual {
-  display: none !important;
-}
-
 .diya-container.lit {
   opacity: 1;
   animation: aarti-motion 6s linear infinite;
@@ -1191,20 +1174,4 @@ body {
     padding: 15px;
     gap: 10px;
   }
-}
-
-.tab-switcher button {
-  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
-  opacity: 0.6;
-}
-
-.tab-switcher button.active-verse {
-  opacity: 1 !important;
-  background: rgba(200, 161, 101, 0.2) !important;
-  border: 1px solid var(--secondary) !important;
-}
-
-.life-story .verse,
-.incident-content .verse {
-  animation: fadeIn 0.5s ease-out forwards;
 }
