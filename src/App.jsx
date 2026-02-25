@@ -278,19 +278,19 @@ function App() {
     if (!audioRef.current) return;
 
     if (audioRef.current.paused) {
-      // Simple, direct play call
       const playPromise = audioRef.current.play();
       if (playPromise !== undefined) {
         playPromise.then(() => {
           setIsPlaying(true);
         }).catch(error => {
-          console.error("Playback failed:", error);
-          // Retry logic
+          console.error("Playback error:", error);
+          // Try loading and playing again
           audioRef.current.load();
-          audioRef.current.play().then(() => setIsPlaying(true)).catch(e => {
-            console.error("Retry failed:", e);
-            alert("Error playing audio. Please try again.");
-          });
+          audioRef.current.play()
+            .then(() => setIsPlaying(true))
+            .catch(e => {
+              alert("Audio blocked by browser. Please tap the screen and try again. Error: " + e.message);
+            });
         });
       }
     } else {
@@ -309,9 +309,8 @@ function App() {
               currentMode === 'videos' ? "" :
                 (stutis[activeItemIndex]?.audio || "/assets/audio/stuti.mp3");
 
-    // Standardize URL to absolute for iOS compatibility
-    const currentAudioSrc = rawAudioSrc ?
-      new URL(rawAudioSrc, window.location.origin).href : "";
+    // Simplified Path for iOS
+    const currentAudioSrc = rawAudioSrc || "";
 
     const prevSrc = audioRef.current?.getAttribute('data-prev-src');
 
@@ -364,7 +363,6 @@ function App() {
         ref={audioRef}
         src="/assets/audio/chalisa.mp3"
         preload="auto"
-        crossOrigin="anonymous"
         playsInline
         webkit-playsinline="true"
         onPlay={() => setIsPlaying(true)}
@@ -372,7 +370,13 @@ function App() {
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
         onError={(e) => {
-          console.error("Audio error details:", e.target.error);
+          const error = e.target.error;
+          let msg = "Unknown Audio Error";
+          if (error.code === 1) msg = "Aborted";
+          if (error.code === 2) msg = "Network Error";
+          if (error.code === 3) msg = "Decode Error";
+          if (error.code === 4) msg = "Source Not Supported";
+          alert("Audio Error: " + msg + " (" + (audioRef.current?.src || "no src") + ")");
           setIsPlaying(false);
         }}
         onEnded={() => {
@@ -389,8 +393,8 @@ function App() {
             if (audioRef.current) setCurrentTime(audioRef.current.duration);
           }
         }} />
-      <audio ref={bellAudioRef} src={`/assets/audio/bell.mp3?v=${APP_VERSION}`} crossOrigin="anonymous" playsInline webkit-playsinline="true" />
-      <audio ref={shankhAudioRef} src={`/assets/audio/shankh.mp3?v=${APP_VERSION}`} crossOrigin="anonymous" playsInline webkit-playsinline="true" />
+      <audio ref={bellAudioRef} src="/assets/audio/bell.mp3" playsInline webkit-playsinline="true" />
+      <audio ref={shankhAudioRef} src="/assets/audio/shankh.mp3" playsInline webkit-playsinline="true" />
 
       {/* Flower Shower */}
       {flowers.map(flower => (
