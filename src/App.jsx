@@ -7,7 +7,7 @@ import { stutis } from './data/stutis';
 import { videos } from './data/videos';
 import { historyData } from './data/history';
 import { quotes } from './data/quotes';
-// Web haptics fallback
+// Web haptics fallback - Build Trigger
 const ImpactStyle = {
   Light: 10,
   Medium: 20,
