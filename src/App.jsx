@@ -565,24 +565,97 @@ function App() {
               </div>
             ))
           ) : currentMode === 'videos' ? (
-            <div className="videos-list" style={{ display: 'grid', gap: '20px', padding: '10px' }}>
+            <div className="videos-list" style={{ display: 'grid', gap: '15px', padding: '10px' }}>
               {videos.map((video, index) => (
-                <div key={index} className="video-item glass-panel" style={{ padding: '0', overflow: 'hidden' }}>
-                  <div className="video-player-wrapper" style={{ position: 'relative', paddingBottom: '56.25%', height: '0' }}>
-                    <iframe
-                      style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', border: 'none' }}
-                      src={`https://www.youtube.com/embed/${video.youtubeId}`}
-                      title={video.title}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    ></iframe>
+                <div
+                  key={index}
+                  className="video-item glass-panel"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '15px',
+                    padding: '12px',
+                    textAlign: 'left',
+                    cursor: 'pointer'
+                  }}
+                  onClick={() => setActiveItemIndex(index)}
+                >
+                  <div style={{
+                    width: '100px',
+                    height: '60px',
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    flexShrink: 0,
+                    position: 'relative'
+                  }}>
+                    <img
+                      src={`https://img.youtube.com/vi/${video.youtubeId}/mqdefault.jpg`}
+                      alt={video.title}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                    <div style={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      background: 'rgba(255, 0, 0, 0.8)',
+                      borderRadius: '50%',
+                      width: '24px',
+                      height: '24px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '0.6rem'
+                    }}>▶</div>
                   </div>
-                  <div style={{ padding: '15px', textAlign: 'left' }}>
-                    <div style={{ color: 'var(--secondary)', fontWeight: 'bold' }}>{video.title}</div>
-                    <div className="hindi-text" style={{ fontSize: '1.2rem', marginTop: '5px' }}>{video[language] || video.gujarati || video.hindi}</div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ color: 'var(--secondary)', fontWeight: 'bold', fontSize: '0.9rem' }}>{video.title}</div>
+                    <div className="hindi-text" style={{ fontSize: '1rem', marginTop: '4px', marginBottom: '0' }}>{video[language] || video.gujarati || video.hindi}</div>
                   </div>
                 </div>
               ))}
+
+              {/* Fixed Video Player Overlay when active */}
+              {activeItemIndex !== null && currentMode === 'videos' && (
+                <div style={{
+                  position: 'fixed',
+                  top: '0',
+                  left: '0',
+                  width: '100%',
+                  height: '100%',
+                  background: 'rgba(0,0,0,0.9)',
+                  zIndex: 10000,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '20px'
+                }} onClick={() => setActiveItemIndex(null)}>
+                  <div style={{ width: '100%', maxWidth: '800px', position: 'relative' }} onClick={e => e.stopPropagation()}>
+                    <button
+                      onClick={() => setActiveItemIndex(null)}
+                      style={{
+                        position: 'absolute',
+                        top: '-40px',
+                        right: '0',
+                        background: 'none',
+                        border: 'none',
+                        color: 'white',
+                        fontSize: '1.5rem',
+                        cursor: 'pointer'
+                      }}
+                    >✕</button>
+                    <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0 }}>
+                      <iframe
+                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', borderRadius: '12px' }}
+                        src={`https://www.youtube.com/embed/${videos[activeItemIndex]?.youtubeId}?autoplay=1`}
+                        title="YouTube video"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      ></iframe>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             stutis.map((stuti, index) => (
