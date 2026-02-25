@@ -7,6 +7,7 @@ import { stutis } from './data/stutis';
 import { quotes } from './data/quotes';
 import { videos } from './data/videos';
 import { historyData } from './data/history';
+import { policyData } from './data/policy';
 // Web haptics fallback
 const ImpactStyle = {
   Light: 10,
@@ -520,11 +521,17 @@ function App() {
             </span>
             <span className="lib-eng">HISTORY</span>
           </button>
-          <button className="library-card library-card-wide" onClick={() => startReading('videos')}>
+          <button className="library-card" onClick={() => startReading('videos')}>
             <span className="lib-hindi">
               {language === 'gujarati' ? 'યુટ્યુબ ભક્તિ' : 'यूट्यूब भक्ति'}
             </span>
-            <span className="lib-eng">YOUTUBE VIDEOS</span>
+            <span className="lib-eng">YOUTUBE</span>
+          </button>
+          <button className="library-card" onClick={() => startReading('policy')}>
+            <span className="lib-hindi">
+              {language === 'gujarati' ? 'ગોપનીયતા' : 'गोपनीयता'}
+            </span>
+            <span className="lib-eng">PRIVACY</span>
           </button>
         </div>
       </div>
@@ -545,7 +552,8 @@ function App() {
                       currentMode === 'aartis' ? 'સોદેવ આરતી' :
                         currentMode === 'stutis' ? 'સોદેવ સ્તુતિ' :
                           currentMode === 'history' ? 'શ્રી સોદેવપીર જીવન ચરિત્ર' :
-                            currentMode === 'videos' ? 'સોદેવ ભક્તિ વીડિયો' : 'સોદેવ પૂજા'
+                            currentMode === 'videos' ? 'સોદેવ ભક્તિ વીડિયો' :
+                              currentMode === 'policy' ? 'ગોપનીયતા નીતિ' : 'સોદેવ પૂજા'
               ) : (
                 currentMode === 'chalisa' ? 'सोदेव चालीसा' :
                   currentMode === 'mantras' ? 'सिद्ध मंत्र संग्रह' :
@@ -553,7 +561,8 @@ function App() {
                       currentMode === 'aartis' ? 'सोदेव आरती' :
                         currentMode === 'stutis' ? 'सोदेव स्तुति' :
                           currentMode === 'history' ? 'श्री सोदेवपीर जीवन चरित्र' :
-                            currentMode === 'videos' ? 'सोदेव भक्ति वीडियो' : 'सोदेव पूजा'
+                            currentMode === 'videos' ? 'सोदेव भक्ति वीडियो' :
+                              currentMode === 'policy' ? 'गोपनीयता नीति' : 'सोदेव पूजा'
               )}
             </div>
             <div className="page-subtitle">
@@ -681,6 +690,22 @@ function App() {
                   </div>
                 </div>
               ))}
+            </div>
+          ) : currentMode === 'policy' ? (
+            <div className="policy-section">
+              {policyData.sections.map((section, idx) => (
+                <div key={idx} className="verse glass-panel">
+                  <div style={{ color: 'var(--secondary)', fontSize: '1.2rem', marginBottom: '10px' }}>
+                    {section.subtitle[language] || section.subtitle.english}
+                  </div>
+                  <div className="hindi-text" style={{ fontSize: '1rem', textAlign: 'left', opacity: 0.9 }}>
+                    {section.text[language] || section.text.english}
+                  </div>
+                </div>
+              ))}
+              <div style={{ marginTop: '30px', opacity: 0.6, fontSize: '0.8rem' }}>
+                {language === 'gujarati' ? 'છેલ્લું અપડેટ: ' : 'अंतिम अपडेट: '} {policyData.lastUpdated}
+              </div>
             </div>
           ) : null}
         </main>
