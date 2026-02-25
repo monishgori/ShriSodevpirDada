@@ -56,13 +56,19 @@ function App() {
   const initializeAudio = () => {
     if (isAudioInitialized) return;
     if (audioRef.current) {
-      audioRef.current.play().then(() => {
-        audioRef.current.pause();
+      // Use a simple play/pause to unlock
+      const p = audioRef.current.play();
+      if (p !== undefined) {
+        p.then(() => {
+          audioRef.current.pause();
+          setIsAudioInitialized(true);
+        }).catch(() => {
+          audioRef.current.load();
+          setIsAudioInitialized(true);
+        });
+      } else {
         setIsAudioInitialized(true);
-      }).catch(() => {
-        audioRef.current.load();
-        setIsAudioInitialized(true);
-      });
+      }
     }
   };
 
@@ -226,10 +232,29 @@ function App() {
 
   useEffect(() => {
     const unlock = () => {
-      // Just prime the audio element, don't call initializeAudio yet
+      // 1. Prime the Audio Element
       if (audioRef.current) {
         audioRef.current.load();
       }
+
+      // 2. High-Level Web Audio API Unlock (The most reliable way for iOS)
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) {
+          const context = new AudioContext();
+          const buffer = context.createBuffer(1, 1, 22050);
+          const source = context.createBufferSource();
+          source.buffer = buffer;
+          source.connect(context.destination);
+          source.start(0);
+          if (context.state === 'suspended') {
+            context.resume();
+          }
+        }
+      } catch (e) {
+        console.warn("WebAudio unlock failed:", e);
+      }
+
       window.removeEventListener('touchstart', unlock);
       window.removeEventListener('click', unlock);
     };
@@ -248,42 +273,25 @@ function App() {
 
 
 
-  const togglePlay = async () => {
+  const togglePlay = () => {
     triggerHaptic(ImpactStyle.Medium);
     if (!audioRef.current) return;
 
-    // Safety: Initialize if not already done
-    if (!isAudioInitialized) {
-      initializeAudio();
-    }
-
     if (audioRef.current.paused) {
-      try {
-        // Essential for iOS: ensure source is valid and primed
-        if (!audioRef.current.src || audioRef.current.src.includes('localhost') || audioRef.current.readyState === 0) {
+      // Simple, direct play call
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          setIsPlaying(true);
+        }).catch(error => {
+          console.error("Playback failed:", error);
+          // Retry logic
           audioRef.current.load();
-        }
-
-        const playPromise = audioRef.current.play();
-        if (playPromise !== undefined) {
-          await playPromise;
-          setIsPlaying(true);
-        } else {
-          setIsPlaying(true);
-        }
-      } catch (error) {
-        console.error("Playback failed:", error);
-        // Nuclear fallback: Reset and Try Again
-        try {
-          audioRef.current.load();
-          await audioRef.current.play();
-          setIsPlaying(true);
-        } catch (retryError) {
-          console.error("Retry failed:", retryError);
-          alert(language === 'gujarati' ?
-            "ઓડિયો પ્લે કરવામાં ભૂલ આવી. કૃપયા નેટવર્ક ચેક કરો અથવા પેજ રિફ્રેશ કરો." :
-            "ऑडियो प्ले करने में त्रुटि। कृपया नेटवर्क चेक करें या पेज रिफ्रेश करें.");
-        }
+          audioRef.current.play().then(() => setIsPlaying(true)).catch(e => {
+            console.error("Retry failed:", e);
+            alert("Error playing audio. Please try again.");
+          });
+        });
       }
     } else {
       audioRef.current.pause();
@@ -301,9 +309,9 @@ function App() {
               currentMode === 'videos' ? "" :
                 (stutis[activeItemIndex]?.audio || "/assets/audio/stuti.mp3");
 
-    // Standardize URL to absolute for iOS compatibility with Cache Buster
+    // Standardize URL to absolute for iOS compatibility
     const currentAudioSrc = rawAudioSrc ?
-      new URL(rawAudioSrc, window.location.origin).href + `?v=${APP_VERSION}` : "";
+      new URL(rawAudioSrc, window.location.origin).href : "";
 
     const prevSrc = audioRef.current?.getAttribute('data-prev-src');
 

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sodev-pooja-v1.0.6';
+const CACHE_NAME = 'sodev-pooja-v1.0.7';
 
 // Install Event
 self.addEventListener('install', (event) => {
