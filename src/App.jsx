@@ -5,6 +5,7 @@ import { bhajans } from './data/bhajans';
 import { aartis } from './data/aartis';
 import { stutis } from './data/stutis';
 import { videos } from './data/videos';
+import { historyData } from './data/history';
 import { quotes } from './data/quotes';
 // Web haptics fallback
 const ImpactStyle = {
@@ -43,6 +44,7 @@ function App() {
   const [dailyQuote, setDailyQuote] = useState({ gujarati: '', hindi: '', english: '' });
   const [isDiyaLit, setIsDiyaLit] = useState(false);
   const [isSeeking, setIsSeeking] = useState(false);
+  const [historyTab, setHistoryTab] = useState('story'); // 'story' or 'incidents'
 
   // Save Preferences
   useEffect(() => {
@@ -249,7 +251,8 @@ function App() {
     setCurrentMode(mode);
     setIsLyricsVisible(true);
     setIsLibraryOpen(false);
-    setActiveItemIndex(mode === 'videos' ? null : 0); // null for videos list, 0 for other modes
+    setActiveItemIndex(mode === 'videos' || mode === 'history' ? null : 0); // null for list views
+    if (mode === 'history') setHistoryTab('story');
     setIsPlaying(false); // Stop any previous audio
     if (audioRef.current) audioRef.current.pause();
   };
@@ -486,6 +489,12 @@ function App() {
             </span>
             <span className="lib-eng">STUTI</span>
           </button>
+          <button className="library-card library-card-wide" style={{ background: 'linear-gradient(135deg, var(--secondary-glow), transparent)', borderColor: 'var(--secondary)' }} onClick={() => startReading('history')}>
+            <span className="lib-hindi">
+              {language === 'gujarati' ? 'દાદા નો ઇતિહાસ' : 'दादा का इतिहास'}
+            </span>
+            <span className="lib-eng">HISTORY & SATSANG</span>
+          </button>
           <button className="library-card library-card-wide" style={{ background: 'linear-gradient(135deg, #ff000033, #00000033)', borderColor: '#ff0000' }} onClick={() => startReading('videos')}>
             <span className="lib-hindi">
               {language === 'gujarati' ? 'સોદેવ વિડિયો' : 'सोदेव वीडियो'}
@@ -512,13 +521,15 @@ function App() {
                   currentMode === 'mantras' ? 'સિદ્ધ મંત્ર સંગ્રહ' :
                     currentMode === 'bhajans' ? 'ભજન સંગ્રહ' :
                       currentMode === 'aartis' ? 'સોદેવ આરતી' :
-                        currentMode === 'videos' ? 'સોદેવ વિડિયો' : 'સોદેવ સ્તુતિ'
+                        currentMode === 'history' ? 'સોદેવ ઈતિહાસ' :
+                          currentMode === 'videos' ? 'સોદેવ વિડિયો' : 'સોદેવ સ્તુતિ'
               ) : (
                 currentMode === 'chalisa' ? 'सोदेव चालीसा' :
                   currentMode === 'mantras' ? 'सिद्ध मंत्र संग्रह' :
                     currentMode === 'bhajans' ? 'भजन संग्रह' :
                       currentMode === 'aartis' ? 'सोदेव आरती' :
-                        currentMode === 'videos' ? 'सोदेव वीडियो' : 'सोदेव स्तुति'
+                        currentMode === 'history' ? 'सोदेव इतिहास' :
+                          currentMode === 'videos' ? 'सोदेव वीडियो' : 'सोदेव स्तुति'
               )}
             </div>
             <div className="page-subtitle">
@@ -579,6 +590,77 @@ function App() {
                 <div className="hindi-text">{aarti[language] || aarti.gujarati || aarti.hindi}</div>
               </div>
             ))
+          ) : currentMode === 'history' ? (
+            <div className="history-view" style={{ padding: '0 10px 40px 10px' }}>
+              <div className="tab-switcher" style={{ display: 'flex', gap: '10px', marginBottom: '25px' }}>
+                <button
+                  className={`glass-panel ${historyTab === 'story' ? 'active-verse' : ''}`}
+                  style={{ flex: 1, padding: '15px', border: 'none', color: '#fff', fontSize: '1rem', cursor: 'pointer' }}
+                  onClick={() => setHistoryTab('story')}
+                >
+                  {language === 'gujarati' ? 'જીવન ચરિત્ર' : 'जीवन चरित्र'}
+                </button>
+                <button
+                  className={`glass-panel ${historyTab === 'incidents' ? 'active-verse' : ''}`}
+                  style={{ flex: 1, padding: '15px', border: 'none', color: '#fff', fontSize: '1rem', cursor: 'pointer' }}
+                  onClick={() => {
+                    setHistoryTab('incidents');
+                    setActiveItemIndex(null);
+                  }}
+                >
+                  {language === 'gujarati' ? 'સત્ય ઘટનાઓ' : 'सत्य घटनाएं'}
+                </button>
+              </div>
+
+              {historyTab === 'story' ? (
+                <div className="life-story">
+                  {historyData.lifeStory.content.map(item => (
+                    <div key={item.id} className="verse glass-panel" style={{ textAlign: 'left', marginBottom: '20px' }}>
+                      <div style={{ color: 'var(--secondary)', fontWeight: 'bold', marginBottom: '10px' }}>{item.subtitle[language]}</div>
+                      <div className="hindi-text" style={{ fontSize: '1.2rem', lineHeight: '1.8' }}>{item.text[language]}</div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="incidents-list">
+                  {activeItemIndex === null ? (
+                    <div style={{ display: 'grid', gap: '15px' }}>
+                      {historyData.incidents.map((incident, index) => (
+                        <div
+                          key={incident.id}
+                          className="verse glass-panel"
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => setActiveItemIndex(index)}
+                        >
+                          <div className="hindi-text" style={{ fontSize: '1.3rem' }}>{incident.title[language]}</div>
+                          <div style={{ color: 'var(--secondary)', fontSize: '0.8rem', marginTop: '10px' }}>
+                            {language === 'gujarati' ? 'વાંચવા માટે ક્લિક કરો' : 'पढ़ने के लिए क्लिक करें'} →
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="incident-content">
+                      <button
+                        className="glass-panel"
+                        style={{ padding: '10px 20px', border: 'none', color: 'var(--secondary)', marginBottom: '20px', cursor: 'pointer' }}
+                        onClick={() => setActiveItemIndex(null)}
+                      >
+                        ← {language === 'gujarati' ? 'યાદી પર પાછા જાઓ' : 'सूची पर वापस जाएं'}
+                      </button>
+                      <div className="verse glass-panel" style={{ textAlign: 'left' }}>
+                        <div style={{ color: 'var(--secondary)', fontWeight: 'bold', fontSize: '1.4rem', marginBottom: '20px' }}>
+                          {historyData.incidents[activeItemIndex].title[language]}
+                        </div>
+                        <div className="hindi-text" style={{ fontSize: '1.3rem', lineHeight: '2' }}>
+                          {historyData.incidents[activeItemIndex].content[language]}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           ) : currentMode === 'videos' ? (
             <div className="videos-list" style={{ display: 'grid', gap: '15px', padding: '10px' }}>
               {videos.map((video, index) => (

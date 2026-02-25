@@ -1188,3 +1188,17 @@ body {
     gap: 10px;
   }
 }
+.tab-switcher button {
+  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  opacity: 0.6;
+}
+
+.tab-switcher button.active-verse {
+  opacity: 1 !important;
+  background: rgba(200, 161, 101, 0.2) !important;
+  border: 1px solid var(--secondary) !important;
+}
+
+.life-story .verse, .incident-content .verse {
+  animation: fadeIn 0.5s ease-out forwards;
+}
