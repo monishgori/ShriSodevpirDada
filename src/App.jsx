@@ -205,15 +205,41 @@ function App() {
   };
 
 
-  // Reset playback when song changes
-  useEffect(() => {
-    setCurrentTime(0);
-    setDuration(0);
-    setCurrentRepeat(0);
-    setIsPlaying(false);
-    if (audioRef.current) {
-      audioRef.current.currentTime = 0;
+  const togglePlay = () => {
+    triggerHaptic(ImpactStyle.Medium);
+    if (!audioRef.current) return;
+
+    if (audioRef.current.paused) {
+      audioRef.current.play().catch(error => {
+        console.error("Playback failed:", error);
+      });
+    } else {
       audioRef.current.pause();
+    }
+  };
+
+  // Reset playback only when the actual audio source changes
+  useEffect(() => {
+    const currentAudioSrc =
+      currentMode === 'chalisa' ? "/assets/audio/chalisa.mp3" :
+        currentMode === 'mantras' ? (mantras[activeItemIndex]?.audio || "/assets/audio/mantra.mp3") :
+          currentMode === 'bhajans' ? (bhajans[activeItemIndex]?.audio || "/assets/audio/bhajan.mp3") :
+            currentMode === 'aartis' ? (aartis[activeItemIndex]?.audio || "/assets/audio/aarti.mp3") :
+              (stutis[activeItemIndex]?.audio || "/assets/audio/Stuti.mp3");
+
+    const prevSrc = audioRef.current?.getAttribute('data-prev-src');
+
+    if (prevSrc !== currentAudioSrc) {
+      setCurrentTime(0);
+      setDuration(0);
+      setCurrentRepeat(0);
+      setIsPlaying(false);
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = currentAudioSrc; // Explicitly update src
+        audioRef.current.load(); // Force browser to fetch the new file properly
+        audioRef.current.setAttribute('data-prev-src', currentAudioSrc);
+      }
     }
   }, [currentMode, activeItemIndex]);
 
@@ -248,15 +274,15 @@ function App() {
       </div>
       <audio
         ref={audioRef}
-        src={
-          currentMode === 'chalisa' ? "/assets/audio/chalisa.mp3" :
-            currentMode === 'mantras' ? (mantras[activeItemIndex]?.audio || "/assets/audio/mantra.mp3") :
-              currentMode === 'bhajans' ? (bhajans[activeItemIndex]?.audio || "/assets/audio/bhajan.mp3") :
-                currentMode === 'aartis' ? (aartis[activeItemIndex]?.audio || "/assets/audio/aarti.mp3") :
-                  (stutis[activeItemIndex]?.audio || "/assets/audio/stuti.mp3")
-        }
+        preload="auto"
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
+        onError={(e) => {
+          console.error("Audio error details:", e.target.error);
+          setIsPlaying(false);
+        }}
         onEnded={() => {
           if (currentRepeat + 1 < repeatCount) {
             setCurrentRepeat(prev => prev + 1);
@@ -359,11 +385,7 @@ function App() {
                 ⋯
               </button>
 
-              <button className="dock-play-btn" onClick={() => {
-                triggerHaptic(ImpactStyle.Medium);
-                if (isPlaying) { audioRef.current.pause(); setIsPlaying(false); }
-                else { audioRef.current.play(); setIsPlaying(true); }
-              }}>
+              <button className="dock-play-btn" onClick={togglePlay}>
                 {isPlaying ? '⏸' : '▶'}
               </button>
 
@@ -504,11 +526,8 @@ function App() {
                 key={index}
                 className={`verse glass-panel ${activeItemIndex === index ? 'active-verse' : ''}`}
                 onClick={() => {
-                  setActiveItemIndex(index);
-                  setIsPlaying(false);
-                  if (audioRef.current) {
-                    audioRef.current.pause();
-                    audioRef.current.load();
+                  if (activeItemIndex !== index) {
+                    setActiveItemIndex(index);
                   }
                 }}
               >
@@ -524,11 +543,8 @@ function App() {
                 key={index}
                 className={`verse glass-panel ${activeItemIndex === index ? 'active-verse' : ''}`}
                 onClick={() => {
-                  setActiveItemIndex(index);
-                  setIsPlaying(false);
-                  if (audioRef.current) {
-                    audioRef.current.pause();
-                    audioRef.current.load();
+                  if (activeItemIndex !== index) {
+                    setActiveItemIndex(index);
                   }
                 }}
               >
@@ -543,17 +559,10 @@ function App() {
               <div
                 key={index}
                 className={`verse glass-panel ${activeItemIndex === index ? 'active-verse' : ''}`}
-                onClick={() => {
-                  setActiveItemIndex(index);
-                  setIsPlaying(false);
-                  if (audioRef.current) {
-                    audioRef.current.pause();
-                    audioRef.current.load();
-                  }
-                }}
+                onClick={() => setActiveItemIndex(index)}
               >
                 <div style={{ color: 'var(--secondary)', fontSize: '0.9rem', marginBottom: '10px' }}>
-                  {aarti.name} {activeItemIndex === index && ' (Selected)'}
+                  {aarti.name}
                 </div>
                 <div className="hindi-text">{aarti[language] || aarti.gujarati || aarti.hindi}</div>
               </div>
@@ -563,17 +572,10 @@ function App() {
               <div
                 key={index}
                 className={`verse glass-panel ${activeItemIndex === index ? 'active-verse' : ''}`}
-                onClick={() => {
-                  setActiveItemIndex(index);
-                  setIsPlaying(false);
-                  if (audioRef.current) {
-                    audioRef.current.pause();
-                    audioRef.current.load();
-                  }
-                }}
+                onClick={() => setActiveItemIndex(index)}
               >
                 <div style={{ color: 'var(--secondary)', fontSize: '0.9rem', marginBottom: '10px' }}>
-                  {stuti.name} {activeItemIndex === index && ' (Selected)'}
+                  {stuti.name}
                 </div>
                 <div className="hindi-text">{stuti[language] || stuti.gujarati || stuti.hindi}</div>
               </div>
