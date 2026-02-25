@@ -1,5 +1,6 @@
 export const chalisaData = {
     title: "શ્રી સોદેવ ચાલીસા",
+    audio: "/assets/audio/chalisa.mp3",
     lyrics: [
         {
             gujarati: "ॐ નમઃ સોદેવપીરાય સર્વ સૌખ્ય પ્રદો ભવઃ",

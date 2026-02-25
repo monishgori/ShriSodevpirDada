@@ -4,19 +4,33 @@ import { mantras } from './data/mantras';
 import { bhajans } from './data/bhajans';
 import { aartis } from './data/aartis';
 import { stutis } from './data/stutis';
+import { videos } from './data/videos';
+import { historyData } from './data/history';
 import { quotes } from './data/quotes';
-// Web haptics fallback
+// Web haptics fallback - Build Trigger
 const ImpactStyle = {
   Light: 10,
   Medium: 20,
   Heavy: 30
 };
 
+const APP_VERSION = '1.1.1';
+
 function App() {
-  const [currentMode, setCurrentMode] = useState(localStorage.getItem('pooja_mode') || 'chalisa');
+  // Safe Storage Utility
+  const getSafeStorage = (key, fallback) => {
+    try {
+      return localStorage.getItem(key) || fallback;
+    } catch (e) {
+      console.warn("Storage access failed:", e);
+      return fallback;
+    }
+  };
+
+  const [currentMode, setCurrentMode] = useState(() => getSafeStorage('pooja_mode', 'chalisa'));
   const [isPlaying, setIsPlaying] = useState(false);
-  const [language, setLanguage] = useState(localStorage.getItem('pooja_lang') || 'gujarati');
-  const [repeatCount, setRepeatCount] = useState(Number(localStorage.getItem('pooja_repeat')) || 1);
+  const [language, setLanguage] = useState(() => getSafeStorage('pooja_lang', 'gujarati'));
+  const [repeatCount, setRepeatCount] = useState(() => Number(getSafeStorage('pooja_repeat', 1)));
   const [currentRepeat, setCurrentRepeat] = useState(0);
   const [isBellRinging, setIsBellRinging] = useState(false);
   const [flowers, setFlowers] = useState([]);
@@ -24,7 +38,7 @@ function App() {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [activeVerse, setActiveVerse] = useState(0);
-  const [activeItemIndex, setActiveItemIndex] = useState(Number(localStorage.getItem('pooja_index')) || 0);
+  const [activeItemIndex, setActiveItemIndex] = useState(() => Number(getSafeStorage('pooja_index', 0)));
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
   const [sleepTimer, setSleepTimer] = useState(null); // in minutes
   const [timerId, setTimerId] = useState(null);
@@ -32,10 +46,23 @@ function App() {
   const [dailyQuote, setDailyQuote] = useState({ gujarati: '', hindi: '', english: '' });
   const [isDiyaLit, setIsDiyaLit] = useState(false);
   const [isSeeking, setIsSeeking] = useState(false);
-
+  const [historyTab, setHistoryTab] = useState('story'); // 'story' or 'incidents'
   const audioRef = useRef(null);
   const bellAudioRef = useRef(null);
   const shankhAudioRef = useRef(null);
+
+
+  // Save Preferences
+  useEffect(() => {
+    try {
+      localStorage.setItem('pooja_mode', currentMode);
+      localStorage.setItem('pooja_lang', language);
+      localStorage.setItem('pooja_repeat', repeatCount);
+      localStorage.setItem('pooja_index', activeItemIndex);
+    } catch (e) {
+      console.warn("Saving to storage failed:", e);
+    }
+  }, [currentMode, language, repeatCount, activeItemIndex]);
 
   const backgroundImage = '/assets/images/1.png';
 
@@ -68,13 +95,6 @@ function App() {
     setDailyQuote(quotes[quoteIndex]);
   }, []);
 
-  // Save Preferences
-  useEffect(() => {
-    localStorage.setItem('pooja_mode', currentMode);
-    localStorage.setItem('pooja_lang', language);
-    localStorage.setItem('pooja_repeat', repeatCount);
-    localStorage.setItem('pooja_index', activeItemIndex);
-  }, [currentMode, language, repeatCount, activeItemIndex]);
 
   // Sleep Timer logic
   useEffect(() => {
@@ -117,14 +137,6 @@ function App() {
       if (dur && isFinite(dur) && dur > 0 && duration !== dur) {
         setDuration(dur);
       }
-
-      // Lyrics Sync
-      if (currentMode === 'chalisa') {
-        const verseCount = chalisaData.lyrics.length;
-        const index = Math.floor((cur / (dur || 1)) * verseCount);
-        const safeIndex = Math.min(index, verseCount - 1);
-        if (safeIndex !== activeVerse) setActiveVerse(safeIndex);
-      }
     }
   };
 
@@ -155,15 +167,7 @@ function App() {
   };
 
 
-  // Auto-scroll logic: When activeVerse changes, scroll the lyrics container
-  useEffect(() => {
-    if (isLyricsVisible && isPlaying) {
-      const activeElement = document.querySelector('.active-verse');
-      if (activeElement) {
-        activeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  }, [activeVerse, isLyricsVisible, isPlaying]);
+  // Auto-scroll logic removed as per user request to revoke auto-sync
 
   // Flower Shower Logic
   const startFlowerShower = () => {
@@ -199,21 +203,80 @@ function App() {
     }
   };
 
+  const showerFlowers = () => {
+    startFlowerShower();
+  };
+
+  useEffect(() => {
+    const unlock = () => {
+      if (audioRef.current) {
+        audioRef.current.load();
+      }
+
+      window.removeEventListener('touchstart', unlock);
+      window.removeEventListener('click', unlock);
+    };
+    window.addEventListener('touchstart', unlock);
+    window.addEventListener('click', unlock);
+    return () => {
+      window.removeEventListener('touchstart', unlock);
+      window.removeEventListener('click', unlock);
+    };
+  }, []);
+
   const toggleDiya = () => {
     triggerHaptic();
     setIsDiyaLit(!isDiyaLit);
   };
 
 
-  // Reset playback when song changes
-  useEffect(() => {
-    setCurrentTime(0);
-    setDuration(0);
-    setCurrentRepeat(0);
-    setIsPlaying(false);
-    if (audioRef.current) {
-      audioRef.current.currentTime = 0;
+
+  const togglePlay = () => {
+    triggerHaptic(ImpactStyle.Medium);
+    if (!audioRef.current) return;
+
+    if (audioRef.current.paused) {
+      audioRef.current.play().then(() => {
+        setIsPlaying(true);
+      }).catch(error => {
+        console.error("Playback failed:", error);
+        // Direct browser fallback
+        audioRef.current.load();
+        audioRef.current.play().then(() => setIsPlaying(true)).catch(() => { });
+      });
+    } else {
       audioRef.current.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  // Reset playback only when the actual audio source changes
+  useEffect(() => {
+    const rawAudioSrc =
+      currentMode === 'chalisa' ? "/assets/audio/chalisa.mp3" :
+        currentMode === 'mantras' ? (mantras[activeItemIndex]?.audio || "/assets/audio/mantra.mp3") :
+          currentMode === 'bhajans' ? (bhajans[activeItemIndex]?.audio || "/assets/audio/bhajan.mp3") :
+            currentMode === 'aartis' ? (aartis[activeItemIndex]?.audio || "/assets/audio/chalisa.mp3") :
+              currentMode === 'videos' ? "" :
+                (stutis[activeItemIndex]?.audio || "/assets/audio/stuti.mp3");
+
+    // Standardization for stability
+    const currentAudioSrc = rawAudioSrc || "";
+
+    const prevSrc = audioRef.current?.getAttribute('data-prev-src');
+
+    if (prevSrc !== currentAudioSrc) {
+      setCurrentTime(0);
+      setDuration(0);
+      setCurrentRepeat(0);
+      setIsPlaying(false);
+
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = currentAudioSrc;
+        audioRef.current.load();
+        audioRef.current.setAttribute('data-prev-src', currentAudioSrc);
+      }
     }
   }, [currentMode, activeItemIndex]);
 
@@ -222,7 +285,8 @@ function App() {
     setCurrentMode(mode);
     setIsLyricsVisible(true);
     setIsLibraryOpen(false);
-    setActiveItemIndex(0); // Reset to first item
+    setActiveItemIndex(mode === 'videos' || mode === 'history' ? null : 0); // null for list views
+    if (mode === 'history') setHistoryTab('story');
     setIsPlaying(false); // Stop any previous audio
     if (audioRef.current) audioRef.current.pause();
   };
@@ -230,7 +294,7 @@ function App() {
   return (
     <div className={`app-container ${isLyricsVisible ? 'view-mode' : 'home-mode'}`}>
       {/* Diya (Lamp) */}
-      <div className={`diya-container ${isDiyaLit ? 'lit' : ''}`}>
+      <div className={`diya-container ${isDiyaLit ? 'lit' : ''} ${isLyricsVisible ? 'hidden-ritual' : ''}`}>
         <div className="diya-glow"></div>
         <div className="diya-base">🪔</div>
       </div>
@@ -248,15 +312,24 @@ function App() {
       </div>
       <audio
         ref={audioRef}
-        src={
-          currentMode === 'chalisa' ? "/assets/audio/chalisa.mp3" :
-            currentMode === 'mantras' ? (mantras[activeItemIndex]?.audio || "/assets/audio/mantra.mp3") :
-              currentMode === 'bhajans' ? (bhajans[activeItemIndex]?.audio || "/assets/audio/bhajan.mp3") :
-                currentMode === 'aartis' ? (aartis[activeItemIndex]?.audio || "/assets/audio/aarti.mp3") :
-                  (stutis[activeItemIndex]?.audio || "/assets/audio/stuti.mp3")
-        }
+        src="/assets/audio/chalisa.mp3"
+        preload="auto"
+        playsInline
+        webkit-playsinline="true"
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
+        onError={(e) => {
+          const error = e.target.error;
+          let msg = "Unknown Audio Error";
+          if (error.code === 1) msg = "Aborted";
+          if (error.code === 2) msg = "Network Error";
+          if (error.code === 3) msg = "Decode Error";
+          if (error.code === 4) msg = "Source Not Supported";
+          alert("Audio Error: " + msg + " (" + (audioRef.current?.src || "no src") + ")");
+          setIsPlaying(false);
+        }}
         onEnded={() => {
           if (currentRepeat + 1 < repeatCount) {
             setCurrentRepeat(prev => prev + 1);
@@ -271,8 +344,8 @@ function App() {
             if (audioRef.current) setCurrentTime(audioRef.current.duration);
           }
         }} />
-      <audio ref={bellAudioRef} src="/assets/audio/bell.mp3" />
-      <audio ref={shankhAudioRef} src="/assets/audio/shankh.mp3" />
+      <audio ref={bellAudioRef} src="/assets/audio/bell.mp3" playsInline webkit-playsinline="true" />
+      <audio ref={shankhAudioRef} src="/assets/audio/shankh.mp3" playsInline webkit-playsinline="true" />
 
       {/* Flower Shower */}
       {flowers.map(flower => (
@@ -335,7 +408,7 @@ function App() {
                 <div className="dock-icon">🐚</div>
                 <span>Shankh</span>
               </div>
-              <div className="dock-icon-item" onClick={startFlowerShower}>
+              <div className="dock-icon-item" onClick={showerFlowers}>
                 <div className="dock-icon">🌸</div>
                 <span>Flowers</span>
               </div>
@@ -359,11 +432,7 @@ function App() {
                 ⋯
               </button>
 
-              <button className="dock-play-btn" onClick={() => {
-                triggerHaptic(ImpactStyle.Medium);
-                if (isPlaying) { audioRef.current.pause(); setIsPlaying(false); }
-                else { audioRef.current.play(); setIsPlaying(true); }
-              }}>
+              <button className="dock-play-btn" onClick={togglePlay}>
                 {isPlaying ? '⏸' : '▶'}
               </button>
 
@@ -463,7 +532,22 @@ function App() {
             </span>
             <span className="lib-eng">STUTI</span>
           </button>
+          <button className="library-card library-card-wide" style={{ background: 'linear-gradient(135deg, var(--secondary-glow), transparent)', borderColor: 'var(--secondary)' }} onClick={() => startReading('history')}>
+            <span className="lib-hindi">
+              {language === 'gujarati' ? 'દાદા નો ઇતિહાસ' : 'दादा का इतिहास'}
+            </span>
+            <span className="lib-eng">HISTORY & SATSANG</span>
+          </button>
+          <button className="library-card library-card-wide" style={{ background: 'linear-gradient(135deg, #ff000033, #00000033)', borderColor: '#ff0000' }} onClick={() => startReading('videos')}>
+            <span className="lib-hindi">
+              {language === 'gujarati' ? 'સોદેવ વિડિયો' : 'सोदेव वीडियो'}
+            </span>
+            <span className="lib-eng" style={{ color: '#ff4444' }}>DIVINE VIDEOS</span>
+          </button>
         </div>
+        <a href="/privacy.html" className="privacy-link" target="_blank" rel="noopener noreferrer">
+          PRIVACY POLICY
+        </a>
       </div>
 
       {/* LYRICS VIEW */}
@@ -479,12 +563,16 @@ function App() {
                 currentMode === 'chalisa' ? 'સોદેવ ચાલીસા' :
                   currentMode === 'mantras' ? 'સિદ્ધ મંત્ર સંગ્રહ' :
                     currentMode === 'bhajans' ? 'ભજન સંગ્રહ' :
-                      currentMode === 'aartis' ? 'સોદેવ આરતી' : 'સોદેવ સ્તુતિ'
+                      currentMode === 'aartis' ? 'સોદેવ આરતી' :
+                        currentMode === 'history' ? 'સોદેવ ઈતિહાસ' :
+                          currentMode === 'videos' ? 'સોદેવ વિડિયો' : 'સોદેવ સ્તુતિ'
               ) : (
                 currentMode === 'chalisa' ? 'सोदेव चालीसा' :
                   currentMode === 'mantras' ? 'सिद्ध मंत्र संग्रह' :
                     currentMode === 'bhajans' ? 'भजन संग्रह' :
-                      currentMode === 'aartis' ? 'सोदेव आरती' : 'सोदेव स्तुति'
+                      currentMode === 'aartis' ? 'सोदेव आरती' :
+                        currentMode === 'history' ? 'सोदेव इतिहास' :
+                          currentMode === 'videos' ? 'सोदेव वीडियो' : 'सोदेव स्तुति'
               )}
             </div>
             <div className="page-subtitle">
@@ -504,11 +592,8 @@ function App() {
                 key={index}
                 className={`verse glass-panel ${activeItemIndex === index ? 'active-verse' : ''}`}
                 onClick={() => {
-                  setActiveItemIndex(index);
-                  setIsPlaying(false);
-                  if (audioRef.current) {
-                    audioRef.current.pause();
-                    audioRef.current.load();
+                  if (activeItemIndex !== index) {
+                    setActiveItemIndex(index);
                   }
                 }}
               >
@@ -524,11 +609,8 @@ function App() {
                 key={index}
                 className={`verse glass-panel ${activeItemIndex === index ? 'active-verse' : ''}`}
                 onClick={() => {
-                  setActiveItemIndex(index);
-                  setIsPlaying(false);
-                  if (audioRef.current) {
-                    audioRef.current.pause();
-                    audioRef.current.load();
+                  if (activeItemIndex !== index) {
+                    setActiveItemIndex(index);
                   }
                 }}
               >
@@ -543,37 +625,187 @@ function App() {
               <div
                 key={index}
                 className={`verse glass-panel ${activeItemIndex === index ? 'active-verse' : ''}`}
-                onClick={() => {
-                  setActiveItemIndex(index);
-                  setIsPlaying(false);
-                  if (audioRef.current) {
-                    audioRef.current.pause();
-                    audioRef.current.load();
-                  }
-                }}
+                onClick={() => setActiveItemIndex(index)}
               >
                 <div style={{ color: 'var(--secondary)', fontSize: '0.9rem', marginBottom: '10px' }}>
-                  {aarti.name} {activeItemIndex === index && ' (Selected)'}
+                  {aarti.name}
                 </div>
                 <div className="hindi-text">{aarti[language] || aarti.gujarati || aarti.hindi}</div>
               </div>
             ))
+          ) : currentMode === 'history' ? (
+            <div className="history-view" style={{ padding: '0 10px 40px 10px' }}>
+              <div className="tab-switcher" style={{ display: 'flex', gap: '10px', marginBottom: '25px' }}>
+                <button
+                  className={`glass-panel ${historyTab === 'story' ? 'active-verse' : ''}`}
+                  style={{ flex: 1, padding: '15px', border: 'none', color: '#fff', fontSize: '1rem', cursor: 'pointer' }}
+                  onClick={() => setHistoryTab('story')}
+                >
+                  {language === 'gujarati' ? 'જીવન ચરિત્ર' : 'जीवन चरित्र'}
+                </button>
+                <button
+                  className={`glass-panel ${historyTab === 'incidents' ? 'active-verse' : ''}`}
+                  style={{ flex: 1, padding: '15px', border: 'none', color: '#fff', fontSize: '1rem', cursor: 'pointer' }}
+                  onClick={() => {
+                    setHistoryTab('incidents');
+                    setActiveItemIndex(null);
+                  }}
+                >
+                  {language === 'gujarati' ? 'સત્ય ઘટનાઓ' : 'सत्य घटनाएं'}
+                </button>
+              </div>
+
+              {historyTab === 'story' ? (
+                <div className="life-story">
+                  {historyData.lifeStory.content.map(item => (
+                    <div key={item.id} className="verse glass-panel" style={{ textAlign: 'left', marginBottom: '20px' }}>
+                      <div style={{ color: 'var(--secondary)', fontWeight: 'bold', marginBottom: '10px' }}>{item.subtitle[language]}</div>
+                      <div className="hindi-text" style={{ fontSize: '1.2rem', lineHeight: '1.8' }}>{item.text[language]}</div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="incidents-list">
+                  {activeItemIndex === null ? (
+                    <div style={{ display: 'grid', gap: '15px' }}>
+                      {historyData.incidents.map((incident, index) => (
+                        <div
+                          key={incident.id}
+                          className="verse glass-panel"
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => setActiveItemIndex(index)}
+                        >
+                          <div className="hindi-text" style={{ fontSize: '1.3rem' }}>{incident.title[language]}</div>
+                          <div style={{ color: 'var(--secondary)', fontSize: '0.8rem', marginTop: '10px' }}>
+                            {language === 'gujarati' ? 'વાંચવા માટે ક્લિક કરો' : 'पढ़ने के लिए क्लिक करें'} →
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="incident-content">
+                      <button
+                        className="glass-panel"
+                        style={{ padding: '10px 20px', border: 'none', color: 'var(--secondary)', marginBottom: '20px', cursor: 'pointer' }}
+                        onClick={() => setActiveItemIndex(null)}
+                      >
+                        ← {language === 'gujarati' ? 'યાદી પર પાછા જાઓ' : 'सूची पर वापस जाएं'}
+                      </button>
+                      <div className="verse glass-panel" style={{ textAlign: 'left' }}>
+                        <div style={{ color: 'var(--secondary)', fontWeight: 'bold', fontSize: '1.4rem', marginBottom: '20px' }}>
+                          {historyData.incidents[activeItemIndex].title[language]}
+                        </div>
+                        <div className="hindi-text" style={{ fontSize: '1.3rem', lineHeight: '2' }}>
+                          {historyData.incidents[activeItemIndex].content[language]}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          ) : currentMode === 'videos' ? (
+            <div className="videos-list" style={{ display: 'grid', gap: '15px', padding: '10px' }}>
+              {videos.map((video, index) => (
+                <div
+                  key={index}
+                  className="video-item glass-panel"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '15px',
+                    padding: '12px',
+                    textAlign: 'left',
+                    cursor: 'pointer'
+                  }}
+                  onClick={() => setActiveItemIndex(index)}
+                >
+                  <div style={{
+                    width: '100px',
+                    height: '60px',
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    flexShrink: 0,
+                    position: 'relative'
+                  }}>
+                    <img
+                      src={`https://img.youtube.com/vi/${video.youtubeId}/mqdefault.jpg`}
+                      alt={video.title}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                    <div style={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      background: 'rgba(255, 0, 0, 0.8)',
+                      borderRadius: '50%',
+                      width: '24px',
+                      height: '24px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '0.6rem'
+                    }}>▶</div>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ color: 'var(--secondary)', fontWeight: 'bold', fontSize: '0.9rem' }}>{video.title}</div>
+                    <div className="hindi-text" style={{ fontSize: '1rem', marginTop: '4px', marginBottom: '0' }}>{video[language] || video.gujarati || video.hindi}</div>
+                  </div>
+                </div>
+              ))}
+
+              {/* Fixed Video Player Overlay when active */}
+              {activeItemIndex !== null && currentMode === 'videos' && (
+                <div style={{
+                  position: 'fixed',
+                  top: '0',
+                  left: '0',
+                  width: '100%',
+                  height: '100%',
+                  background: 'rgba(0,0,0,0.9)',
+                  zIndex: 10000,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '20px'
+                }} onClick={() => setActiveItemIndex(null)}>
+                  <div style={{ width: '100%', maxWidth: '800px', position: 'relative' }} onClick={e => e.stopPropagation()}>
+                    <button
+                      onClick={() => setActiveItemIndex(null)}
+                      style={{
+                        position: 'absolute',
+                        top: '-40px',
+                        right: '0',
+                        background: 'none',
+                        border: 'none',
+                        color: 'white',
+                        fontSize: '1.5rem',
+                        cursor: 'pointer'
+                      }}
+                    >✕</button>
+                    <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0 }}>
+                      <iframe
+                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', borderRadius: '12px' }}
+                        src={`https://www.youtube.com/embed/${videos[activeItemIndex]?.youtubeId}?autoplay=1`}
+                        title="YouTube video"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      ></iframe>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           ) : (
             stutis.map((stuti, index) => (
               <div
                 key={index}
                 className={`verse glass-panel ${activeItemIndex === index ? 'active-verse' : ''}`}
-                onClick={() => {
-                  setActiveItemIndex(index);
-                  setIsPlaying(false);
-                  if (audioRef.current) {
-                    audioRef.current.pause();
-                    audioRef.current.load();
-                  }
-                }}
+                onClick={() => setActiveItemIndex(index)}
               >
                 <div style={{ color: 'var(--secondary)', fontSize: '0.9rem', marginBottom: '10px' }}>
-                  {stuti.name} {activeItemIndex === index && ' (Selected)'}
+                  {stuti.name}
                 </div>
                 <div className="hindi-text">{stuti[language] || stuti.gujarati || stuti.hindi}</div>
               </div>
