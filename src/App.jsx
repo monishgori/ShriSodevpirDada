@@ -4,6 +4,7 @@ import { mantras } from './data/mantras';
 import { bhajans } from './data/bhajans';
 import { aartis } from './data/aartis';
 import { stutis } from './data/stutis';
+import { videos } from './data/videos';
 import { quotes } from './data/quotes';
 // Web haptics fallback
 const ImpactStyle = {
@@ -209,7 +210,8 @@ function App() {
         currentMode === 'mantras' ? (mantras[activeItemIndex]?.audio || "/assets/audio/mantra.mp3") :
           currentMode === 'bhajans' ? (bhajans[activeItemIndex]?.audio || "/assets/audio/bhajan.mp3") :
             currentMode === 'aartis' ? (aartis[activeItemIndex]?.audio || "/assets/audio/aarti.mp3") :
-              (stutis[activeItemIndex]?.audio || "/assets/audio/Stuti.mp3");
+              currentMode === 'videos' ? "" :
+                (stutis[activeItemIndex]?.audio || "/assets/audio/Stuti.mp3");
 
     const prevSrc = audioRef.current?.getAttribute('data-prev-src');
 
@@ -469,6 +471,12 @@ function App() {
             </span>
             <span className="lib-eng">STUTI</span>
           </button>
+          <button className="library-card library-card-wide" style={{ background: 'linear-gradient(135deg, #ff000033, #00000033)', borderColor: '#ff0000' }} onClick={() => startReading('videos')}>
+            <span className="lib-hindi">
+              {language === 'gujarati' ? 'સોદેવ વિડિયો' : 'सोदेव वीडियो'}
+            </span>
+            <span className="lib-eng" style={{ color: '#ff4444' }}>DIVINE VIDEOS</span>
+          </button>
         </div>
         <a href="/privacy.html" className="privacy-link" target="_blank" rel="noopener noreferrer">
           PRIVACY POLICY
@@ -488,12 +496,14 @@ function App() {
                 currentMode === 'chalisa' ? 'સોદેવ ચાલીસા' :
                   currentMode === 'mantras' ? 'સિદ્ધ મંત્ર સંગ્રહ' :
                     currentMode === 'bhajans' ? 'ભજન સંગ્રહ' :
-                      currentMode === 'aartis' ? 'સોદેવ આરતી' : 'સોદેવ સ્તુતિ'
+                      currentMode === 'aartis' ? 'સોદેવ આરતી' :
+                        currentMode === 'videos' ? 'સોદેવ વિડિયો' : 'સોદેવ સ્તુતિ'
               ) : (
                 currentMode === 'chalisa' ? 'सोदेव चालीसा' :
                   currentMode === 'mantras' ? 'सिद्ध मंत्र संग्रह' :
                     currentMode === 'bhajans' ? 'भजन संग्रह' :
-                      currentMode === 'aartis' ? 'सोदेव आरती' : 'सोदेव स्तुति'
+                      currentMode === 'aartis' ? 'सोदेव आरती' :
+                        currentMode === 'videos' ? 'सोदेव वीडियो' : 'सोदेव स्तुति'
               )}
             </div>
             <div className="page-subtitle">
@@ -554,6 +564,26 @@ function App() {
                 <div className="hindi-text">{aarti[language] || aarti.gujarati || aarti.hindi}</div>
               </div>
             ))
+          ) : currentMode === 'videos' ? (
+            <div className="videos-list" style={{ display: 'grid', gap: '20px', padding: '10px' }}>
+              {videos.map((video, index) => (
+                <div key={index} className="video-item glass-panel" style={{ padding: '0', overflow: 'hidden' }}>
+                  <div className="video-player-wrapper" style={{ position: 'relative', paddingBottom: '56.25%', height: '0' }}>
+                    <iframe
+                      style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', border: 'none' }}
+                      src={`https://www.youtube.com/embed/${video.youtubeId}`}
+                      title={video.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                  <div style={{ padding: '15px', textAlign: 'left' }}>
+                    <div style={{ color: 'var(--secondary)', fontWeight: 'bold' }}>{video.title}</div>
+                    <div className="hindi-text" style={{ fontSize: '1.2rem', marginTop: '5px' }}>{video[language] || video.gujarati || video.hindi}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : (
             stutis.map((stuti, index) => (
               <div
