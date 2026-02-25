@@ -14,6 +14,8 @@ const ImpactStyle = {
   Heavy: 30
 };
 
+const APP_VERSION = '1.0.6';
+
 function App() {
   // Safe Storage Utility
   const getSafeStorage = (key, fallback) => {
@@ -224,7 +226,10 @@ function App() {
 
   useEffect(() => {
     const unlock = () => {
-      initializeAudio();
+      // Just prime the audio element, don't call initializeAudio yet
+      if (audioRef.current) {
+        audioRef.current.load();
+      }
       window.removeEventListener('touchstart', unlock);
       window.removeEventListener('click', unlock);
     };
@@ -234,7 +239,7 @@ function App() {
       window.removeEventListener('touchstart', unlock);
       window.removeEventListener('click', unlock);
     };
-  }, [isAudioInitialized]);
+  }, []);
 
   const toggleDiya = () => {
     triggerHaptic();
@@ -296,8 +301,9 @@ function App() {
               currentMode === 'videos' ? "" :
                 (stutis[activeItemIndex]?.audio || "/assets/audio/Stuti.mp3");
 
-    // Standardize URL to absolute for iOS compatibility
-    const currentAudioSrc = rawAudioSrc ? new URL(rawAudioSrc, window.location.origin).href : "";
+    // Standardize URL to absolute for iOS compatibility with Cache Buster
+    const currentAudioSrc = rawAudioSrc ?
+      new URL(rawAudioSrc, window.location.origin).href + `?v=${APP_VERSION}` : "";
 
     const prevSrc = audioRef.current?.getAttribute('data-prev-src');
 
@@ -375,8 +381,8 @@ function App() {
             if (audioRef.current) setCurrentTime(audioRef.current.duration);
           }
         }} />
-      <audio ref={bellAudioRef} src="/assets/audio/bell.mp3" playsInline webkit-playsinline="true" />
-      <audio ref={shankhAudioRef} src="/assets/audio/shankh.mp3" playsInline webkit-playsinline="true" />
+      <audio ref={bellAudioRef} src={`/assets/audio/bell.mp3?v=${APP_VERSION}`} crossOrigin="anonymous" playsInline webkit-playsinline="true" />
+      <audio ref={shankhAudioRef} src={`/assets/audio/shankh.mp3?v=${APP_VERSION}`} crossOrigin="anonymous" playsInline webkit-playsinline="true" />
 
       {/* Flower Shower */}
       {flowers.map(flower => (
