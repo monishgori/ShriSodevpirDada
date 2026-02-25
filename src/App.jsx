@@ -14,7 +14,7 @@ const ImpactStyle = {
   Heavy: 30
 };
 
-const APP_VERSION = '1.0.9';
+const APP_VERSION = '1.1.0';
 
 function App() {
   // Safe Storage Utility
