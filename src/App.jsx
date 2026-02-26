@@ -491,6 +491,24 @@ function App() {
             <div className="greeting-text">{getGreeting()}</div>
           </div>
 
+          {/* Move language here to clear space in the dock (Premium Location) */}
+          {!isLyricsVisible && (
+            <div className="language-pill-container header-lang glass-panel">
+              <button
+                className={`lang-pill-btn ${language === 'gujarati' ? 'active' : ''}`}
+                onClick={(e) => { e.stopPropagation(); setLanguage('gujarati'); triggerHaptic(); }}
+              >
+                GUJ
+              </button>
+              <button
+                className={`lang-pill-btn ${language === 'hindi' ? 'active' : ''}`}
+                onClick={(e) => { e.stopPropagation(); setLanguage('hindi'); triggerHaptic(); }}
+              >
+                HIN
+              </button>
+            </div>
+          )}
+
           {!isLyricsVisible && !isFocusMode && (dailyQuote.gujarati || dailyQuote.hindi) && (
             <div className="daily-quote-card glass-panel">
               <div className="quote-header">
@@ -578,41 +596,24 @@ function App() {
                 {isPlaying ? '⏸' : '▶'}
               </button>
 
-              <div className="dock-control-cluster">
-                <div className="language-pill-container mini">
-                  <button
-                    className={`lang-pill-btn ${language === 'gujarati' ? 'active' : ''}`}
-                    onClick={(e) => { e.stopPropagation(); setLanguage('gujarati'); triggerHaptic(); }}
-                  >
-                    GUJ
-                  </button>
-                  <button
-                    className={`lang-pill-btn ${language === 'hindi' ? 'active' : ''}`}
-                    onClick={(e) => { e.stopPropagation(); setLanguage('hindi'); triggerHaptic(); }}
-                  >
-                    HIN
-                  </button>
-                </div>
-
-                <div className="repeat-pill-container">
-                  <span className="repeat-icon">🔁</span>
-                  <select
-                    value={repeatCount}
-                    onChange={(e) => setRepeatCount(Number(e.target.value))}
-                    className="repeat-mini-select"
-                  >
-                    <option value="1">1x</option>
-                    <option value="3">3x</option>
-                    <option value="11">11x</option>
-                    <option value="21">21x</option>
-                    <option value="108">108x</option>
-                  </select>
-                  {repeatCount > 1 && (
-                    <div className="dock-jaap-label">
-                      Jaap {currentRepeat + 1}/{repeatCount}
-                    </div>
-                  )}
-                </div>
+              <div className="dock-repeat-island glass-panel">
+                <span className="repeat-icon">🔁</span>
+                <select
+                  value={repeatCount}
+                  onChange={(e) => setRepeatCount(Number(e.target.value))}
+                  className="repeat-mini-select"
+                >
+                  <option value="1">1x</option>
+                  <option value="3">3x</option>
+                  <option value="11">11x</option>
+                  <option value="21">21x</option>
+                  <option value="108">108x</option>
+                </select>
+                {repeatCount > 1 && (
+                  <div className="dock-jaap-badge">
+                    {currentRepeat + 1}/{repeatCount}
+                  </div>
+                )}
               </div>
             </div>
 
