@@ -521,17 +521,27 @@ function App() {
             </span>
             <span className="lib-eng">HISTORY</span>
           </button>
-          <button className="library-card" onClick={() => startReading('videos')}>
+          <button className="library-card library-card-wide" onClick={() => startReading('videos')}>
             <span className="lib-hindi">
               {language === 'gujarati' ? 'યુટ્યુબ ભક્તિ' : 'यूट्यूब भक्ति'}
             </span>
-            <span className="lib-eng">YOUTUBE</span>
+            <span className="lib-eng">VIDEOS</span>
           </button>
-          <button className="library-card" onClick={() => startReading('policy')}>
-            <span className="lib-hindi">
-              {language === 'gujarati' ? 'ગોપનીયતા' : 'गोपनीयता'}
-            </span>
-            <span className="lib-eng">PRIVACY</span>
+        </div>
+        <div style={{ textAlign: 'center', padding: '15px 0 10px 0', opacity: 0.5 }}>
+          <button
+            onClick={() => startReading('policy')}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'var(--text-primary)',
+              fontSize: '0.65rem',
+              letterSpacing: '1px',
+              cursor: 'pointer',
+              fontWeight: '500'
+            }}
+          >
+            PRIVACY POLICY
           </button>
         </div>
       </div>
