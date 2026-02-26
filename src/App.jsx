@@ -326,17 +326,7 @@ function App() {
       setIsPlaying(false);
     };
 
-    audio.onended = () => {
-      if (currentRepeat + 1 < repeatCount) {
-        setCurrentRepeat(prev => prev + 1);
-        audio.currentTime = 0;
-        audio.play().catch(e => console.error("Auto-replay failed:", e));
-      } else {
-        setIsPlaying(false);
-        setCurrentRepeat(0);
-        setCurrentTime(audio.duration);
-      }
-    };
+    audio.onended = null; // Managed by dedicated effect to avoid stale closures
 
     return audio;
   };
@@ -371,6 +361,29 @@ function App() {
       }
     };
   }, [currentMode, activeItemIndex]);
+
+  // FIX: Dedicated effect for audio looping logic (Avoids stale closures)
+  useEffect(() => {
+    if (!audioRef.current) return;
+
+    audioRef.current.onended = () => {
+      // Check if we need to repeat again
+      if (currentRepeat + 1 < repeatCount) {
+        setCurrentRepeat(prev => prev + 1);
+        if (audioRef.current) {
+          audioRef.current.currentTime = 0;
+          audioRef.current.play().catch(e => console.error("Auto-replay loop failed:", e));
+        }
+      } else {
+        // No more repeats: stop and reset
+        setIsPlaying(false);
+        setCurrentRepeat(0);
+        if (audioRef.current) {
+          audioRef.current.currentTime = audioRef.current.duration || 0;
+        }
+      }
+    };
+  }, [currentRepeat, repeatCount]);
 
   const ringBell = () => {
     triggerHaptic(ImpactStyle.Heavy);
