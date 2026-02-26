@@ -230,6 +230,10 @@ function App() {
 
   // Effect to handle source changes (switching tracks)
   useEffect(() => {
+    // Only reload audio source if we are in an audio-bearing mode
+    const audioModes = ['chalisa', 'mantras', 'bhajans', 'aartis', 'stutis'];
+    if (!audioModes.includes(currentMode)) return;
+
     const rawAudioSrc =
       currentMode === 'chalisa' ? "/assets/audio/chalisa1.mp3" :
         currentMode === 'mantras' ? (mantras[activeItemIndex]?.audio || "/assets/audio/mantra.mp3") :
@@ -279,11 +283,25 @@ function App() {
 
   const startReading = (mode) => {
     triggerHaptic(ImpactStyle.Light);
+
+    const audioModes = ['chalisa', 'mantras', 'bhajans', 'aartis', 'stutis'];
+    const isNewModeAudio = audioModes.includes(mode);
+
+    // 1. If we are staying in the same mode, just show the view
+    // 2. If we are entering a non-audio mode (History/Videos), don't disturb background audio
+    if (currentMode === mode || !isNewModeAudio) {
+      setCurrentMode(mode);
+      setIsLyricsVisible(true);
+      setIsLibraryOpen(false);
+      return;
+    }
+
+    // 3. Otherwise, we are switching to a DIFFERENT audio mode - stop previous
     setCurrentMode(mode);
     setIsLyricsVisible(true);
     setIsLibraryOpen(false);
-    setActiveItemIndex(0); // Reset to first item
-    setIsPlaying(false); // Stop any previous audio
+    setActiveItemIndex(0);
+    setIsPlaying(false);
     if (audioRef.current) audioRef.current.pause();
   };
 
