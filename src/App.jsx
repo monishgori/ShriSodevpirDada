@@ -194,13 +194,7 @@ function App() {
           setDuration(dur);
         }
 
-        // Lyrics Sync
-        if (currentMode === 'chalisa') {
-          const verseCount = chalisaData.lyrics.length;
-          const index = Math.floor((cur / (dur || 1)) * verseCount);
-          const safeIndex = Math.min(index, verseCount - 1);
-          if (safeIndex !== activeVerse) setActiveVerse(safeIndex);
-        }
+        // Lyrics Sync disabled for manual reading
       }
     };
 
