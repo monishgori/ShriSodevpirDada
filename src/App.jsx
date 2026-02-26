@@ -28,6 +28,7 @@ function App() {
   const [duration, setDuration] = useState(0);
   const [activeVerse, setActiveVerse] = useState(0);
   const [activeItemIndex, setActiveItemIndex] = useState(Number(localStorage.getItem('pooja_index')) || 0);
+  const [activeIncidentIndex, setActiveIncidentIndex] = useState(0);
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
   const [sleepTimer, setSleepTimer] = useState(null); // in minutes
   const [timerId, setTimerId] = useState(null);
@@ -679,19 +680,36 @@ function App() {
 
               <div className="page-header" style={{ marginTop: '50px' }}>
                 <div className="page-title">{language === 'gujarati' ? 'દાદાના ચમત્કારો' : 'दादा के चमत्कार'}</div>
-                <div className="page-subtitle">Divine Incidents</div>
+                <div className="page-subtitle">Select a Miracle to Read</div>
               </div>
 
-              {historyData.incidents.map((incident) => (
-                <div key={incident.id} className="verse glass-panel">
-                  <div style={{ color: 'var(--secondary)', fontSize: '1.2rem', marginBottom: '15px' }}>
-                    {incident.title[language]}
+              <div className="incidents-grid">
+                {historyData.incidents.map((incident, idx) => (
+                  <button
+                    key={incident.id}
+                    className={`incident-select-card glass-panel ${activeIncidentIndex === idx ? 'active' : ''}`}
+                    onClick={() => {
+                      setActiveIncidentIndex(idx);
+                      triggerHaptic(ImpactStyle.Light);
+                    }}
+                  >
+                    <span className="incident-number">#{idx + 1}</span>
+                    <span className="incident-title-text">{incident.title[language]}</span>
+                  </button>
+                ))}
+              </div>
+
+              {historyData.incidents[activeIncidentIndex] && (
+                <div className="selected-incident-viewer glass-panel active-verse">
+                  <div className="incident-viewer-header">
+                    <span className="divine-tag">{language === 'gujarati' ? 'ચમત્કાર' : 'चमत्कार'}</span>
+                    <h2>{historyData.incidents[activeIncidentIndex].title[language]}</h2>
                   </div>
-                  <div className="hindi-text" style={{ fontSize: '1.1rem', textAlign: 'left' }}>
-                    {incident.content[language]}
+                  <div className="hindi-text incident-content">
+                    {historyData.incidents[activeIncidentIndex].content[language]}
                   </div>
                 </div>
-              ))}
+              )}
             </div>
           ) : currentMode === 'videos' ? (
             <div className="videos-section-container">
