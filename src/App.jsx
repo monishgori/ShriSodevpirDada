@@ -660,7 +660,12 @@ function App() {
               </div>
             ))
           ) : currentMode === 'history' ? (
-            <div className="history-section">
+            <div className="history-section-container">
+              <div className="page-header">
+                <div className="page-title">{language === 'gujarati' ? 'જીવન ચરિત્ર' : 'जीवन चरित्र'}</div>
+                <div className="page-subtitle">Life Story & Miracles</div>
+              </div>
+
               {historyData.lifeStory.content.map((item) => (
                 <div key={item.id} className="verse glass-panel">
                   <div style={{ color: 'var(--secondary)', fontSize: '1.2rem', marginBottom: '15px' }}>
@@ -671,9 +676,12 @@ function App() {
                   </div>
                 </div>
               ))}
+
               <div className="page-header" style={{ marginTop: '50px' }}>
                 <div className="page-title">{language === 'gujarati' ? 'દાદાના ચમત્કારો' : 'दादा के चमत्कार'}</div>
+                <div className="page-subtitle">Divine Incidents</div>
               </div>
+
               {historyData.incidents.map((incident) => (
                 <div key={incident.id} className="verse glass-panel">
                   <div style={{ color: 'var(--secondary)', fontSize: '1.2rem', marginBottom: '15px' }}>
@@ -686,42 +694,61 @@ function App() {
               ))}
             </div>
           ) : currentMode === 'videos' ? (
-            <div className="videos-grid-flow">
-              {videos.map((vid) => (
-                <div key={vid.id} className="verse glass-panel video-card-item">
-                  <div style={{ color: 'var(--secondary)', fontSize: '1rem', marginBottom: '15px' }}>
-                    {vid[language]}
+            <div className="videos-section-container">
+              <div className="page-header">
+                <div className="page-title">{language === 'gujarati' ? 'સોદેવપીર દર્શન' : 'सोदेवपीर दर्शन'}</div>
+                <div className="page-subtitle">YouTube Devotional Library</div>
+              </div>
+
+              <div className="videos-grid-flow">
+                {videos.map((vid) => (
+                  <div key={vid.id} className="video-premium-card glass-panel">
+                    <div className="video-container-wrapper">
+                      <iframe
+                        width="100%"
+                        height="200"
+                        src={`https://www.youtube.com/embed/${vid.youtubeId}?modestbranding=1&rel=0`}
+                        title={vid.title}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      ></iframe>
+                    </div>
+                    <div className="video-card-details">
+                      <div className="video-platform-badge">
+                        <span className="youtube-logo">🔴</span> YouTube
+                      </div>
+                      <div className="video-card-title">
+                        {vid[language] || vid.gujarati || vid.hindi}
+                      </div>
+                    </div>
                   </div>
-                  <div className="video-container-wrapper">
-                    <iframe
-                      width="100%"
-                      height="200"
-                      src={`https://www.youtube.com/embed/${vid.youtubeId}`}
-                      title={vid.title}
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      style={{ borderRadius: '15px' }}
-                    ></iframe>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           ) : currentMode === 'policy' ? (
-            <div className="policy-section">
+            <div className="policy-section-container">
+              <div className="page-header">
+                <div className="page-title">{policyData.title[language] || policyData.title.english}</div>
+                <div className="page-subtitle">Privacy & Data Transparency</div>
+              </div>
+
+              <div className="verse glass-panel" style={{ textAlign: 'center', marginBottom: '30px', padding: '15px' }}>
+                <div style={{ color: 'var(--secondary)', fontSize: '0.85rem', opacity: 0.8 }}>
+                  Last Updated: {policyData.lastUpdated}
+                </div>
+              </div>
+
               {policyData.sections.map((section, idx) => (
                 <div key={idx} className="verse glass-panel">
-                  <div style={{ color: 'var(--secondary)', fontSize: '1.2rem', marginBottom: '10px' }}>
+                  <div style={{ color: 'var(--secondary)', fontSize: '1.2rem', marginBottom: '15px' }}>
                     {section.subtitle[language] || section.subtitle.english}
                   </div>
-                  <div className="hindi-text" style={{ fontSize: '1rem', textAlign: 'left', opacity: 0.9 }}>
+                  <div className="hindi-text" style={{ fontSize: '1.1rem', textAlign: 'left' }}>
                     {section.text[language] || section.text.english}
                   </div>
                 </div>
               ))}
-              <div style={{ marginTop: '30px', opacity: 0.6, fontSize: '0.8rem' }}>
-                {language === 'gujarati' ? 'છેલ્લું અપડેટ: ' : 'अंतिम अपडेट: '} {policyData.lastUpdated}
-              </div>
             </div>
           ) : null}
         </main>
