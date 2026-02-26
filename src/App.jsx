@@ -613,6 +613,9 @@ function App() {
                 onClick={() => {
                   setActiveItemIndex(index);
                   setIsPlaying(false);
+                  if (audioRef.current) {
+                    audioRef.current.pause();
+                  }
                 }}
               >
                 <div style={{ color: 'var(--secondary)', fontSize: '0.9rem', marginBottom: '10px' }}>
@@ -629,6 +632,9 @@ function App() {
                 onClick={() => {
                   setActiveItemIndex(index);
                   setIsPlaying(false);
+                  if (audioRef.current) {
+                    audioRef.current.pause();
+                  }
                 }}
               >
                 <div style={{ color: 'var(--secondary)', fontSize: '0.9rem', marginBottom: '10px' }}>
@@ -645,6 +651,9 @@ function App() {
                 onClick={() => {
                   setActiveItemIndex(index);
                   setIsPlaying(false);
+                  if (audioRef.current) {
+                    audioRef.current.pause();
+                  }
                 }}
               >
                 <div style={{ color: 'var(--secondary)', fontSize: '0.9rem', marginBottom: '10px' }}>
