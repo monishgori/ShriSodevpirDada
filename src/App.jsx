@@ -398,7 +398,8 @@ function App() {
             <div className="dock-controls-row">
               <button
                 className={`dock-lib-btn ${isLibraryOpen ? 'active' : ''}`}
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   triggerHaptic(ImpactStyle.Light);
                   setIsLibraryOpen(!isLibraryOpen);
                 }}
@@ -406,7 +407,8 @@ function App() {
                 ⋯
               </button>
 
-              <button className="dock-play-btn" onClick={() => {
+              <button className="dock-play-btn" onClick={(e) => {
+                e.stopPropagation();
                 triggerHaptic(ImpactStyle.Medium);
                 console.log(`[DOCK PLAY] Mode: ${currentMode} | isPlaying: ${isPlaying} | Audio state: ${audioRef.current?.paused ? 'paused' : 'playing'}`);
                 if (audioRef.current) {
@@ -437,13 +439,13 @@ function App() {
                 <div className="language-pill-container mini">
                   <button
                     className={`lang-pill-btn ${language === 'gujarati' ? 'active' : ''}`}
-                    onClick={() => { setLanguage('gujarati'); triggerHaptic(); }}
+                    onClick={(e) => { e.stopPropagation(); setLanguage('gujarati'); triggerHaptic(); }}
                   >
                     GUJ
                   </button>
                   <button
                     className={`lang-pill-btn ${language === 'hindi' ? 'active' : ''}`}
-                    onClick={() => { setLanguage('hindi'); triggerHaptic(); }}
+                    onClick={(e) => { e.stopPropagation(); setLanguage('hindi'); triggerHaptic(); }}
                   >
                     HIN
                   </button>
@@ -494,54 +496,57 @@ function App() {
 
       {/* DEVOTIONAL LIBRARY TRAY (Independent Layer) */}
       {isLibraryOpen && <div className="tray-backdrop" onClick={() => setIsLibraryOpen(false)}></div>}
-      <div className={`library-tray glass-panel ${isLibraryOpen ? 'active' : ''}`}>
+      <div
+        className={`library-tray glass-panel ${isLibraryOpen ? 'active' : ''}`}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="tray-handle" onClick={() => setIsLibraryOpen(false)}></div>
         <div className="tray-title">Devotional Library</div>
 
         <div className="library-grid">
-          <button className="library-card" onClick={() => startReading('chalisa')}>
+          <button className="library-card" onClick={(e) => { e.stopPropagation(); startReading('chalisa'); }}>
             <span className="lib-icon">📜</span>
             <span className="lib-hindi">
               {language === 'gujarati' ? 'સોદેવ ચાલીસા' : 'सोदेव चालीसा'}
             </span>
             <span className="lib-eng">CHALISA</span>
           </button>
-          <button className="library-card" onClick={() => startReading('mantras')}>
+          <button className="library-card" onClick={(e) => { e.stopPropagation(); startReading('mantras'); }}>
             <span className="lib-icon">💎</span>
             <span className="lib-hindi">
               {language === 'gujarati' ? 'સિદ્ધ મંત્ર' : 'सिद्ध मंत्र'}
             </span>
             <span className="lib-eng">MANTRAS</span>
           </button>
-          <button className="library-card" onClick={() => startReading('bhajans')}>
+          <button className="library-card" onClick={(e) => { e.stopPropagation(); startReading('bhajans'); }}>
             <span className="lib-icon">🪕</span>
             <span className="lib-hindi">
               {language === 'gujarati' ? 'ભજન સંગ્રહ' : 'भजन संग्रह'}
             </span>
             <span className="lib-eng">BHAJANS</span>
           </button>
-          <button className="library-card" onClick={() => startReading('aartis')}>
+          <button className="library-card" onClick={(e) => { e.stopPropagation(); startReading('aartis'); }}>
             <span className="lib-icon">🕯️</span>
             <span className="lib-hindi">
               {language === 'gujarati' ? 'સોદેવ આરતી' : 'सोदेव आरती'}
             </span>
             <span className="lib-eng">AARTI</span>
           </button>
-          <button className="library-card" onClick={() => startReading('stutis')}>
+          <button className="library-card" onClick={(e) => { e.stopPropagation(); startReading('stutis'); }}>
             <span className="lib-icon">🙌</span>
             <span className="lib-hindi">
               {language === 'gujarati' ? 'સોદેવ સ્તુતિ' : 'सोदेव स्तुति'}
             </span>
             <span className="lib-eng">STUTI</span>
           </button>
-          <button className="library-card" onClick={() => startReading('history')}>
+          <button className="library-card" onClick={(e) => { e.stopPropagation(); startReading('history'); }}>
             <span className="lib-icon">🏺</span>
             <span className="lib-hindi">
               {language === 'gujarati' ? 'જીવન ચરિત્ર' : 'जीवन चरित्र'}
             </span>
             <span className="lib-eng">HISTORY</span>
           </button>
-          <button className="library-card library-card-wide" onClick={() => startReading('videos')}>
+          <button className="library-card library-card-wide" onClick={(e) => { e.stopPropagation(); startReading('videos'); }}>
             <div className="wide-card-content">
               <span className="lib-icon">🎥</span>
               <div className="wide-text">
@@ -721,7 +726,8 @@ function App() {
                       <button
                         key={incident.id}
                         className={`incident-select-card glass-panel ${activeIncidentIndex === idx ? 'active' : ''}`}
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation();
                           setActiveIncidentIndex(idx);
                           triggerHaptic(ImpactStyle.Light);
                         }}

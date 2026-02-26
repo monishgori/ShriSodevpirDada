@@ -523,10 +523,15 @@ body {
   scrollbar-width: none;
   touch-action: pan-y;
   -webkit-overflow-scrolling: touch;
+  /* iOS stability fixes */
+  transform: translate(-50%, 110%) translateZ(0);
+  -webkit-transform: translate(-50%, 110%) translateZ(0);
+  will-change: transform;
 }
 
 .library-tray.active {
-  transform: translate(-50%, 0);
+  transform: translate(-50%, 0) translateZ(0);
+  -webkit-transform: translate(-50%, 0) translateZ(0);
 }
 
 .tray-handle {
