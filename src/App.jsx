@@ -176,10 +176,10 @@ function App() {
     const audio = audioRef.current;
     audio.pause();
 
-    // Set source and call load() - critical for mobile stability
+    // Set source and properties for faster loading
     audio.src = path;
-    audio.load();
     audio.preload = "auto";
+    audio.load();
 
     // Setup events
     audio.onplay = () => setIsPlaying(true);
@@ -234,8 +234,8 @@ function App() {
               currentMode === 'stutis' ? (stutis[activeItemIndex]?.audio || "/assets/audio/Stuti.mp3") :
                 "/assets/audio/chalisa1.mp3";
 
-    // Use a timestamp to prevent broken cache issues on mobile
-    const path = `${rawAudioSrc}?v=${Date.now()}`;
+    // Use stable path - removed timestamp to allow browser caching for faster playback
+    const path = rawAudioSrc;
 
     setCurrentTime(0);
     setDuration(0);
