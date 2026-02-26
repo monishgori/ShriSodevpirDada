@@ -593,8 +593,15 @@ function App() {
       {/* LYRICS VIEW */}
       {isLyricsVisible && (
         <main className="lyrics-container">
-          <div className="back-btn glass-panel" onClick={() => setIsLyricsVisible(false)}>
-            <span className="back-icon">←</span> {language === 'gujarati' ? 'વાંચન બંધ કરો' : 'पठन बंद करें'}
+          <div className="top-actions-row">
+            <div className="back-btn glass-panel" onClick={() => setIsLyricsVisible(false)}>
+              <span className="back-icon">←</span> {language === 'gujarati' ? 'વાંચન બંધ કરો' : 'पठन बंद करें'}
+            </div>
+            {currentMode === 'history' && historyView !== 'menu' && (
+              <div className="back-btn glass-panel secondary-back" onClick={() => { setHistoryView('menu'); triggerHaptic(); }}>
+                <span className="back-icon">↺</span> {language === 'gujarati' ? 'પાછા જાઓ' : 'वापस जाएं'}
+              </div>
+            )}
           </div>
 
           <div className="page-header">
@@ -605,7 +612,10 @@ function App() {
                     currentMode === 'bhajans' ? 'ભજન સંગ્રહ' :
                       currentMode === 'aartis' ? 'સોદેવ આરતી' :
                         currentMode === 'stutis' ? 'સોદેવ સ્તુતિ' :
-                          currentMode === 'history' ? 'શ્રી સોદેવપીર જીવન ચરિત્ર' :
+                          currentMode === 'history' ? (
+                            historyView === 'menu' ? 'શ્રી સોદેવપીર ઇતિહાસ' :
+                              historyView === 'lifeStory' ? 'શ્રી સોદેવપીર જીવન ચરિત્ર' : 'દાદાના ચમત્કારો'
+                          ) :
                             currentMode === 'videos' ? 'સોદેવપીર દર્શન' :
                               currentMode === 'policy' ? 'ગોપનીયતા નીતિ' : 'સોદેવ પૂજા'
               ) : (
@@ -614,7 +624,10 @@ function App() {
                     currentMode === 'bhajans' ? 'भजन संग्रह' :
                       currentMode === 'aartis' ? 'सोदेव आरती' :
                         currentMode === 'stutis' ? 'सोदेव स्तुति' :
-                          currentMode === 'history' ? 'श्री सोदेवपीर जीवन चरित्र' :
+                          currentMode === 'history' ? (
+                            historyView === 'menu' ? 'श्री सोदेवपीर इतिहास' :
+                              historyView === 'lifeStory' ? 'श्री सोदेवपीर जीवन चरित्र' : 'दादा के चमत्कार'
+                          ) :
                             currentMode === 'videos' ? 'सोदेवपीर दर्शन' :
                               currentMode === 'policy' ? 'गोपनीयता नीति' : 'सोदेव पूजा'
               )}
@@ -685,8 +698,7 @@ function App() {
             <div className="history-section-container">
               {historyView === 'menu' ? (
                 <>
-                  <div className="page-header">
-                    <div className="page-title">{language === 'gujarati' ? 'ઇતિહાસ' : 'इतिहास'}</div>
+                  <div className="page-header center-header">
                     <div className="page-subtitle">Choose a Section to Read</div>
                   </div>
                   <div className="history-menu-grid">
@@ -708,11 +720,7 @@ function App() {
                 </>
               ) : historyView === 'lifeStory' ? (
                 <>
-                  <button className="history-back-nav" onClick={() => setHistoryView('menu')}>
-                    <span className="back-arrow">←</span> {language === 'gujarati' ? 'પાછા જાઓ' : 'वापस जाएं'}
-                  </button>
-                  <div className="page-header">
-                    <div className="page-title">{language === 'gujarati' ? 'જીવન ચરિત્ર' : 'जीवन चरित्र'}</div>
+                  <div className="page-header center-header">
                     <div className="page-subtitle">Sacred Journey of Sodevpir Dada</div>
                   </div>
                   {historyData.lifeStory.content.map((item) => (
@@ -728,11 +736,7 @@ function App() {
                 </>
               ) : (
                 <>
-                  <button className="history-back-nav" onClick={() => setHistoryView('menu')}>
-                    <span className="back-arrow">←</span> {language === 'gujarati' ? 'પાછા જાઓ' : 'वापस जाएं'}
-                  </button>
-                  <div className="page-header">
-                    <div className="page-title">{language === 'gujarati' ? 'દાદાના ચમત્કારો' : 'दादा के चमत्कार'}</div>
+                  <div className="page-header center-header">
                     <div className="page-subtitle">Select a Miracle to Read</div>
                   </div>
 

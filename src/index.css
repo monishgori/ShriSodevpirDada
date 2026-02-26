@@ -1205,6 +1205,13 @@ body {
   }
 }
 
+.top-actions-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+}
+
 .back-btn {
   display: inline-flex;
   align-items: center;
@@ -1212,15 +1219,30 @@ body {
   padding: 10px 24px;
   border-radius: 30px;
   background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   color: white;
   cursor: pointer;
-  margin-bottom: 20px;
   transition: all 0.3s;
+}
+
+.back-btn.secondary-back {
+  background: rgba(255, 153, 51, 0.15);
+  border: 1px solid rgba(255, 153, 51, 0.3);
+  color: #FFD700;
 }
 
 .back-btn:hover {
   background: rgba(255, 255, 255, 0.2);
-  transform: translateX(-5px);
+  transform: translateY(-2px);
+}
+
+.back-btn.secondary-back:hover {
+  background: rgba(255, 153, 51, 0.25);
+}
+
+.center-header {
+  margin-top: -10px;
+  margin-bottom: 35px;
 }
 
 @media (max-width: 600px) {
