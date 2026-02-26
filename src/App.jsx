@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { chalisaData } from './data/chalisa';
 import { mantras } from './data/mantras';
 import { bhajans } from './data/bhajans';
@@ -361,7 +361,7 @@ function App() {
     shankhAudioRef.current.play().catch(() => { });
   };
 
-  const startReading = (mode) => {
+  const startReading = useCallback((mode) => {
     triggerHaptic(ImpactStyle.Light);
     if (mode === 'history') {
       setHistoryView('menu');
@@ -387,7 +387,7 @@ function App() {
     setActiveItemIndex(0);
     setIsPlaying(false);
     if (audioRef.current) audioRef.current.pause();
-  };
+  }, [currentMode]);
 
   return (
     <div className={`app-container ${isLyricsVisible ? 'view-mode' : 'home-mode'}`}>

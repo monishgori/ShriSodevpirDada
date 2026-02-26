@@ -527,11 +527,22 @@ body {
   transform: translate(-50%, 110%) translateZ(0);
   -webkit-transform: translate(-50%, 110%) translateZ(0);
   will-change: transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  isolation: isolate;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .library-tray.active {
   transform: translate(-50%, 0) translateZ(0);
   -webkit-transform: translate(-50%, 0) translateZ(0);
+}
+
+.library-card {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .tray-handle {
