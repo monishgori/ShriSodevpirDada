@@ -598,7 +598,14 @@ function App() {
               <span className="back-icon">←</span> {language === 'gujarati' ? 'વાંચન બંધ કરો' : 'पठन बंद करें'}
             </div>
             {currentMode === 'history' && historyView !== 'menu' && (
-              <div className="back-btn glass-panel secondary-back" onClick={() => { setHistoryView('menu'); triggerHaptic(); }}>
+              <div className="back-btn glass-panel secondary-back" onClick={() => {
+                if (historyView === 'incidentDetail') {
+                  setHistoryView('incidents');
+                } else {
+                  setHistoryView('menu');
+                }
+                triggerHaptic();
+              }}>
                 <span className="back-icon">↺</span> {language === 'gujarati' ? 'પાછા જાઓ' : 'वापस जाएं'}
               </div>
             )}
@@ -614,7 +621,8 @@ function App() {
                         currentMode === 'stutis' ? 'સોદેવ સ્તુતિ' :
                           currentMode === 'history' ? (
                             historyView === 'menu' ? 'શ્રી સોદેવપીર ઇતિહાસ' :
-                              historyView === 'lifeStory' ? 'શ્રી સોદેવપીર જીવન ચરિત્ર' : 'દાદાના ચમત્કારો'
+                              historyView === 'lifeStory' ? 'શ્રી સોદેવપીર જીવન ચરિત્ર' :
+                                historyView === 'incidentDetail' && activeIncidentIndex !== null ? historyData.incidents[activeIncidentIndex].title[language] : 'દાદાના ચમત્કારો'
                           ) :
                             currentMode === 'videos' ? 'સોદેવપીર દર્શન' :
                               currentMode === 'policy' ? 'ગોપનીયતા નીતિ' : 'સોદેવ પૂજા'
@@ -626,7 +634,8 @@ function App() {
                         currentMode === 'stutis' ? 'सोदेव स्तुति' :
                           currentMode === 'history' ? (
                             historyView === 'menu' ? 'श्री सोदेवपीर इतिहास' :
-                              historyView === 'lifeStory' ? 'श्री सोदेवपीर जीवन चरित्र' : 'दादा के चमत्कार'
+                              historyView === 'lifeStory' ? 'श्री सोदेवपीर जीवन चरित्र' :
+                                historyView === 'incidentDetail' && activeIncidentIndex !== null ? historyData.incidents[activeIncidentIndex].title[language] : 'दादा के चमत्कार'
                           ) :
                             currentMode === 'videos' ? 'सोदेवपीर दर्शन' :
                               currentMode === 'policy' ? 'गोपनीयता नीति' : 'सोदेव पूजा'
@@ -734,7 +743,7 @@ function App() {
                     </div>
                   ))}
                 </>
-              ) : (
+              ) : historyView === 'incidents' ? (
                 <>
                   <div className="page-header center-header">
                     <div className="page-subtitle">Select a Miracle to Read</div>
@@ -748,6 +757,7 @@ function App() {
                         onClick={(e) => {
                           e.stopPropagation();
                           setActiveIncidentIndex(idx);
+                          setHistoryView('incidentDetail');
                           triggerHaptic(ImpactStyle.Light);
                         }}
                       >
@@ -756,20 +766,19 @@ function App() {
                       </button>
                     ))}
                   </div>
-
+                </>
+              ) : historyView === 'incidentDetail' ? (
+                <div className="selected-incident-viewer-fullscreen active-verse">
+                  <div className="page-header center-header">
+                    <div className="page-subtitle">{language === 'gujarati' ? 'ચમત્કારનો ઇતિહાસ' : 'चमत्कार का इतिहास'}</div>
+                  </div>
                   {activeIncidentIndex !== null && historyData.incidents[activeIncidentIndex] && (
-                    <div className="selected-incident-viewer glass-panel active-verse">
-                      <div className="incident-viewer-header">
-                        <span className="divine-tag">{language === 'gujarati' ? 'ચમત્કાર' : 'चमत्कार'}</span>
-                        <h2>{historyData.incidents[activeIncidentIndex].title[language]}</h2>
-                      </div>
-                      <div className="hindi-text incident-content">
-                        {historyData.incidents[activeIncidentIndex].content[language]}
-                      </div>
+                    <div className="hindi-text incident-content-full">
+                      {historyData.incidents[activeIncidentIndex].content[language]}
                     </div>
                   )}
-                </>
-              )}
+                </div>
+              ) : null}
             </div>
           ) : currentMode === 'videos' ? (
             <div className="videos-section-container">
