@@ -476,6 +476,16 @@ body {
   height: 100vh;
   background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  justify-content: flex-end;
+  /* CRITICAL: Keep dock at bottom under the tray */
+}
+
+.tray-open .pooja-dock {
+  opacity: 0.2;
+  /* Subdue the background dock to focus on library */
+  transform: scale(0.95);
+  /* Slightly push back */
 }
 
 .tray-backdrop {
