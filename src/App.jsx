@@ -115,6 +115,12 @@ function App() {
     try { return Number(localStorage.getItem('pooja_repeat')) || 1; } catch { return 1; }
   });
   const [currentRepeat, setCurrentRepeat] = useState(0);
+  const currentRepeatRef = useRef(0);
+  const repeatCountRef = useRef(1);
+
+  // Sync refs with state for stable access in audio listeners
+  useEffect(() => { currentRepeatRef.current = currentRepeat; }, [currentRepeat]);
+  useEffect(() => { repeatCountRef.current = repeatCount; }, [repeatCount]);
   const [isBellRinging, setIsBellRinging] = useState(false);
   const [flowers, setFlowers] = useState([]);
   const [isLyricsVisible, setIsLyricsVisible] = useState(false);
@@ -326,7 +332,18 @@ function App() {
       setIsPlaying(false);
     };
 
-    audio.onended = null; // Managed by dedicated effect to avoid stale closures
+    audio.onended = () => {
+      // Use refs for stable values on all devices (especially mobile browsers)
+      if (currentRepeatRef.current + 1 < repeatCountRef.current) {
+        setCurrentRepeat(prev => prev + 1);
+        audio.currentTime = 0;
+        audio.play().catch(e => console.log("Loop play resumed:", e.message));
+      } else {
+        setIsPlaying(false);
+        setCurrentRepeat(0); // Reset for next user interaction
+        audio.currentTime = audio.duration || 0;
+      }
+    };
 
     return audio;
   };
@@ -361,29 +378,6 @@ function App() {
       }
     };
   }, [currentMode, activeItemIndex]);
-
-  // FIX: Dedicated effect for audio looping logic (Avoids stale closures)
-  useEffect(() => {
-    if (!audioRef.current) return;
-
-    audioRef.current.onended = () => {
-      // Check if we need to repeat again
-      if (currentRepeat + 1 < repeatCount) {
-        setCurrentRepeat(prev => prev + 1);
-        if (audioRef.current) {
-          audioRef.current.currentTime = 0;
-          audioRef.current.play().catch(e => console.error("Auto-replay loop failed:", e));
-        }
-      } else {
-        // No more repeats: stop and reset
-        setIsPlaying(false);
-        setCurrentRepeat(0);
-        if (audioRef.current) {
-          audioRef.current.currentTime = audioRef.current.duration || 0;
-        }
-      }
-    };
-  }, [currentRepeat, repeatCount]);
 
   const ringBell = () => {
     triggerHaptic(ImpactStyle.Heavy);
@@ -598,6 +592,11 @@ function App() {
                     <option value="21">21x</option>
                     <option value="108">108x</option>
                   </select>
+                  {repeatCount > 1 && (
+                    <div className="dock-jaap-label">
+                      Jaap {currentRepeat + 1}/{repeatCount}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -688,7 +687,11 @@ function App() {
               )}
             </div>
             <div className="page-subtitle">
-              {currentMode === 'chalisa' && currentRepeat > 0 && `Jaap ${currentRepeat + 1} of ${repeatCount}`}
+              {['chalisa', 'mantras', 'bhajans', 'aartis', 'stutis'].includes(currentMode) && repeatCount > 1 && (
+                <div className="jaap-counter">
+                  Jaap {currentRepeat + 1} of {repeatCount}
+                </div>
+              )}
               {currentMode === 'videos' && 'YouTube Devotional Library'}
             </div>
           </div>
