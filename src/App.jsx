@@ -15,6 +15,94 @@ const ImpactStyle = {
   Heavy: 30
 };
 
+// Memoized Library Tray to prevent jumping/flickering on re-renders (Critical for iOS Safari)
+const DevotionalLibrary = React.memo(({ isLibraryOpen, setIsLibraryOpen, language, startReading }) => {
+  return (
+    <>
+      {isLibraryOpen && <div className="tray-backdrop" onClick={() => setIsLibraryOpen(false)}></div>}
+      <div
+        className={`library-tray glass-panel ${isLibraryOpen ? 'active' : ''}`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="tray-handle" onClick={() => setIsLibraryOpen(false)}></div>
+        <div className="tray-title">Devotional Library</div>
+
+        <div className="library-grid">
+          <button className="library-card" onClick={(e) => { e.stopPropagation(); startReading('chalisa'); }}>
+            <span className="lib-icon">📜</span>
+            <span className="lib-hindi">
+              {language === 'gujarati' ? 'સોદેવ ચાલીસા' : 'सोदेव चालीसा'}
+            </span>
+            <span className="lib-eng">CHALISA</span>
+          </button>
+          <button className="library-card" onClick={(e) => { e.stopPropagation(); startReading('mantras'); }}>
+            <span className="lib-icon">💎</span>
+            <span className="lib-hindi">
+              {language === 'gujarati' ? 'સિદ્ધ મંત્ર' : 'सिद्ध मंत्र'}
+            </span>
+            <span className="lib-eng">MANTRAS</span>
+          </button>
+          <button className="library-card" onClick={(e) => { e.stopPropagation(); startReading('bhajans'); }}>
+            <span className="lib-icon">🪕</span>
+            <span className="lib-hindi">
+              {language === 'gujarati' ? 'ભજન સંગ્રહ' : 'भजन संग्रह'}
+            </span>
+            <span className="lib-eng">BHAJANS</span>
+          </button>
+          <button className="library-card" onClick={(e) => { e.stopPropagation(); startReading('aartis'); }}>
+            <span className="lib-icon">🕯️</span>
+            <span className="lib-hindi">
+              {language === 'gujarati' ? 'સોદેવ આરતી' : 'सोदेव आरती'}
+            </span>
+            <span className="lib-eng">AARTI</span>
+          </button>
+          <button className="library-card" onClick={(e) => { e.stopPropagation(); startReading('stutis'); }}>
+            <span className="lib-icon">🙌</span>
+            <span className="lib-hindi">
+              {language === 'gujarati' ? 'સોદેવ સ્તુતિ' : 'सोदेव સ્તુતિ'}
+            </span>
+            <span className="lib-eng">STUTI</span>
+          </button>
+          <button className="library-card" onClick={(e) => { e.stopPropagation(); startReading('history'); }}>
+            <span className="lib-icon">🏺</span>
+            <span className="lib-hindi">
+              {language === 'gujarati' ? 'જીવન ચરિત્ર' : 'जीवन चरित्र'}
+            </span>
+            <span className="lib-eng">HISTORY</span>
+          </button>
+          <button className="library-card library-card-wide" onClick={(e) => { e.stopPropagation(); startReading('videos'); }}>
+            <div className="wide-card-content">
+              <span className="lib-icon">🎥</span>
+              <div className="wide-text">
+                <span className="lib-hindi" style={{ fontSize: '1.3rem' }}>
+                  {language === 'gujarati' ? 'યુટ્યુબ ભક્તિ' : 'यूट्यूब भक्ति'}
+                </span>
+                <span className="lib-eng">VIDEOS</span>
+              </div>
+            </div>
+          </button>
+        </div>
+        <div className="tray-privacy-footer" style={{ textAlign: 'center', padding: '15px 0 10px 0', opacity: 0.5 }}>
+          <button
+            onClick={(e) => { e.stopPropagation(); startReading('policy'); }}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'var(--text-primary)',
+              fontSize: '0.65rem',
+              letterSpacing: '1px',
+              cursor: 'pointer',
+              fontWeight: '500'
+            }}
+          >
+            PRIVACY POLICY
+          </button>
+        </div>
+      </div>
+    </>
+  );
+});
+
 function App() {
   const [currentMode, setCurrentMode] = useState(localStorage.getItem('pooja_mode') || 'chalisa');
   const [isPlaying, setIsPlaying] = useState(false);
@@ -494,87 +582,13 @@ function App() {
         </div>
       </div>
 
-      {/* DEVOTIONAL LIBRARY TRAY (Independent Layer) */}
-      {isLibraryOpen && <div className="tray-backdrop" onClick={() => setIsLibraryOpen(false)}></div>}
-      <div
-        className={`library-tray glass-panel ${isLibraryOpen ? 'active' : ''}`}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="tray-handle" onClick={() => setIsLibraryOpen(false)}></div>
-        <div className="tray-title">Devotional Library</div>
-
-        <div className="library-grid">
-          <button className="library-card" onClick={(e) => { e.stopPropagation(); startReading('chalisa'); }}>
-            <span className="lib-icon">📜</span>
-            <span className="lib-hindi">
-              {language === 'gujarati' ? 'સોદેવ ચાલીસા' : 'सोदेव चालीसा'}
-            </span>
-            <span className="lib-eng">CHALISA</span>
-          </button>
-          <button className="library-card" onClick={(e) => { e.stopPropagation(); startReading('mantras'); }}>
-            <span className="lib-icon">💎</span>
-            <span className="lib-hindi">
-              {language === 'gujarati' ? 'સિદ્ધ મંત્ર' : 'सिद्ध मंत्र'}
-            </span>
-            <span className="lib-eng">MANTRAS</span>
-          </button>
-          <button className="library-card" onClick={(e) => { e.stopPropagation(); startReading('bhajans'); }}>
-            <span className="lib-icon">🪕</span>
-            <span className="lib-hindi">
-              {language === 'gujarati' ? 'ભજન સંગ્રહ' : 'भजन संग्रह'}
-            </span>
-            <span className="lib-eng">BHAJANS</span>
-          </button>
-          <button className="library-card" onClick={(e) => { e.stopPropagation(); startReading('aartis'); }}>
-            <span className="lib-icon">🕯️</span>
-            <span className="lib-hindi">
-              {language === 'gujarati' ? 'સોદેવ આરતી' : 'सोदेव आरती'}
-            </span>
-            <span className="lib-eng">AARTI</span>
-          </button>
-          <button className="library-card" onClick={(e) => { e.stopPropagation(); startReading('stutis'); }}>
-            <span className="lib-icon">🙌</span>
-            <span className="lib-hindi">
-              {language === 'gujarati' ? 'સોદેવ સ્તુતિ' : 'सोदेव स्तुति'}
-            </span>
-            <span className="lib-eng">STUTI</span>
-          </button>
-          <button className="library-card" onClick={(e) => { e.stopPropagation(); startReading('history'); }}>
-            <span className="lib-icon">🏺</span>
-            <span className="lib-hindi">
-              {language === 'gujarati' ? 'જીવન ચરિત્ર' : 'जीवन चरित्र'}
-            </span>
-            <span className="lib-eng">HISTORY</span>
-          </button>
-          <button className="library-card library-card-wide" onClick={(e) => { e.stopPropagation(); startReading('videos'); }}>
-            <div className="wide-card-content">
-              <span className="lib-icon">🎥</span>
-              <div className="wide-text">
-                <span className="lib-hindi" style={{ fontSize: '1.3rem' }}>
-                  {language === 'gujarati' ? 'યુટ્યુબ ભક્તિ' : 'यूट्यूब भक्ति'}
-                </span>
-                <span className="lib-eng">VIDEOS</span>
-              </div>
-            </div>
-          </button>
-        </div>
-        <div className="tray-privacy-footer" style={{ textAlign: 'center', padding: '15px 0 10px 0', opacity: 0.5 }}>
-          <button
-            onClick={() => startReading('policy')}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'var(--text-primary)',
-              fontSize: '0.65rem',
-              letterSpacing: '1px',
-              cursor: 'pointer',
-              fontWeight: '500'
-            }}
-          >
-            PRIVACY POLICY
-          </button>
-        </div>
-      </div>
+      {/* DEVOTIONAL LIBRARY TRAY (Isolated to prevent flickering/jumping) */}
+      <DevotionalLibrary
+        isLibraryOpen={isLibraryOpen}
+        setIsLibraryOpen={setIsLibraryOpen}
+        language={language}
+        startReading={startReading}
+      />
 
       {/* LYRICS VIEW */}
       {isLyricsVisible && (
