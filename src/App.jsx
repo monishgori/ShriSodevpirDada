@@ -637,22 +637,9 @@ function App() {
               </div>
             ))
           ) : currentMode === 'aartis' ? (
-            aartis.map((aarti, index) => (
-              <div
-                key={index}
-                className={`verse glass-panel ${activeItemIndex === index ? 'active-verse' : ''}`}
-                onClick={() => {
-                  setActiveItemIndex(index);
-                  setIsPlaying(false);
-                  if (audioRef.current) {
-                    audioRef.current.pause();
-                  }
-                }}
-              >
-                <div style={{ color: 'var(--secondary)', fontSize: '0.9rem', marginBottom: '10px' }}>
-                  {aarti.name} {activeItemIndex === index && ' (Selected)'}
-                </div>
-                <div className="hindi-text">{aarti[language] || aarti.gujarati || aarti.hindi}</div>
+            aartis.map((verse, index) => (
+              <div key={index} className="verse glass-panel">
+                <div className="hindi-text">{verse[language] || verse.gujarati || verse.hindi}</div>
               </div>
             ))
           ) : currentMode === 'stutis' ? (
