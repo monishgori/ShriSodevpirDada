@@ -115,12 +115,6 @@ function App() {
     try { return Number(localStorage.getItem('pooja_repeat')) || 1; } catch { return 1; }
   });
   const [currentRepeat, setCurrentRepeat] = useState(0);
-  const currentRepeatRef = useRef(0);
-  const repeatCountRef = useRef(1);
-
-  // Sync refs with state for stable access in audio listeners
-  useEffect(() => { currentRepeatRef.current = currentRepeat; }, [currentRepeat]);
-  useEffect(() => { repeatCountRef.current = repeatCount; }, [repeatCount]);
   const [isBellRinging, setIsBellRinging] = useState(false);
   const [flowers, setFlowers] = useState([]);
   const [isLyricsVisible, setIsLyricsVisible] = useState(false);
@@ -332,18 +326,7 @@ function App() {
       setIsPlaying(false);
     };
 
-    audio.onended = () => {
-      // Use refs for stable values on all devices (especially mobile browsers)
-      if (currentRepeatRef.current + 1 < repeatCountRef.current) {
-        setCurrentRepeat(prev => prev + 1);
-        audio.currentTime = 0;
-        audio.play().catch(e => console.log("Loop play resumed:", e.message));
-      } else {
-        setIsPlaying(false);
-        setCurrentRepeat(0); // Reset for next user interaction
-        audio.currentTime = audio.duration || 0;
-      }
-    };
+    audio.onended = null; // Hands-off: logic is now managed by a dedicated effect for stability
 
     return audio;
   };
@@ -353,7 +336,7 @@ function App() {
     const audioModes = ['chalisa', 'mantras', 'bhajans', 'aartis', 'stutis'];
     if (!audioModes.includes(currentMode)) return;
 
-    // Resolve source with explicit preference for MP3s for Android support
+    // Resolve source path
     const rawAudioSrc =
       currentMode === 'chalisa' ? "/assets/audio/chalisa1.mp3" :
         currentMode === 'mantras' ? (mantras[activeItemIndex]?.audio || "/assets/audio/Shree_Sodevpir_Dada_Dhyan_Mantra.mp3") :
@@ -362,9 +345,9 @@ function App() {
               currentMode === 'stutis' ? (stutis[activeItemIndex]?.audio || "/assets/audio/Stuti.mp3") :
                 "/assets/audio/chalisa1.mp3";
 
-    // Use stable path - removed timestamp to allow browser caching for faster playback
     const path = rawAudioSrc;
 
+    // RESET counters on track change
     setCurrentTime(0);
     setDuration(0);
     setCurrentRepeat(0);
@@ -378,6 +361,29 @@ function App() {
       }
     };
   }, [currentMode, activeItemIndex]);
+
+  // ROBUST REPEATER LOGIC: Handles looping with state directly
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    audio.onended = () => {
+      if (currentRepeat + 1 < repeatCount) {
+        setCurrentRepeat(prev => prev + 1);
+        audio.currentTime = 0;
+        // Small delay protects against "rapid fire" bugs on some mobile OS
+        setTimeout(() => {
+          if (audio) {
+            audio.play().catch(e => console.error("Repeater Error:", e.message));
+          }
+        }, 200);
+      } else {
+        setIsPlaying(false);
+        setCurrentRepeat(0);
+        audio.currentTime = audio.duration || 0;
+      }
+    };
+  }, [currentRepeat, repeatCount]);
 
   const ringBell = () => {
     triggerHaptic(ImpactStyle.Heavy);
