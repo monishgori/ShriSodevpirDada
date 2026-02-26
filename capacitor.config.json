@@ -1,0 +1,11 @@
+{
+  "appId": "com.monishgori.shrisodevpirdada",
+  "appName": "Shri Sodevpir Dada",
+  "webDir": "dist",
+  "server": {
+    "url": "https://shrisodevpirdada.vercel.app",
+    "allowNavigation": [
+      "shrisodevpirdada.vercel.app"
+    ]
+  }
+}
