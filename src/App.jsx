@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { AdMob, BannerAdSize, BannerAdPosition } from '@capacitor-community/admob';
 import { chalisaData } from './data/chalisa';
 import { mantras } from './data/mantras';
 import { bhajans } from './data/bhajans';
@@ -142,6 +143,34 @@ function App() {
   const [dailyQuote, setDailyQuote] = useState({ gujarati: '', hindi: '', english: '' });
   const [isDiyaLit, setIsDiyaLit] = useState(false);
   const [isSeeking, setIsSeeking] = useState(false);
+
+  // Initialize AdMob & Show Banner
+  useEffect(() => {
+    const initAdMob = async () => {
+      try {
+        await AdMob.initialize();
+
+        // Show Banner Ad (Bottom Center)
+        const adOptions = {
+          adId: 'ca-app-pub-5914382038291713/2444272147',
+          adSize: BannerAdSize.ADAPTIVE_BANNER,
+          position: BannerAdPosition.BOTTOM_CENTER,
+          margin: 0,
+          isTesting: true // IMPORTANT: Keep true for now to see 'Test Ad' safely
+        };
+
+        await AdMob.showBanner(adOptions);
+      } catch (e) {
+        console.warn("AdMob Info:", e.message);
+      }
+    };
+
+    // Only attempt on native platforms (not browser)
+    const isNative = window.Capacitor?.isNative || window.location.protocol === 'capacitor:';
+    if (isNative) {
+      initAdMob();
+    }
+  }, []);
 
   const backgroundImage = '/assets/images/1.png';
 

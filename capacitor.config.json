@@ -7,5 +7,10 @@
     "allowNavigation": [
       "shrisodevpirdada.vercel.app"
     ]
+  },
+  "plugins": {
+    "AdMob": {
+      "androidAppId": "ca-app-pub-5914382038291713~4636630725"
+    }
   }
 }
