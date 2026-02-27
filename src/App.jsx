@@ -150,25 +150,26 @@ function App() {
       try {
         await AdMob.initialize();
 
-        // Show Banner Ad (Bottom Center)
+        // Show Banner Ad (TOP CENTER for 5-minute visibility check)
         const adOptions = {
-          adId: 'ca-app-pub-5914382038291713/2444272147',
+          adId: 'ca-app-pub-3940256099942544/6300978111', // Official Google Test ID (Always works)
           adSize: BannerAdSize.ADAPTIVE_BANNER,
-          position: BannerAdPosition.BOTTOM_CENTER,
-          margin: 0,
-          isTesting: true // IMPORTANT: Keep true for now to see 'Test Ad' safely
+          position: BannerAdPosition.TOP_CENTER,
+          margin: 60, // Push down slightly from the status bar
+          isTesting: true
         };
 
         await AdMob.showBanner(adOptions);
+        console.log("AdMob: Banner requested at TOP");
       } catch (e) {
         console.warn("AdMob Info:", e.message);
       }
     };
 
-    // Only attempt on native platforms (not browser)
-    const isNative = window.Capacitor?.isNative || window.location.protocol === 'capacitor:';
+    // Robust native check for remote URLs
+    const isNative = !!window.Capacitor?.isNative;
     if (isNative) {
-      initAdMob();
+      setTimeout(initAdMob, 3000); // 3s delay to ensure the bridge is solid
     }
   }, []);
 
