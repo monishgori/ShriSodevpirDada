@@ -2,12 +2,6 @@
   "appId": "com.monishgori.shrisodevpirdada",
   "appName": "Shri Sodevpir Dada",
   "webDir": "dist",
-  "server": {
-    "url": "https://shrisodevpirdada.vercel.app",
-    "allowNavigation": [
-      "shrisodevpirdada.vercel.app"
-    ]
-  },
   "plugins": {
     "AdMob": {
       "androidAppId": "ca-app-pub-5914382038291713~4636630725"

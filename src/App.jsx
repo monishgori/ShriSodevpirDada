@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { Capacitor } from '@capacitor/core';
 import { AdMob, BannerAdSize, BannerAdPosition } from '@capacitor-community/admob';
 import { chalisaData } from './data/chalisa';
 import { mantras } from './data/mantras';
@@ -150,26 +151,24 @@ function App() {
       try {
         await AdMob.initialize();
 
-        // Show Banner Ad (TOP CENTER for 5-minute visibility check)
+        // Show Banner Ad (Bottom Center with 100px margin to show ABOVE the dock)
         const adOptions = {
-          adId: 'ca-app-pub-3940256099942544/6300978111', // Official Google Test ID (Always works)
+          adId: 'ca-app-pub-3940256099942544/6300978111', // Master Google Test ID
           adSize: BannerAdSize.ADAPTIVE_BANNER,
-          position: BannerAdPosition.TOP_CENTER,
-          margin: 60, // Push down slightly from the status bar
+          position: BannerAdPosition.BOTTOM_CENTER,
+          margin: 100, // Important: Shows ad ABOVE the player buttons
           isTesting: true
         };
 
         await AdMob.showBanner(adOptions);
-        console.log("AdMob: Banner requested at TOP");
       } catch (e) {
-        console.warn("AdMob Info:", e.message);
+        console.warn("AdMob Check:", e.message);
       }
     };
 
-    // Robust native check for remote URLs
-    const isNative = !!window.Capacitor?.isNative;
-    if (isNative) {
-      setTimeout(initAdMob, 3000); // 3s delay to ensure the bridge is solid
+    // Robust Native Detection (Capacitor Way)
+    if (Capacitor.isNativePlatform()) {
+      setTimeout(initAdMob, 1500);
     }
   }, []);
 
