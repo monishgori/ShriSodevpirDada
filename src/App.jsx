@@ -150,30 +150,9 @@ function App() {
   useEffect(() => {
     const splashTimer = setTimeout(() => {
       setShowSplash(false);
-    }, 5500); // 5.5 seconds for a powerful divine intro
+    }, 6000); // 6 seconds total
     return () => clearTimeout(splashTimer);
   }, []);
-
-  if (showSplash) {
-    return (
-      <div className="divine-splash">
-        <div className="splash-background">
-          <img src="/assets/images/merged_splash.png" className="splash-img merged-divine" alt="Divine Sodevpir Dada" />
-        </div>
-
-        <div className="divine-gears">
-          <div className="gear gear-large">⚙️</div>
-          <div className="gear gear-small-1">⚙️</div>
-          <div className="gear gear-small-2">⚙️</div>
-        </div>
-
-        <div className="splash-content">
-          <h1 className="splash-text">ॐ श्री સાદેવપીર દાદાય નમ:</h1>
-          <p className="splash-subtext">Divine Deity is coming...</p>
-        </div>
-      </div>
-    );
-  }
 
   // Initialize AdMob & Show Banner
   useEffect(() => {
@@ -506,462 +485,469 @@ function App() {
   }, [currentMode]);
 
   return (
-    <div className={`app-container ${isLyricsVisible ? 'view-mode' : 'home-mode'}`}>
-      {/* Diya (Lamp) */}
-      <div className={`diya-container ${isDiyaLit ? 'lit' : ''}`}>
-        <div className="diya-glow"></div>
-        <div className="diya-base">🪔</div>
-      </div>
-      {/* Ambient Particles */}
-      <div className="particles-container">
-        {Array.from({ length: 15 }).map((_, i) => (
-          <div key={i} className="particle" style={{
-            left: Math.random() * 100 + '%',
-            top: Math.random() * 100 + '%',
-            animationDelay: Math.random() * 5 + 's',
-            width: 2 + Math.random() * 3 + 'px',
-            height: 2 + Math.random() * 3 + 'px'
-          }}></div>
+    <>
+      <div className={`app-container ${isLyricsVisible ? 'view-mode' : 'home-mode'}`}>
+        {/* Diya (Lamp) */}
+        <div className={`diya-container ${isDiyaLit ? 'lit' : ''}`}>
+          <div className="diya-glow"></div>
+          <div className="diya-base">🪔</div>
+        </div>
+        {/* Ambient Particles */}
+        <div className="particles-container">
+          {Array.from({ length: 15 }).map((_, i) => (
+            <div key={i} className="particle" style={{
+              left: Math.random() * 100 + '%',
+              top: Math.random() * 100 + '%',
+              animationDelay: Math.random() * 5 + 's',
+              width: 2 + Math.random() * 3 + 'px',
+              height: 2 + Math.random() * 3 + 'px'
+            }}></div>
+          ))}
+        </div>
+
+        {/* Flower Shower */}
+        {flowers.map(flower => (
+          <div key={flower.id} className="flower" style={{
+            left: flower.left,
+            animationDelay: flower.delay,
+            animationDuration: flower.duration
+          }}>{flower.type}</div>
         ))}
-      </div>
 
-      {/* Flower Shower */}
-      {flowers.map(flower => (
-        <div key={flower.id} className="flower" style={{
-          left: flower.left,
-          animationDelay: flower.delay,
-          animationDuration: flower.duration
-        }}>{flower.type}</div>
-      ))}
-
-      {/* Background Section */}
-      <div className="background-slider" onClick={() => setIsLyricsVisible(false)}>
-        <img src={backgroundImage} alt="SODEV" className="bg-image active" />
-        <div className="bg-overlay"></div>
-      </div>
-
-      {/* Top Bar */}
-      <header className="top-bar">
-        <div className="divine-centerpiece">
-          <div className="divine-name">ૐ શ્રી સાદેવપીર દાદાય નમઃ</div>
+        {/* Background Section */}
+        <div className="background-slider" onClick={() => setIsLyricsVisible(false)}>
+          <img src={backgroundImage} alt="SODEV" className="bg-image active" />
+          <div className="bg-overlay"></div>
         </div>
 
-        <div className="top-bar-side-content">
-          <div className="header-greeting" onClick={() => setIsLyricsVisible(false)}>
-            <div className="greeting-text">{getGreeting()}</div>
+        {/* Top Bar */}
+        <header className="top-bar">
+          <div className="divine-centerpiece">
+            <div className="divine-name">ૐ શ્રી સાદેવપીર દાદાય નમઃ</div>
           </div>
 
-          {!isLyricsVisible && !isFocusMode && (dailyQuote.gujarati || dailyQuote.hindi) && (
-            <div className="daily-quote-card glass-panel">
-              <div className="quote-header">
-                <span className="quote-icon">❝</span>
-                <span className="quote-label">{language === 'gujarati' ? 'આજનો વિચાર' : 'आज का विचार'}</span>
-              </div>
-              <div className="quote-content">
-                <div className="main-quote">
-                  {dailyQuote[language] || dailyQuote.gujarati || dailyQuote.hindi}
+          <div className="top-bar-side-content">
+            <div className="header-greeting" onClick={() => setIsLyricsVisible(false)}>
+              <div className="greeting-text">{getGreeting()}</div>
+            </div>
+
+            {!isLyricsVisible && !isFocusMode && (dailyQuote.gujarati || dailyQuote.hindi) && (
+              <div className="daily-quote-card glass-panel">
+                <div className="quote-header">
+                  <span className="quote-icon">❝</span>
+                  <span className="quote-label">{language === 'gujarati' ? 'આજનો વિચાર' : 'आज का विचार'}</span>
                 </div>
-                {language !== 'gujarati' && dailyQuote.gujarati && <div className="sub-quote guj">{dailyQuote.gujarati}</div>}
-                {language !== 'hindi' && dailyQuote.hindi && <div className="sub-quote hindi">{dailyQuote.hindi}</div>}
-              </div>
-            </div>
-          )}
-
-        </div>
-      </header>
-
-      <div className="bottom-dashboard-container">
-
-        {/* POOJA DOCK: Celestial Duo-Island */}
-        <div className="pooja-dock">
-
-          {/* Island 1: Rituals */}
-          <div className="ritual-island glass-panel">
-            <div className="ritual-scroller">
-              <div className="dock-icon-item" onClick={ringBell}>
-                <div className={`dock-icon ${isBellRinging ? 'bell-ringing' : ''}`}>🔔</div>
-                <span>Bell</span>
-              </div>
-              <div className="dock-icon-item" onClick={playShankh}>
-                <div className="dock-icon">🐚</div>
-                <span>Shankh</span>
-              </div>
-              <div className="dock-icon-item" onClick={startFlowerShower}>
-                <div className="dock-icon">🌸</div>
-                <span>Flowers</span>
-              </div>
-              <div className="dock-icon-item" onClick={toggleDiya}>
-                <div className={`dock-icon ${isDiyaLit ? 'active' : ''}`}>🪔</div>
-                <span>Lamp</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Island 2: Main Controls */}
-          <div className="control-island glass-panel">
-            <div className="dock-controls-row">
-              <button
-                className={`dock-lib-btn ${isLibraryOpen ? 'active' : ''}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  triggerHaptic(ImpactStyle.Light);
-                  setIsLibraryOpen(!isLibraryOpen);
-                }}
-              >
-                ⋯
-              </button>
-
-              <button className="dock-play-btn" onClick={(e) => {
-                e.stopPropagation();
-                triggerHaptic(ImpactStyle.Medium);
-
-                // CRITICAL: Ensure audio instance exists on user interaction for iOS Safari
-                if (!audioRef.current) {
-                  createAudioInstance(getAudioPath());
-                }
-
-                const audio = audioRef.current;
-                if (audio) {
-                  if (isPlaying) {
-                    audio.pause();
-                    setIsPlaying(false);
-                  } else {
-                    const playPromise = audio.play();
-                    if (playPromise !== undefined) {
-                      playPromise
-                        .then(() => setIsPlaying(true))
-                        .catch(err => console.error("Dock Play Error:", err.message));
-                    }
-                  }
-                }
-              }}>
-                {isPlaying ? '⏸' : '▶'}
-              </button>
-
-              <div className="language-pill-container mini">
-                <button
-                  className={`lang-pill-btn ${language === 'gujarati' ? 'active' : ''}`}
-                  onClick={(e) => { e.stopPropagation(); setLanguage('gujarati'); triggerHaptic(); }}
-                >
-                  G
-                </button>
-                <button
-                  className={`lang-pill-btn ${language === 'hindi' ? 'active' : ''}`}
-                  onClick={(e) => { e.stopPropagation(); setLanguage('hindi'); triggerHaptic(); }}
-                >
-                  H
-                </button>
-              </div>
-
-              <div className="dock-repeat-island glass-panel">
-                <span className="repeat-icon">🔁</span>
-                <select
-                  value={repeatCount}
-                  onChange={(e) => setRepeatCount(Number(e.target.value))}
-                  className="repeat-mini-select"
-                >
-                  <option value="1">1x</option>
-                  <option value="3">3x</option>
-                  <option value="11">11x</option>
-                  <option value="21">21x</option>
-                  <option value="108">108x</option>
-                </select>
-                {repeatCount > 1 && (
-                  <div className="dock-jaap-badge">
-                    {currentRepeat + 1}/{repeatCount}
+                <div className="quote-content">
+                  <div className="main-quote">
+                    {dailyQuote[language] || dailyQuote.gujarati || dailyQuote.hindi}
                   </div>
-                )}
-              </div>
-            </div>
-
-            <div className="dock-seek-row">
-              <span className="dock-time">{formatTime(currentTime)}</span>
-              <div className="seek-container">
-                <div
-                  className="seek-fill"
-                  style={{ width: `${(currentTime / (duration || 1)) * 100}%` }}
-                ></div>
-                <input
-                  type="range"
-                  className="seek-bar"
-                  min="0"
-                  max={duration || 0}
-                  value={currentTime}
-                  onMouseDown={() => setIsSeeking(true)}
-                  onTouchStart={() => setIsSeeking(true)}
-                  onMouseUp={handleSeekEnd}
-                  onTouchEnd={handleSeekEnd}
-                  onChange={handleSeek}
-                />
-              </div>
-              <span className="dock-time">{formatTime(duration)}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* DEVOTIONAL LIBRARY TRAY (Isolated to prevent flickering/jumping) */}
-      <DevotionalLibrary
-        isLibraryOpen={isLibraryOpen}
-        setIsLibraryOpen={setIsLibraryOpen}
-        language={language}
-        startReading={startReading}
-      />
-
-      {/* LYRICS VIEW */}
-      {isLyricsVisible && (
-        <main className="lyrics-container">
-          <div className="top-actions-row">
-            <div className="back-btn glass-panel" onClick={() => setIsLyricsVisible(false)}>
-              <span className="back-icon">←</span> {language === 'gujarati' ? 'વાંચન બંધ કરો' : 'पठन बंद करें'}
-            </div>
-            {currentMode === 'history' && historyView !== 'menu' && (
-              <div className="back-btn glass-panel secondary-back" onClick={() => {
-                if (historyView === 'incidentDetail') {
-                  setHistoryView('incidents');
-                } else {
-                  setHistoryView('menu');
-                }
-                triggerHaptic();
-              }}>
-                <span className="back-icon">↺</span> {language === 'gujarati' ? 'પાછા જાઓ' : 'वापस जाएं'}
+                  {language !== 'gujarati' && dailyQuote.gujarati && <div className="sub-quote guj">{dailyQuote.gujarati}</div>}
+                  {language !== 'hindi' && dailyQuote.hindi && <div className="sub-quote hindi">{dailyQuote.hindi}</div>}
+                </div>
               </div>
             )}
+
           </div>
+        </header>
 
-          <div className="page-header">
-            <div className="page-title">
-              {language === 'gujarati' ? (
-                currentMode === 'chalisa' ? 'સોદેવ ચાલીસા' :
-                  currentMode === 'mantras' ? 'સિદ્ધ મંત્ર સંગ્રહ' :
-                    currentMode === 'bhajans' ? 'ભજન સંગ્રહ' :
-                      currentMode === 'aartis' ? 'સોદેવ આરતી' :
-                        currentMode === 'stutis' ? 'સોદેવ સ્તુતિ' :
-                          currentMode === 'history' ? (
-                            historyView === 'menu' ? 'શ્રી સોદેવપીર ઇતિહાસ' :
-                              historyView === 'lifeStory' ? 'શ્રી સોદેવપીર જીવન ચરિત્ર' :
-                                historyView === 'incidentDetail' && activeIncidentIndex !== null ? historyData.incidents[activeIncidentIndex].title[language] : 'દાદાના ચમત્કારો'
-                          ) :
-                            currentMode === 'videos' ? 'સોદેવપીર દર્શન' :
-                              currentMode === 'policy' ? 'ગોપનીયતા નીતિ' : 'સોદેવ પૂજા'
-              ) : (
-                currentMode === 'chalisa' ? 'सोदेव चालीसा' :
-                  currentMode === 'mantras' ? 'सिद्ध मंत्र संग्रह' :
-                    currentMode === 'bhajans' ? 'भजन संग्रह' :
-                      currentMode === 'aartis' ? 'सोदेव आरती' :
-                        currentMode === 'stutis' ? 'सोदेव स्तुति' :
-                          currentMode === 'history' ? (
-                            historyView === 'menu' ? 'श्री सोदेवपीर इतिहास' :
-                              historyView === 'lifeStory' ? 'श्री सोदेवपीर जीवन चरित्र' :
-                                historyView === 'incidentDetail' && activeIncidentIndex !== null ? historyData.incidents[activeIncidentIndex].title[language] : 'दादा के चमत्कार'
-                          ) :
-                            currentMode === 'videos' ? 'सोदेवपीर दर्शन' :
-                              currentMode === 'policy' ? 'गोपनीयता नीति' : 'सोदेव पूजा'
-              )}
+        <div className="bottom-dashboard-container">
+
+          {/* POOJA DOCK: Celestial Duo-Island */}
+          <div className="pooja-dock">
+
+            {/* Island 1: Rituals */}
+            <div className="ritual-island glass-panel">
+              <div className="ritual-scroller">
+                <div className="dock-icon-item" onClick={ringBell}>
+                  <div className={`dock-icon ${isBellRinging ? 'bell-ringing' : ''}`}>🔔</div>
+                  <span>Bell</span>
+                </div>
+                <div className="dock-icon-item" onClick={playShankh}>
+                  <div className="dock-icon">🐚</div>
+                  <span>Shankh</span>
+                </div>
+                <div className="dock-icon-item" onClick={startFlowerShower}>
+                  <div className="dock-icon">🌸</div>
+                  <span>Flowers</span>
+                </div>
+                <div className="dock-icon-item" onClick={toggleDiya}>
+                  <div className={`dock-icon ${isDiyaLit ? 'active' : ''}`}>🪔</div>
+                  <span>Lamp</span>
+                </div>
+              </div>
             </div>
-            <div className="page-subtitle">
-              {['chalisa', 'mantras', 'bhajans', 'aartis', 'stutis'].includes(currentMode) && repeatCount > 1 && (
-                <div className="jaap-counter">
-                  Jaap {currentRepeat + 1} of {repeatCount}
-                </div>
-              )}
-              {currentMode === 'videos' && 'YouTube Devotional Library'}
-            </div>
-          </div>
 
-          {currentMode === 'chalisa' ? (
-            chalisaData.lyrics.map((verse, index) => (
-              <div key={index} className={`verse glass-panel ${activeVerse === index ? 'active-verse' : ''}`}>
-                <div className="hindi-text">{verse[language] || verse.gujarati || verse.hindi}</div>
-              </div>
-            ))
-          ) : currentMode === 'mantras' ? (
-            mantras.map((mantra, index) => (
-              <div
-                key={index}
-                className={`verse glass-panel ${activeItemIndex === index ? 'active-verse' : ''}`}
-                onClick={() => {
-                  setActiveItemIndex(index);
-                  setIsPlaying(false);
-                  if (audioRef.current) {
-                    audioRef.current.pause();
-                  }
-                }}
-              >
-                <div style={{ color: 'var(--secondary)', fontSize: '0.9rem', marginBottom: '10px' }}>
-                  {mantra.name} {activeItemIndex === index && ' (Selected)'}
-                </div>
-                <div className="hindi-text">{mantra[language] || mantra.gujarati || mantra.hindi}</div>
-              </div>
-            ))
-          ) : currentMode === 'bhajans' ? (
-            bhajans.map((bhajan, index) => (
-              <div
-                key={index}
-                className={`verse glass-panel ${activeItemIndex === index ? 'active-verse' : ''}`}
-                onClick={() => {
-                  setActiveItemIndex(index);
-                  setIsPlaying(false);
-                  if (audioRef.current) {
-                    audioRef.current.pause();
-                  }
-                }}
-              >
-                <div style={{ color: 'var(--secondary)', fontSize: '0.9rem', marginBottom: '10px' }}>
-                  {bhajan.name} {activeItemIndex === index && ' (Selected)'}
-                </div>
-                <div className="hindi-text">{bhajan[language] || bhajan.gujarati || bhajan.hindi}</div>
-              </div>
-            ))
-          ) : currentMode === 'aartis' ? (
-            aartis.map((verse, index) => (
-              <div key={index} className="verse glass-panel">
-                <div className="hindi-text">{verse[language] || verse.gujarati || verse.hindi}</div>
-              </div>
-            ))
-          ) : currentMode === 'stutis' ? (
-            stutis.map((verse, index) => (
-              <div key={index} className="verse glass-panel">
-                <div className="hindi-text">{verse[language] || verse.gujarati || verse.hindi}</div>
-              </div>
-            ))
-          ) : currentMode === 'history' ? (
-            <div className="history-section-container">
-              {historyView === 'menu' ? (
-                <>
-                  <div className="page-header center-header">
-                    <div className="page-subtitle">Choose a Section to Read</div>
-                  </div>
-                  <div className="history-menu-grid">
-                    <button className="history-menu-card glass-panel" onClick={() => { setHistoryView('lifeStory'); triggerHaptic(ImpactStyle.Medium); }}>
-                      <div className="menu-card-icon">📖</div>
-                      <div className="menu-card-content">
-                        <div className="menu-card-title">{language === 'gujarati' ? 'જીવન ચરિત્ર' : 'जीवन चरित्र'}</div>
-                        <div className="menu-card-subtitle">Life Story & Miracles</div>
-                      </div>
-                    </button>
-                    <button className="history-menu-card glass-panel" onClick={() => { setHistoryView('incidents'); triggerHaptic(ImpactStyle.Medium); }}>
-                      <div className="menu-card-icon">✨</div>
-                      <div className="menu-card-content">
-                        <div className="menu-card-title">{language === 'gujarati' ? 'દાદાના ચમત્કારો' : 'दादा के चमत्कार'}</div>
-                        <div className="menu-card-subtitle">True Incidents Index</div>
-                      </div>
-                    </button>
-                  </div>
-                </>
-              ) : historyView === 'lifeStory' ? (
-                <>
-                  <div className="page-header center-header">
-                    <div className="page-subtitle">Sacred Journey of Sodevpir Dada</div>
-                  </div>
-                  {historyData.lifeStory.content.map((item) => (
-                    <div key={item.id} className="verse glass-panel">
-                      <div style={{ color: 'var(--secondary)', fontSize: '1.2rem', marginBottom: '15px' }}>
-                        {item.subtitle[language]}
-                      </div>
-                      <div className="hindi-text" style={{ fontSize: '1.1rem', textAlign: 'left' }}>
-                        {item.text[language]}
-                      </div>
-                    </div>
-                  ))}
-                </>
-              ) : historyView === 'incidents' ? (
-                <>
-                  <div className="page-header center-header">
-                    <div className="page-subtitle">Select a Miracle to Read</div>
-                  </div>
+            {/* Island 2: Main Controls */}
+            <div className="control-island glass-panel">
+              <div className="dock-controls-row">
+                <button
+                  className={`dock-lib-btn ${isLibraryOpen ? 'active' : ''}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    triggerHaptic(ImpactStyle.Light);
+                    setIsLibraryOpen(!isLibraryOpen);
+                  }}
+                >
+                  ⋯
+                </button>
 
-                  <div className="incidents-grid">
-                    {historyData.incidents.map((incident, idx) => (
-                      <button
-                        key={incident.id}
-                        className={`incident-select-card glass-panel ${activeIncidentIndex === idx ? 'active' : ''}`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setActiveIncidentIndex(idx);
-                          setHistoryView('incidentDetail');
-                          triggerHaptic(ImpactStyle.Light);
-                        }}
-                      >
-                        <span className="incident-number">#{idx + 1}</span>
-                        <span className="incident-title-text">{incident.title[language]}</span>
-                      </button>
-                    ))}
-                  </div>
-                </>
-              ) : historyView === 'incidentDetail' ? (
-                <div className="selected-incident-viewer-fullscreen active-verse">
-                  <div className="page-header center-header">
-                    <div className="page-subtitle">{language === 'gujarati' ? 'ચમત્કારનો ઇતિહાસ' : 'चमत्कार का इतिहास'}</div>
-                  </div>
-                  {activeIncidentIndex !== null && historyData.incidents[activeIncidentIndex] && (
-                    <div className="hindi-text incident-content-full">
-                      {historyData.incidents[activeIncidentIndex].content[language]}
+                <button className="dock-play-btn" onClick={(e) => {
+                  e.stopPropagation();
+                  triggerHaptic(ImpactStyle.Medium);
+
+                  // CRITICAL: Ensure audio instance exists on user interaction for iOS Safari
+                  if (!audioRef.current) {
+                    createAudioInstance(getAudioPath());
+                  }
+
+                  const audio = audioRef.current;
+                  if (audio) {
+                    if (isPlaying) {
+                      audio.pause();
+                      setIsPlaying(false);
+                    } else {
+                      const playPromise = audio.play();
+                      if (playPromise !== undefined) {
+                        playPromise
+                          .then(() => setIsPlaying(true))
+                          .catch(err => console.error("Dock Play Error:", err.message));
+                      }
+                    }
+                  }
+                }}>
+                  {isPlaying ? '⏸' : '▶'}
+                </button>
+
+                <div className="language-pill-container mini">
+                  <button
+                    className={`lang-pill-btn ${language === 'gujarati' ? 'active' : ''}`}
+                    onClick={(e) => { e.stopPropagation(); setLanguage('gujarati'); triggerHaptic(); }}
+                  >
+                    G
+                  </button>
+                  <button
+                    className={`lang-pill-btn ${language === 'hindi' ? 'active' : ''}`}
+                    onClick={(e) => { e.stopPropagation(); setLanguage('hindi'); triggerHaptic(); }}
+                  >
+                    H
+                  </button>
+                </div>
+
+                <div className="dock-repeat-island glass-panel">
+                  <span className="repeat-icon">🔁</span>
+                  <select
+                    value={repeatCount}
+                    onChange={(e) => setRepeatCount(Number(e.target.value))}
+                    className="repeat-mini-select"
+                  >
+                    <option value="1">1x</option>
+                    <option value="3">3x</option>
+                    <option value="11">11x</option>
+                    <option value="21">21x</option>
+                    <option value="108">108x</option>
+                  </select>
+                  {repeatCount > 1 && (
+                    <div className="dock-jaap-badge">
+                      {currentRepeat + 1}/{repeatCount}
                     </div>
                   )}
                 </div>
-              ) : null}
+              </div>
+
+              <div className="dock-seek-row">
+                <span className="dock-time">{formatTime(currentTime)}</span>
+                <div className="seek-container">
+                  <div
+                    className="seek-fill"
+                    style={{ width: `${(currentTime / (duration || 1)) * 100}%` }}
+                  ></div>
+                  <input
+                    type="range"
+                    className="seek-bar"
+                    min="0"
+                    max={duration || 0}
+                    value={currentTime}
+                    onMouseDown={() => setIsSeeking(true)}
+                    onTouchStart={() => setIsSeeking(true)}
+                    onMouseUp={handleSeekEnd}
+                    onTouchEnd={handleSeekEnd}
+                    onChange={handleSeek}
+                  />
+                </div>
+                <span className="dock-time">{formatTime(duration)}</span>
+              </div>
             </div>
-          ) : currentMode === 'videos' ? (
-            <div className="videos-section-container">
+          </div>
+        </div>
 
+        {/* DEVOTIONAL LIBRARY TRAY (Isolated to prevent flickering/jumping) */}
+        <DevotionalLibrary
+          isLibraryOpen={isLibraryOpen}
+          setIsLibraryOpen={setIsLibraryOpen}
+          language={language}
+          startReading={startReading}
+        />
 
-              <div className="videos-grid-flow">
-                {videos.map((vid) => (
-                  <div key={vid.id} className="video-premium-card glass-panel">
-                    <div className="video-container-wrapper">
-                      <iframe
-                        width="100%"
-                        height="200"
-                        src={`https://www.youtube.com/embed/${vid.youtubeId}?modestbranding=1&rel=0`}
-                        title={vid.title}
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      ></iframe>
+        {/* LYRICS VIEW */}
+        {isLyricsVisible && (
+          <main className="lyrics-container">
+            <div className="top-actions-row">
+              <div className="back-btn glass-panel" onClick={() => setIsLyricsVisible(false)}>
+                <span className="back-icon">←</span> {language === 'gujarati' ? 'વાંચન બંધ કરો' : 'पठन बंद करें'}
+              </div>
+              {currentMode === 'history' && historyView !== 'menu' && (
+                <div className="back-btn glass-panel secondary-back" onClick={() => {
+                  if (historyView === 'incidentDetail') {
+                    setHistoryView('incidents');
+                  } else {
+                    setHistoryView('menu');
+                  }
+                  triggerHaptic();
+                }}>
+                  <span className="back-icon">↺</span> {language === 'gujarati' ? 'પાછા જાઓ' : 'वापस जाएं'}
+                </div>
+              )}
+            </div>
+
+            <div className="page-header">
+              <div className="page-title">
+                {language === 'gujarati' ? (
+                  currentMode === 'chalisa' ? 'સોદેવ ચાલીસા' :
+                    currentMode === 'mantras' ? 'સિદ્ધ મંત્ર સંગ્રહ' :
+                      currentMode === 'bhajans' ? 'ભજન સંગ્રહ' :
+                        currentMode === 'aartis' ? 'સોદેવ આરતી' :
+                          currentMode === 'stutis' ? 'સોદેવ સ્તુતિ' :
+                            currentMode === 'history' ? (
+                              historyView === 'menu' ? 'શ્રી સોદેવપીર ઇતિહાસ' :
+                                historyView === 'lifeStory' ? 'શ્રી સોદેવપીર જીવન ચરિત્ર' :
+                                  historyView === 'incidentDetail' && activeIncidentIndex !== null ? historyData.incidents[activeIncidentIndex].title[language] : 'દાદાના ચમત્કારો'
+                            ) :
+                              currentMode === 'videos' ? 'સોદેવપીર દર્શન' :
+                                currentMode === 'policy' ? 'ગોપનીયતા નીતિ' : 'સોદેવ પૂજા'
+                ) : (
+                  currentMode === 'chalisa' ? 'सोदेव चालीसा' :
+                    currentMode === 'mantras' ? 'सिद्ध मंत्र संग्रह' :
+                      currentMode === 'bhajans' ? 'भजन संग्रह' :
+                        currentMode === 'aartis' ? 'सोदेव आरती' :
+                          currentMode === 'stutis' ? 'सोदेव स्तुति' :
+                            currentMode === 'history' ? (
+                              historyView === 'menu' ? 'श्री सोदेवपीर इतिहास' :
+                                historyView === 'lifeStory' ? 'श्री सोदेवपीर जीवन चरित्र' :
+                                  historyView === 'incidentDetail' && activeIncidentIndex !== null ? historyData.incidents[activeIncidentIndex].title[language] : 'दादा के चमत्कार'
+                            ) :
+                              currentMode === 'videos' ? 'सोदेवपीर दर्शन' :
+                                currentMode === 'policy' ? 'गोपनीयता नीति' : 'सोदेव पूजा'
+                )}
+              </div>
+              <div className="page-subtitle">
+                {['chalisa', 'mantras', 'bhajans', 'aartis', 'stutis'].includes(currentMode) && repeatCount > 1 && (
+                  <div className="jaap-counter">
+                    Jaap {currentRepeat + 1} of {repeatCount}
+                  </div>
+                )}
+                {currentMode === 'videos' && 'YouTube Devotional Library'}
+              </div>
+            </div>
+
+            {currentMode === 'chalisa' ? (
+              chalisaData.lyrics.map((verse, index) => (
+                <div key={index} className={`verse glass-panel ${activeVerse === index ? 'active-verse' : ''}`}>
+                  <div className="hindi-text">{verse[language] || verse.gujarati || verse.hindi}</div>
+                </div>
+              ))
+            ) : currentMode === 'mantras' ? (
+              mantras.map((mantra, index) => (
+                <div
+                  key={index}
+                  className={`verse glass-panel ${activeItemIndex === index ? 'active-verse' : ''}`}
+                  onClick={() => {
+                    setActiveItemIndex(index);
+                    setIsPlaying(false);
+                    if (audioRef.current) {
+                      audioRef.current.pause();
+                    }
+                  }}
+                >
+                  <div style={{ color: 'var(--secondary)', fontSize: '0.9rem', marginBottom: '10px' }}>
+                    {mantra.name} {activeItemIndex === index && ' (Selected)'}
+                  </div>
+                  <div className="hindi-text">{mantra[language] || mantra.gujarati || mantra.hindi}</div>
+                </div>
+              ))
+            ) : currentMode === 'bhajans' ? (
+              bhajans.map((bhajan, index) => (
+                <div
+                  key={index}
+                  className={`verse glass-panel ${activeItemIndex === index ? 'active-verse' : ''}`}
+                  onClick={() => {
+                    setActiveItemIndex(index);
+                    setIsPlaying(false);
+                    if (audioRef.current) {
+                      audioRef.current.pause();
+                    }
+                  }}
+                >
+                  <div style={{ color: 'var(--secondary)', fontSize: '0.9rem', marginBottom: '10px' }}>
+                    {bhajan.name} {activeItemIndex === index && ' (Selected)'}
+                  </div>
+                  <div className="hindi-text">{bhajan[language] || bhajan.gujarati || bhajan.hindi}</div>
+                </div>
+              ))
+            ) : currentMode === 'aartis' ? (
+              aartis.map((verse, index) => (
+                <div key={index} className="verse glass-panel">
+                  <div className="hindi-text">{verse[language] || verse.gujarati || verse.hindi}</div>
+                </div>
+              ))
+            ) : currentMode === 'stutis' ? (
+              stutis.map((verse, index) => (
+                <div key={index} className="verse glass-panel">
+                  <div className="hindi-text">{verse[language] || verse.gujarati || verse.hindi}</div>
+                </div>
+              ))
+            ) : currentMode === 'history' ? (
+              <div className="history-section-container">
+                {historyView === 'menu' ? (
+                  <>
+                    <div className="page-header center-header">
+                      <div className="page-subtitle">Choose a Section to Read</div>
                     </div>
-                    <div className="video-card-details">
-                      <div className="video-platform-badge">
-                        <span className="youtube-logo">🔴</span> YouTube
+                    <div className="history-menu-grid">
+                      <button className="history-menu-card glass-panel" onClick={() => { setHistoryView('lifeStory'); triggerHaptic(ImpactStyle.Medium); }}>
+                        <div className="menu-card-icon">📖</div>
+                        <div className="menu-card-content">
+                          <div className="menu-card-title">{language === 'gujarati' ? 'જીવન ચરિત્ર' : 'जीवन चरित्र'}</div>
+                          <div className="menu-card-subtitle">Life Story & Miracles</div>
+                        </div>
+                      </button>
+                      <button className="history-menu-card glass-panel" onClick={() => { setHistoryView('incidents'); triggerHaptic(ImpactStyle.Medium); }}>
+                        <div className="menu-card-icon">✨</div>
+                        <div className="menu-card-content">
+                          <div className="menu-card-title">{language === 'gujarati' ? 'દાદાના ચમત્કારો' : 'दादा के चमत्कार'}</div>
+                          <div className="menu-card-subtitle">True Incidents Index</div>
+                        </div>
+                      </button>
+                    </div>
+                  </>
+                ) : historyView === 'lifeStory' ? (
+                  <>
+                    <div className="page-header center-header">
+                      <div className="page-subtitle">Sacred Journey of Sodevpir Dada</div>
+                    </div>
+                    {historyData.lifeStory.content.map((item) => (
+                      <div key={item.id} className="verse glass-panel">
+                        <div style={{ color: 'var(--secondary)', fontSize: '1.2rem', marginBottom: '15px' }}>
+                          {item.subtitle[language]}
+                        </div>
+                        <div className="hindi-text" style={{ fontSize: '1.1rem', textAlign: 'left' }}>
+                          {item.text[language]}
+                        </div>
                       </div>
-                      <div className="video-card-title">
-                        {vid[language] || vid.gujarati || vid.hindi}
+                    ))}
+                  </>
+                ) : historyView === 'incidents' ? (
+                  <>
+                    <div className="page-header center-header">
+                      <div className="page-subtitle">Select a Miracle to Read</div>
+                    </div>
+
+                    <div className="incidents-grid">
+                      {historyData.incidents.map((incident, idx) => (
+                        <button
+                          key={incident.id}
+                          className={`incident-select-card glass-panel ${activeIncidentIndex === idx ? 'active' : ''}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveIncidentIndex(idx);
+                            setHistoryView('incidentDetail');
+                            triggerHaptic(ImpactStyle.Light);
+                          }}
+                        >
+                          <span className="incident-number">#{idx + 1}</span>
+                          <span className="incident-title-text">{incident.title[language]}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                ) : historyView === 'incidentDetail' ? (
+                  <div className="selected-incident-viewer-fullscreen active-verse">
+                    <div className="page-header center-header">
+                      <div className="page-subtitle">{language === 'gujarati' ? 'ચમત્કારનો ઇતિહાસ' : 'चमत्कार का इतिहास'}</div>
+                    </div>
+                    {activeIncidentIndex !== null && historyData.incidents[activeIncidentIndex] && (
+                      <div className="hindi-text incident-content-full">
+                        {historyData.incidents[activeIncidentIndex].content[language]}
                       </div>
+                    )}
+                  </div>
+                ) : null}
+              </div>
+            ) : currentMode === 'videos' ? (
+              <div className="videos-section-container">
+
+
+                <div className="videos-grid-flow">
+                  {videos.map((vid) => (
+                    <div key={vid.id} className="video-premium-card glass-panel">
+                      <div className="video-container-wrapper">
+                        <iframe
+                          width="100%"
+                          height="200"
+                          src={`https://www.youtube.com/embed/${vid.youtubeId}?modestbranding=1&rel=0`}
+                          title={vid.title}
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        ></iframe>
+                      </div>
+                      <div className="video-card-details">
+                        <div className="video-platform-badge">
+                          <span className="youtube-logo">🔴</span> YouTube
+                        </div>
+                        <div className="video-card-title">
+                          {vid[language] || vid.gujarati || vid.hindi}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : currentMode === 'policy' ? (
+              <div className="policy-section-container">
+                <div className="page-header">
+                  <div className="page-title">{policyData.title[language] || policyData.title.english}</div>
+                  <div className="page-subtitle">Privacy & Data Transparency</div>
+                </div>
+
+                <div className="verse glass-panel" style={{ textAlign: 'center', marginBottom: '30px', padding: '15px' }}>
+                  <div style={{ color: 'var(--secondary)', fontSize: '0.85rem', opacity: 0.8 }}>
+                    Last Updated: {policyData.lastUpdated}
+                  </div>
+                </div>
+
+                {policyData.sections.map((section, idx) => (
+                  <div key={idx} className="verse glass-panel">
+                    <div style={{ color: 'var(--secondary)', fontSize: '1.2rem', marginBottom: '15px' }}>
+                      {section.subtitle[language] || section.subtitle.english}
+                    </div>
+                    <div className="hindi-text" style={{ fontSize: '1.1rem', textAlign: 'left' }}>
+                      {section.text[language] || section.text.english}
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
-          ) : currentMode === 'policy' ? (
-            <div className="policy-section-container">
-              <div className="page-header">
-                <div className="page-title">{policyData.title[language] || policyData.title.english}</div>
-                <div className="page-subtitle">Privacy & Data Transparency</div>
-              </div>
+            ) : null}
+          </main>
+        )}
 
-              <div className="verse glass-panel" style={{ textAlign: 'center', marginBottom: '30px', padding: '15px' }}>
-                <div style={{ color: 'var(--secondary)', fontSize: '0.85rem', opacity: 0.8 }}>
-                  Last Updated: {policyData.lastUpdated}
-                </div>
-              </div>
-
-              {policyData.sections.map((section, idx) => (
-                <div key={idx} className="verse glass-panel">
-                  <div style={{ color: 'var(--secondary)', fontSize: '1.2rem', marginBottom: '15px' }}>
-                    {section.subtitle[language] || section.subtitle.english}
-                  </div>
-                  <div className="hindi-text" style={{ fontSize: '1.1rem', textAlign: 'left' }}>
-                    {section.text[language] || section.text.english}
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : null}
-        </main>
+        {/* No separate footer - all is in dashboard */}
+      </div>
+      {showSplash && (
+        <div className="divine-splash-clean">
+          <img src="/assets/images/merged_splash.png" className="splash-full-img" alt="Divine Sodevpir Dada" />
+        </div>
       )}
-
-      {/* No separate footer - all is in dashboard */}
-    </div>
+    </>
   );
 }
 
