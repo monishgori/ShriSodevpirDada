@@ -150,7 +150,7 @@ function App() {
   useEffect(() => {
     const splashTimer = setTimeout(() => {
       setShowSplash(false);
-    }, 6000); // 6 seconds total
+    }, 2500); // Shortened to 2.5s to match user expectation (1-2s range)
     return () => clearTimeout(splashTimer);
   }, []);
 
@@ -183,7 +183,7 @@ function App() {
           await AdMob.prepareInterstitial(interstitialOptions);
 
           // Safety Catch: Sometimes 'interstitialAdLoaded' fires before listener is ready, or not at all on cache.
-          // Try showing after 5 seconds as a fallback.
+          // Try showing after 4 seconds as a fallback.
           setTimeout(async () => {
             try {
               await AdMob.showInterstitial();
@@ -191,7 +191,7 @@ function App() {
             } catch (showErr) {
               // Silent fail - ad probably already showed or just isn't ready.
             }
-          }, 5000);
+          }, 4000);
 
         } catch (prepErr) {
           console.log("Interstitial preparation failed:", prepErr.message);
@@ -214,7 +214,7 @@ function App() {
 
     // Robust Native Detection
     if (Capacitor.isNativePlatform()) {
-      setTimeout(initAdMob, 2000);
+      initAdMob(); // Start initialization immediately
     }
   }, []);
 
