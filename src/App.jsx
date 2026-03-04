@@ -161,16 +161,38 @@ function App() {
         console.log("AdMob: Starting initialization...");
         await AdMob.initialize();
 
-        // Show Banner Ad at the very bottom
-        const adOptions = {
-          adId: 'ca-app-pub-5914382038291713/2444272147', // User's Ad Unit ID
+        // 1. Prepare and Show Interstitial Ad (Smart Load - Version 1.19)
+        const interstitialOptions = {
+          adId: 'ca-app-pub-5914382038291713/4836567750',
+          isTesting: false
+        };
+
+        try {
+          await AdMob.prepareInterstitial(interstitialOptions);
+
+          // Wait slightly longer to give data time to download
+          setTimeout(async () => {
+            try {
+              await AdMob.showInterstitial();
+              console.log("Interstitial Showed Successfully");
+            } catch (showErr) {
+              console.log("Ad not ready yet, skipping to avoid disturbance.");
+            }
+          }, 2500);
+        } catch (prepErr) {
+          console.log("Interstitial preparation failed:", prepErr.message);
+        }
+
+        // 2. Show Banner Ad at the very bottom
+        const bannerOptions = {
+          adId: 'ca-app-pub-5914382038291713/2444272147',
           adSize: BannerAdSize.ADAPTIVE_BANNER,
           position: BannerAdPosition.BOTTOM_CENTER,
           margin: 0,
           isTesting: false // LIVE ADS ENABLED 🛡️💰⚡
         };
 
-        await AdMob.showBanner(adOptions);
+        await AdMob.showBanner(bannerOptions);
       } catch (e) {
         console.warn("AdMob Check:", e.message);
       }
@@ -539,10 +561,11 @@ function App() {
                 </div>
                 <div className="quote-content">
                   <div className="main-quote">
-                    {dailyQuote[language] || dailyQuote.gujarati || dailyQuote.hindi}
+                    {/* For quotes, we stay in original language even if UI is in English */}
+                    {language === 'gujarati' ? dailyQuote.gujarati : dailyQuote.hindi}
                   </div>
                   {language !== 'gujarati' && dailyQuote.gujarati && <div className="sub-quote guj">{dailyQuote.gujarati}</div>}
-                  {language !== 'hindi' && dailyQuote.hindi && <div className="sub-quote hindi">{dailyQuote.hindi}</div>}
+                  {language === 'gujarati' && dailyQuote.hindi && <div className="sub-quote hindi">{dailyQuote.hindi}</div>}
                 </div>
               </div>
             )}
@@ -630,6 +653,12 @@ function App() {
                     onClick={(e) => { e.stopPropagation(); setLanguage('hindi'); triggerHaptic(); }}
                   >
                     H
+                  </button>
+                  <button
+                    className={`lang-pill-btn ${language === 'english' ? 'active' : ''}`}
+                    onClick={(e) => { e.stopPropagation(); setLanguage('english'); triggerHaptic(); }}
+                  >
+                    E
                   </button>
                 </div>
 

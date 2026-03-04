@@ -460,7 +460,7 @@ body {
   position: fixed;
   bottom: 0;
   /* Universal Gap: Ensures room for AdMob banner on ALL phone sizes */
-  padding-bottom: 80px;
+  padding-bottom: 90px;
   left: 0;
   width: 100%;
   z-index: 1000;
