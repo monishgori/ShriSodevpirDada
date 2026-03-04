@@ -168,17 +168,31 @@ function App() {
         };
 
         try {
+          // Listen for the ad to be ready (Native logic - Version 1.19 Optimized)
+          const adListener = await AdMob.addListener('interstitialAdLoaded', async (info) => {
+            console.log("AdMob: Interstitial Loaded via Listener!");
+            try {
+              await AdMob.showInterstitial();
+              console.log("Interstitial Showed successfully via Listener");
+            } catch (showErr) {
+              console.warn("Show error via listener:", showErr.message);
+            }
+            adListener.remove(); // Cleanup once shown
+          });
+
           await AdMob.prepareInterstitial(interstitialOptions);
 
-          // Wait slightly longer to give data time to download
+          // Safety Catch: Sometimes 'interstitialAdLoaded' fires before listener is ready, or not at all on cache.
+          // Try showing after 5 seconds as a fallback.
           setTimeout(async () => {
             try {
               await AdMob.showInterstitial();
-              console.log("Interstitial Showed Successfully");
+              console.log("Interstitial Showed via Timeout Fallback");
             } catch (showErr) {
-              console.log("Ad not ready yet, skipping to avoid disturbance.");
+              // Silent fail - ad probably already showed or just isn't ready.
             }
-          }, 2500);
+          }, 5000);
+
         } catch (prepErr) {
           console.log("Interstitial preparation failed:", prepErr.message);
         }
