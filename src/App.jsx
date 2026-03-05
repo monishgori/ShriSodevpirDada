@@ -159,27 +159,41 @@ function App() {
   useEffect(() => {
     const prepareAds = async () => {
       if (!Capacitor.isNativePlatform()) return;
-      try {
-        console.log("AdMob: Pre-preparing ads...");
-        await AdMob.initialize();
+      // 🏁 STABILITY DELAY: Allow the app engine 2s to fully settle before AdMob calls
+      setTimeout(async () => {
+        try {
+          console.log("AdMob: Initializing...");
+          await AdMob.initialize();
 
-        // Prepare Interstitial immediately in background
-        await AdMob.prepareInterstitial({
-          adId: 'ca-app-pub-5914382038291713/4836567750',
-          isTesting: false
-        });
+          // 🛡️ INDEPENDENT BANNER: One ad failure won't block the other
+          try {
+            await AdMob.showBanner({
+              adId: 'ca-app-pub-5914382038291713/2444272147',
+              adSize: BannerAdSize.ADAPTIVE_BANNER,
+              position: BannerAdPosition.BOTTOM_CENTER,
+              margin: 0,
+              isTesting: false
+            });
+            console.log("AdMob: Banner Loaded ✅");
+          } catch (bannerErr) {
+            console.warn("Banner Error:", bannerErr.message);
+          }
 
-        // 2. Show Banner immediately
-        await AdMob.showBanner({
-          adId: 'ca-app-pub-5914382038291713/2444272147',
-          adSize: BannerAdSize.ADAPTIVE_BANNER,
-          position: BannerAdPosition.BOTTOM_CENTER,
-          margin: 0,
-          isTesting: false
-        });
-      } catch (e) {
-        console.warn("AdMob Init Error:", e.message);
-      }
+          // 🛡️ INDEPENDENT INTERSTITIAL PREP
+          try {
+            await AdMob.prepareInterstitial({
+              adId: 'ca-app-pub-5914382038291713/4836567750',
+              isTesting: false
+            });
+            console.log("AdMob: Interstitial Ready in Background ✅");
+          } catch (intErr) {
+            console.warn("Interstitial Prep Error:", intErr.message);
+          }
+
+        } catch (e) {
+          console.warn("AdMob Global Error:", e.message);
+        }
+      }, 2000);
     };
     prepareAds();
   }, []);
