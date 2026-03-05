@@ -145,6 +145,7 @@ function App() {
   const [isDiyaLit, setIsDiyaLit] = useState(false);
   const [isSeeking, setIsSeeking] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
+  const [isIntReady, setIsIntReady] = useState(false);
 
   // Splash Screen Logic
   useEffect(() => {
@@ -159,13 +160,14 @@ function App() {
   useEffect(() => {
     const prepareAds = async () => {
       if (!Capacitor.isNativePlatform()) return;
-      // 🏁 STABILITY DELAY: Allow the app engine 2s to fully settle before AdMob calls
+
+      // Delay initialization by 2s for engine stability
       setTimeout(async () => {
         try {
           console.log("AdMob: Initializing...");
           await AdMob.initialize();
 
-          // 🛡️ INDEPENDENT BANNER: One ad failure won't block the other
+          // 🛡️ INDEPENDENT BANNER
           try {
             await AdMob.showBanner({
               adId: 'ca-app-pub-5914382038291713/2444272147',
@@ -175,49 +177,42 @@ function App() {
               isTesting: false
             });
             console.log("AdMob: Banner Loaded ✅");
-          } catch (bannerErr) {
-            console.warn("Banner Error:", bannerErr.message);
-          }
+          } catch (bannerErr) { console.warn("Banner Error:", bannerErr.message); }
 
-          // 🛡️ INDEPENDENT INTERSTITIAL PREP
+          // 🛡️ INDEPENDENT INTERSTITIAL PREP WITH LISTENER
           try {
+            // Listen for 'Ready' Signal
+            const loadedSub = await AdMob.addListener('interstitialAdLoaded', () => {
+              console.log("AdMob: Interstitial is now DOWNLOADED and READY ✅");
+              setIsIntReady(true);
+            });
+
             await AdMob.prepareInterstitial({
               adId: 'ca-app-pub-5914382038291713/4836567750',
               isTesting: false
             });
-            console.log("AdMob: Interstitial Ready in Background ✅");
-          } catch (intErr) {
-            console.warn("Interstitial Prep Error:", intErr.message);
-          }
+          } catch (intErr) { console.warn("Interstitial Prep Error:", intErr.message); }
 
-        } catch (e) {
-          console.warn("AdMob Global Error:", e.message);
-        }
+        } catch (e) { console.warn("AdMob Global Error:", e.message); }
       }, 2000);
     };
     prepareAds();
   }, []);
 
-  // 2. SHOW INTERSTITIAL ONLY AFTER SPLASH IS GONE
+  // 2. SHOW INTERSTITIAL ONLY AFTER BOTH SPLASH IS GONE & AD IS LOADED
   useEffect(() => {
-    if (!showSplash && Capacitor.isNativePlatform()) {
-      const showAppStartAd = async () => {
+    if (!showSplash && isIntReady && Capacitor.isNativePlatform()) {
+      const showAd = async () => {
         try {
-          console.log("AdMob: Attempting to show ad after splash...");
+          console.log("AdMob: Popping up the Full-Screen Ad! 🛡️💰");
           await AdMob.showInterstitial();
-          console.log("AdMob: Success!");
-        } catch (e) {
-          console.log("AdMob: Not ready on first try, retrying in 3s...");
-          // One final retry if it wasn't loaded yet
-          setTimeout(async () => {
-            try { await AdMob.showInterstitial(); } catch (err) { }
-          }, 3000);
-        }
+          setIsIntReady(false); // Reset state
+        } catch (err) { console.log("AdMob Show Failed:", err.message); }
       };
-      // Give the UI 500ms to breathe after splash disappears
-      setTimeout(showAppStartAd, 500);
+      // Give the UI a tiny moment to stabilize
+      setTimeout(showAd, 500);
     }
-  }, [showSplash]);
+  }, [showSplash, isIntReady]);
 
   const backgroundImage = '/assets/images/1.png';
 
