@@ -155,68 +155,55 @@ function App() {
   }, []);
 
   // Initialize AdMob & Show Banner
+  // 1. GLOBAL AD STATE & PREPARATION
   useEffect(() => {
-    const initAdMob = async () => {
+    const prepareAds = async () => {
+      if (!Capacitor.isNativePlatform()) return;
       try {
-        console.log("AdMob: Starting initialization...");
+        console.log("AdMob: Pre-preparing ads...");
         await AdMob.initialize();
 
-        // 1. Prepare and Show Interstitial Ad (Smart Load - Version 1.19)
-        const interstitialOptions = {
+        // Prepare Interstitial immediately in background
+        await AdMob.prepareInterstitial({
           adId: 'ca-app-pub-5914382038291713/4836567750',
           isTesting: false
-        };
+        });
 
-        try {
-          // Listen for the ad to be ready (Native logic - Version 1.19 Optimized)
-          const adListener = await AdMob.addListener('interstitialAdLoaded', async (info) => {
-            console.log("AdMob: Interstitial Loaded via Listener!");
-            try {
-              await AdMob.showInterstitial();
-              console.log("Interstitial Showed successfully via Listener");
-            } catch (showErr) {
-              console.warn("Show error via listener:", showErr.message);
-            }
-            adListener.remove(); // Cleanup once shown
-          });
-
-          await AdMob.prepareInterstitial(interstitialOptions);
-
-          // Safety Catch: Sometimes 'interstitialAdLoaded' fires before listener is ready, or not at all on cache.
-          // Try showing after 4 seconds as a fallback.
-          setTimeout(async () => {
-            try {
-              await AdMob.showInterstitial();
-              console.log("Interstitial Showed via Timeout Fallback");
-            } catch (showErr) {
-              // Silent fail - ad probably already showed or just isn't ready.
-            }
-          }, 4000);
-
-        } catch (prepErr) {
-          console.log("Interstitial preparation failed:", prepErr.message);
-        }
-
-        // 2. Show Banner Ad at the very bottom
-        const bannerOptions = {
+        // 2. Show Banner immediately
+        await AdMob.showBanner({
           adId: 'ca-app-pub-5914382038291713/2444272147',
           adSize: BannerAdSize.ADAPTIVE_BANNER,
           position: BannerAdPosition.BOTTOM_CENTER,
           margin: 0,
-          isTesting: false // LIVE ADS ENABLED 🛡️💰⚡
-        };
-
-        await AdMob.showBanner(bannerOptions);
+          isTesting: false
+        });
       } catch (e) {
-        console.warn("AdMob Check:", e.message);
+        console.warn("AdMob Init Error:", e.message);
       }
     };
-
-    // Robust Native Detection
-    if (Capacitor.isNativePlatform()) {
-      initAdMob(); // Start initialization immediately
-    }
+    prepareAds();
   }, []);
+
+  // 2. SHOW INTERSTITIAL ONLY AFTER SPLASH IS GONE
+  useEffect(() => {
+    if (!showSplash && Capacitor.isNativePlatform()) {
+      const showAppStartAd = async () => {
+        try {
+          console.log("AdMob: Attempting to show ad after splash...");
+          await AdMob.showInterstitial();
+          console.log("AdMob: Success!");
+        } catch (e) {
+          console.log("AdMob: Not ready on first try, retrying in 3s...");
+          // One final retry if it wasn't loaded yet
+          setTimeout(async () => {
+            try { await AdMob.showInterstitial(); } catch (err) { }
+          }, 3000);
+        }
+      };
+      // Give the UI 500ms to breathe after splash disappears
+      setTimeout(showAppStartAd, 500);
+    }
+  }, [showSplash]);
 
   const backgroundImage = '/assets/images/1.png';
 
