@@ -99,6 +99,20 @@ const DevotionalLibrary = React.memo(({ isLibraryOpen, setIsLibraryOpen, languag
           >
             PRIVACY POLICY
           </button>
+          <div style={{ margin: '5px 0', opacity: 0.3, fontSize: '0.5rem' }}>•</div>
+          <button
+            onClick={(e) => { e.stopPropagation(); window.showIntAd(); }}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'var(--text-secondary)',
+              fontSize: '0.6rem',
+              letterSpacing: '0.5px',
+              cursor: 'pointer'
+            }}
+          >
+            LOAD ADS
+          </button>
         </div>
       </div>
     </>
@@ -161,52 +175,58 @@ function App() {
     const prepareAds = async () => {
       if (!Capacitor.isNativePlatform()) return;
 
-      // Delay initialization by 2s for engine stability
-      setTimeout(async () => {
+      try {
+        console.log("AdMob: Initializing...");
+        await AdMob.initialize();
+
+        // 🛡️ INDEPENDENT BANNER
         try {
-          console.log("AdMob: Initializing...");
-          await AdMob.initialize();
+          await AdMob.showBanner({
+            adId: 'ca-app-pub-5914382038291713/2444272147',
+            adSize: BannerAdSize.ADAPTIVE_BANNER,
+            position: BannerAdPosition.BOTTOM_CENTER,
+            margin: 0,
+            isTesting: false
+          });
+          console.log("AdMob: Banner Loaded ✅");
+        } catch (bannerErr) { console.warn("Banner Error:", bannerErr.message); }
 
-          // 🛡️ INDEPENDENT BANNER
-          try {
-            await AdMob.showBanner({
-              adId: 'ca-app-pub-5914382038291713/2444272147',
-              adSize: BannerAdSize.ADAPTIVE_BANNER,
-              position: BannerAdPosition.BOTTOM_CENTER,
-              margin: 0,
-              isTesting: false
-            });
-            console.log("AdMob: Banner Loaded ✅");
-          } catch (bannerErr) { console.warn("Banner Error:", bannerErr.message); }
+        // 🛡️ INDEPENDENT INTERSTITIAL PREP WITH LISTENER
+        try {
+          await AdMob.addListener('interstitialAdLoaded', () => {
+            console.log("AdMob: Interstitial READY ✅");
+            setIsIntReady(true);
+          });
 
-          // 🛡️ INDEPENDENT INTERSTITIAL PREP WITH LISTENER
-          try {
-            await AdMob.addListener('interstitialAdLoaded', () => {
-              console.log("AdMob: Interstitial READY ✅");
-              setIsIntReady(true);
-            });
+          await AdMob.addListener('interstitialAdFailedToLoad', (err) => {
+            console.log("AdMob: Interstitial Failed to Load ❌", err.message);
+            // Retry once after 5 seconds if it fails
+            setTimeout(() => {
+              AdMob.prepareInterstitial({
+                adId: 'ca-app-pub-5914382038291713/4836567750',
+                isTesting: false
+              }).catch(e => console.log("AdMob Retry Failed:", e.message));
+            }, 5000);
+          });
 
-            await AdMob.addListener('interstitialAdFailedToLoad', (err) => {
-              console.log("AdMob: Interstitial Failed to Load ❌", err.message);
-              // Retry once after 5 seconds if it fails
-              setTimeout(() => {
-                AdMob.prepareInterstitial({
-                  adId: 'ca-app-pub-5914382038291713/4836567750',
-                  isTesting: false
-                }).catch(e => console.log("AdMob Retry Failed:", e.message));
-              }, 5000);
-            });
+          await AdMob.prepareInterstitial({
+            adId: 'ca-app-pub-5914382038291713/4836567750',
+            isTesting: false
+          });
+        } catch (intErr) { console.warn("Interstitial Setup Error:", intErr.message); }
 
-            await AdMob.prepareInterstitial({
-              adId: 'ca-app-pub-5914382038291713/4836567750',
-              isTesting: false
-            });
-          } catch (intErr) { console.warn("Interstitial Setup Error:", intErr.message); }
-
-        } catch (e) { console.warn("AdMob Global Error:", e.message); }
-      }, 2000);
+      } catch (e) { console.warn("AdMob Global Error:", e.message); }
     };
     prepareAds();
+
+    // Expose manual trigger to window for testing
+    window.showIntAd = async () => {
+      try {
+        await AdMob.showInterstitial();
+      } catch (err) {
+        alert("Ad not ready yet. Please wait a few seconds.");
+      }
+    };
   }, []);
 
   // 2. SHOW INTERSTITIAL ONLY AFTER BOTH SPLASH IS GONE & AD IS LOADED
