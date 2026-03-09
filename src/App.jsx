@@ -194,22 +194,29 @@ function App() {
           console.log("AdMob: Banner Loaded ✅");
         } catch (bannerErr) { console.warn("Banner Error:", bannerErr.message); }
 
-        // 🛡️ INDEPENDENT INTERSTITIAL PREP WITH LISTENER
+        // 🛡️ INDEPENDENT INTERSTITIAL PREP WITH DETAILED LOGGING
         try {
+          // Remove old listeners if any
+          await AdMob.removeAllListeners().catch(() => { });
+
           await AdMob.addListener('interstitialAdLoaded', () => {
             console.log("AdMob: Interstitial READY ✅");
             setIsIntReady(true);
+            window.lastAdError = null;
           });
 
           await AdMob.addListener('interstitialAdFailedToLoad', (err) => {
-            console.log("AdMob: Interstitial Failed to Load ❌", err.message);
-            // Retry once after 5 seconds if it fails
+            console.log("AdMob: Interstitial Failed to Load ❌", err.message, err.code);
+            window.lastAdError = err.message + " (Code: " + (err.code || "unknown") + ")";
+            setIsIntReady(false);
+
+            // Retry after 10 seconds (don't spam)
             setTimeout(() => {
               AdMob.prepareInterstitial({
                 adId: 'ca-app-pub-5914382038291713/4836567750',
                 isTesting: false
               }).catch(e => console.log("AdMob Retry Failed:", e.message));
-            }, 5000);
+            }, 10000);
           });
 
           await AdMob.prepareInterstitial({
@@ -222,15 +229,23 @@ function App() {
     };
     prepareAds();
 
-    // Expose manual trigger to window for testing
+    // EXPOSE MONITORING FOR USER
     window.showIntAd = async () => {
       try {
+        console.log("AdMob: Manual Show Triggered");
         await AdMob.showInterstitial();
       } catch (err) {
-        alert("Ad not ready yet. Please wait a few seconds.");
+        let msg = "Ad not ready yet.";
+        if (window.lastAdError) msg += "\nReason: " + window.lastAdError;
+        else msg += "\nPlease wait 5-10 seconds.";
+        alert(msg);
       }
     };
-  }, []);
+
+    window.checkAdStatus = () => {
+      alert("Ready: " + (isIntReady ? "YES ✅" : "NO ❌") + "\nLast Error: " + (window.lastAdError || "None"));
+    };
+  }, [isIntReady]);
 
   // 2. SHOW INTERSTITIAL ONLY AFTER BOTH SPLASH IS GONE & AD IS LOADED
   useEffect(() => {
