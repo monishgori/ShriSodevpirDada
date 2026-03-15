@@ -458,9 +458,8 @@ body {
 /* MODERN FLOATING DOCK & LIBRARY TRAY */
 .bottom-dashboard-container {
   position: fixed;
-  bottom: 0;
-  /* Universal Gap: Ensures room for AdMob banner on ALL phone sizes */
-  padding-bottom: 90px;
+  /* Room for AdMob banner (50px-60px) + small gap */
+  padding-bottom: 60px;
   left: 0;
   width: 100%;
   z-index: 1000;
@@ -736,9 +735,9 @@ body.tray-open {
 .seek-container {
   flex: 1;
   position: relative;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
   display: flex;
   align-items: center;
   margin: 0 10px;
@@ -749,10 +748,10 @@ body.tray-open {
   left: 0;
   top: 0;
   height: 100%;
-  background: var(--secondary);
-  border-radius: 10px;
+  background: linear-gradient(to right, var(--secondary), #fff);
+  border-radius: 20px;
   pointer-events: none;
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+  box-shadow: 0 0 10px var(--secondary);
   z-index: 1;
 }
 
@@ -775,16 +774,21 @@ body.tray-open {
 .seek-bar::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 0;
-  height: 0;
-  opacity: 0;
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border: 2px solid var(--secondary);
+  border-radius: 50%;
   cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .seek-bar::-moz-range-thumb {
-  width: 0;
-  height: 0;
-  opacity: 0;
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border: 2px solid var(--secondary);
+  border-radius: 50%;
   cursor: pointer;
 }
 
