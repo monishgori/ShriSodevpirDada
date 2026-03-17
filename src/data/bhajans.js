@@ -54,5 +54,13 @@ export const bhajans = [
         gujarati: "એક વાર એક વાર",
         hindi: "एक बार एक बार",
         english: "Ek Vaar Ek Vaar"
+    },
+    {
+        id: "b8",
+        name: "Hareli Bhazi Sudharijha",
+        audio: "/assets/audio/HARELI BHAZI SUDHARIJHA.mp3",
+        gujarati: "હરેલી ભજી સુધારીજા",
+        hindi: "हरेली भजी सुधारिजा",
+        english: "Hareli Bhazi Sudharijha"
     }
 ];
