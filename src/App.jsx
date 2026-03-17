@@ -234,7 +234,11 @@ function App() {
   // Background Slider & Time-based Greeting
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (language === 'gujarati') {
+    if (language === 'english') {
+      if (hour < 12) return "Good Morning";
+      if (hour < 17) return "Good Afternoon";
+      return "Good Evening";
+    } else if (language === 'gujarati') {
       if (hour < 12) return "શુભ પ્રભાત";
       if (hour < 17) return "શુભ બપોર";
       return "શુભ સંધ્યા";
