@@ -4,6 +4,7 @@ export const mantras = [
         name: "Mahamrityunjaya Mantra",
         gujarati: "ॐ त्र्यम्बकम् यजामहे सुગન્ધિમ પુષ્ટિવર્ધનમ્।\nઉર્વારુકમિવ બન્ધનાન્ મૃત્યોર્મુક્ષીય મામૃતાત્॥",
         hindi: "ॐ त्र्यम्बकम् यजामहे सुगन्धिम् पुष्टिवर्धनम्।\nउर्वारुकमिव बन्धनान् मृत्योर्मुक्षीय मामृतात्॥",
+            english: "Om tryambakam yajamahe sugandhim pushtivardhanam|\nUrvarukamiva bandhanan mrityormukshiya mamritat||",
         audio: "/assets/audio/mantra.mp3"
     },
     {
@@ -11,6 +12,7 @@ export const mantras = [
         name: "Shree Sodevpir Dada Dhyan Mantra",
         gujarati: "ૐ શ્રી સાદેવપીર દાદાય નમઃ",
         hindi: "ॐ श्री सादेवपीर दादाय नमः",
+            english: "Om shri sadevapira dadaya namah",
         audio: "/assets/audio/Shree_Sodevpir_Dada_Dhyan_Mantra.mp3"
     }
 ];
