@@ -942,10 +942,9 @@ function App() {
                     }
                   }}
                 >
-                  <div style={{ color: 'var(--secondary)', fontSize: '0.9rem', marginBottom: '10px' }}>
+                  <div style={{ color: 'var(--secondary)', fontSize: '0.9rem' }}>
                     {bhajan.name} {activeItemIndex === index && ' (Selected)'}
                   </div>
-                  <div className="hindi-text">{bhajan[language] || bhajan.gujarati || bhajan.hindi}</div>
                 </div>
               ))
             ) : currentMode === 'aartis' ? (
