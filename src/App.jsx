@@ -19,7 +19,10 @@ const ImpactStyle = {
 };
 
 // Memoized Library Tray to prevent jumping/flickering on re-renders (Critical for iOS Safari)
-const DevotionalLibrary = React.memo(({ isLibraryOpen, setIsLibraryOpen, language, startReading, morningToggle, eveningToggle, isMorningOn, isEveningOn }) => {
+const DevotionalLibrary = React.memo(({ 
+  isLibraryOpen, setIsLibraryOpen, language, startReading, morningToggle, eveningToggle, isMorningOn, isEveningOn,
+  morningTime, setMorningTime, eveningTime, setEveningTime 
+}) => {
   return (
     <>
       {isLibraryOpen && <div className="tray-backdrop" onClick={() => setIsLibraryOpen(false)}></div>}
@@ -93,24 +96,74 @@ const DevotionalLibrary = React.memo(({ isLibraryOpen, setIsLibraryOpen, languag
             {language === 'gujarati' ? 'દૈનિક સૂચનાઓ (Reminders)' : language === 'english' ? 'Daily Reminders' : 'दैनिक सूचनाएं (Reminders)'}
           </div>
           
-          <div className="setting-row glass-panel" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 15px', marginBottom: '10px', borderRadius: '15px' }}>
-             <div style={{ color: '#fff', fontSize: '0.9rem' }}>
-                <span style={{ fontSize: '1.2rem', marginRight: '8px' }}>🌅</span> 
-                {language === 'gujarati' ? 'આજનો વિચાર (6:30 AM)' : language === 'english' ? 'Morning Quote (6:30 AM)' : 'सुबह का विचार (6:30 AM)'}
+          <div className="setting-row glass-panel" style={{ display: 'flex', flexDirection: 'column', padding: '12px 15px', marginBottom: '10px', borderRadius: '15px' }}>
+             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+               <div style={{ color: '#fff', fontSize: '0.9rem' }}>
+                  <span style={{ fontSize: '1.2rem', marginRight: '8px' }}>🌅</span> 
+                  {language === 'gujarati' ? 'આજનો વિચાર' : language === 'english' ? 'Morning Quote' : 'सुबह का विचार'}
+               </div>
+               <div className={`switch ${isMorningOn ? 'on' : ''}`} onClick={(e) => { e.stopPropagation(); morningToggle(!isMorningOn); }}>
+                  <div className="switch-knob"></div>
+               </div>
              </div>
-             <div className={`switch ${isMorningOn ? 'on' : ''}`} onClick={(e) => { e.stopPropagation(); morningToggle(!isMorningOn); }}>
-                <div className="switch-knob"></div>
-             </div>
+             {isMorningOn && (
+               <div className="time-picker-row" style={{ marginTop: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', opacity: 0.8 }}>
+                 <span style={{ fontSize: '0.75rem', color: 'var(--secondary)' }}>
+                   {language === 'gujarati' ? 'સમય પસંદ કરો:' : language === 'english' ? 'Select Time:' : 'समय चुनें:'}
+                 </span>
+                 <input 
+                   type="time" 
+                   value={morningTime} 
+                   onChange={(e) => setMorningTime(e.target.value)}
+                   className="settings-time-input"
+                   onClick={(e) => e.stopPropagation()}
+                   style={{ 
+                     background: 'rgba(255,255,255,0.1)', 
+                     border: '1px solid rgba(255,255,255,0.2)', 
+                     color: '#fff', 
+                     borderRadius: '8px', 
+                     padding: '4px 8px',
+                     fontSize: '0.9rem',
+                     outline: 'none'
+                   }}
+                 />
+               </div>
+             )}
           </div>
 
-          <div className="setting-row glass-panel" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 15px', borderRadius: '15px' }}>
-             <div style={{ color: '#fff', fontSize: '0.9rem' }}>
-                <span style={{ fontSize: '1.2rem', marginRight: '8px' }}>🪔</span> 
-                {language === 'gujarati' ? 'સાંજ ની આરતી (6:30 PM)' : language === 'english' ? 'Evening Aarti (6:30 PM)' : 'शाम की आरती (6:30 PM)'}
+          <div className="setting-row glass-panel" style={{ display: 'flex', flexDirection: 'column', padding: '12px 15px', borderRadius: '15px' }}>
+             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+               <div style={{ color: '#fff', fontSize: '0.9rem' }}>
+                  <span style={{ fontSize: '1.2rem', marginRight: '8px' }}>🪔</span> 
+                  {language === 'gujarati' ? 'સાંજ ની આરતી' : language === 'english' ? 'Evening Aarti' : 'शाम की आरती'}
+               </div>
+               <div className={`switch ${isEveningOn ? 'on' : ''}`} onClick={(e) => { e.stopPropagation(); eveningToggle(!isEveningOn); }}>
+                  <div className="switch-knob"></div>
+               </div>
              </div>
-             <div className={`switch ${isEveningOn ? 'on' : ''}`} onClick={(e) => { e.stopPropagation(); eveningToggle(!isEveningOn); }}>
-                <div className="switch-knob"></div>
-             </div>
+             {isEveningOn && (
+               <div className="time-picker-row" style={{ marginTop: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', opacity: 0.8 }}>
+                 <span style={{ fontSize: '0.75rem', color: 'var(--secondary)' }}>
+                   {language === 'gujarati' ? 'સમય પસંદ કરો:' : language === 'english' ? 'Select Time:' : 'समय चुनें:'}
+                 </span>
+                 <input 
+                   type="time" 
+                   value={eveningTime} 
+                   onChange={(e) => setEveningTime(e.target.value)}
+                   className="settings-time-input"
+                   onClick={(e) => e.stopPropagation()}
+                   style={{ 
+                     background: 'rgba(255,255,255,0.1)', 
+                     border: '1px solid rgba(255,255,255,0.2)', 
+                     color: '#fff', 
+                     borderRadius: '8px', 
+                     padding: '4px 8px',
+                     fontSize: '0.9rem',
+                     outline: 'none'
+                   }}
+                 />
+               </div>
+             )}
           </div>
         </div>
 
@@ -168,6 +221,13 @@ function App() {
     try { return localStorage.getItem('sodev_evening_notif') === 'true'; } catch { return false; }
   });
 
+  const [morningTime, setMorningTime] = useState(() => {
+    try { return localStorage.getItem('sodev_morning_time') || '06:30'; } catch { return '06:30'; }
+  });
+  const [eveningTime, setEveningTime] = useState(() => {
+    try { return localStorage.getItem('sodev_evening_time') || '18:30'; } catch { return '18:30'; }
+  });
+
   // Handle Notification Scheduling
   useEffect(() => {
     const setupNotifications = async () => {
@@ -196,15 +256,17 @@ function App() {
         const notificationsList = [];
 
         if (morningNotification) {
+            const [h, m] = morningTime.split(':').map(Number);
             notificationsList.push({
                 title: language === 'gujarati' ? 'શુભ પ્રભાત ધન્ય દિવસ!' : language === 'english' ? 'Good Morning!' : 'शुभ प्रभात धन्य दिन!',
-                body: language === 'gujarati' ? 'તમારો આજનો વિચાર વાંચવા માટે ટચ કરો.' : language === 'english' ? 'Tap to read your thought of the day.' : 'आज का विचार पढ़ने के लिए टैप करें।',
+                body: language === 'gujarati' ? 'તમારો આજનો વિચાર વાંચવા માટે ટચ કરો.' : language === 'english' ? 'Tap to read your thought of the day.' : 'आज का विचार पढ़ने के लिए टैપ करें।',
                 id: 1,
-                schedule: { on: { hour: 6, minute: 30 }, allowWhileIdle: true }
+                schedule: { on: { hour: h, minute: m }, allowWhileIdle: true }
             });
         }
 
         if (eveningNotification) {
+            const [h, m] = eveningTime.split(':').map(Number);
             notificationsList.push({
                 title: language === 'gujarati' ? 'આરતી નો સમય' : language === 'english' ? 'Evening Aarti Time' : 'आरती का समय',
                 body: language === 'gujarati' ? 'શ્રી સોદેવપીર દાદા ની સાંજની આરતી કરવાનો સમય થઈ ગયો છે.' : language === 'english' ? 'It is time for Shri Sodevpir Dada evening Aarti.' : 'श्री सोदेवपीर दादा की शाम की आरती का समय हो गया है।',
@@ -224,7 +286,9 @@ function App() {
     setupNotifications();
     localStorage.setItem('sodev_morning_notif', morningNotification.toString());
     localStorage.setItem('sodev_evening_notif', eveningNotification.toString());
-  }, [morningNotification, eveningNotification, language]);
+    localStorage.setItem('sodev_morning_time', morningTime);
+    localStorage.setItem('sodev_evening_time', eveningTime);
+  }, [morningNotification, eveningNotification, morningTime, eveningTime, language]);
 
   // iOS Safari Stability: Lock body scroll when tray is open to prevent jumping
   useEffect(() => {
@@ -801,6 +865,10 @@ function App() {
           eveningToggle={setEveningNotification}
           isMorningOn={morningNotification}
           isEveningOn={eveningNotification}
+          morningTime={morningTime}
+          setMorningTime={setMorningTime}
+          eveningTime={eveningTime}
+          setEveningTime={setEveningTime}
         />
 
         {/* LYRICS VIEW */}
