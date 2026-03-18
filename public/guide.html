@@ -527,9 +527,37 @@
     }
 
     // Initial Load
-    const savedLang = localStorage.getItem('pooja_guide_lang') || 'gujarati';
-    setLang(savedLang);
-    setPlatform('ios');
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('pooja_guide_lang') || 'gujarati';
+        setLang(savedLang);
+        
+        // Auto Detect Platform
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        let detectedPlatform = 'android'; // Default to android
+        
+        if (/android/i.test(userAgent)) {
+            detectedPlatform = 'android';
+        } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+            detectedPlatform = 'ios';
+        }
+
+        setPlatform(detectedPlatform);
+        
+        // Add a "Recommended" badge to the detected tab
+        const activeTab = document.querySelector(`.platform-tab[onclick*="${detectedPlatform}"]`);
+        if (activeTab) {
+            const badge = document.createElement('span');
+            badge.style.fontSize = '0.6rem';
+            badge.style.background = 'var(--primary)';
+            badge.style.color = '#000';
+            badge.style.padding = '2px 6px';
+            badge.style.borderRadius = '10px';
+            badge.style.marginLeft = '5px';
+            badge.style.verticalAlign = 'middle';
+            badge.innerText = 'AUTO';
+            activeTab.appendChild(badge);
+        }
+    });
 </script>
 
 </body>
