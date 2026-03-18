@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>How to Use - Shri Sodevpir Dada</title>
+    <link rel="icon" type="image/png" href="/assets/images/1.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff9933;
+            --secondary: #ffcc00;
+            --bg-dark: #1a1a1a;
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --text-gold: #f1c40f;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #2c1a05 0%, #000000 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 0 20px 0;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid var(--secondary);
+            box-shadow: 0 0 20px rgba(255, 153, 51, 0.4);
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-family: 'Tiro Devanagari Hindi', serif;
+            color: var(--text-gold);
+            font-size: 1.8rem;
+            margin: 10px 0;
+        }
+
+        .lang-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .lang-btn {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn.active {
+            background: var(--primary);
+            border-color: var(--secondary);
+            font-weight: bold;
+        }
+
+        .section-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .platform-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 10px;
+        }
+
+        .step {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .step-num {
+            background: var(--primary);
+            color: #000;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+
+        .step-text {
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #ecf0f1;
+        }
+
+        .footer-links {
+            text-align: center;
+            margin-top: 30px;
+            padding-bottom: 40px;
+        }
+
+        .back-link {
+            display: inline-block;
+            background: var(--primary);
+            color: #000;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(255, 153, 51, 0.4);
+        }
+
+        [data-lang]:not(.active-lang) {
+            display: none !important;
+        }
+
+        @media (max-width: 400px) {
+            h1 { font-size: 1.5rem; }
+            .section-card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <img src="/assets/images/1.png" alt="Sodevpir Dada" class="logo">
+        <h1 data-lang="gujarati">કેવી રીતે ઇન્સ્ટોલ કરવું?</h1>
+        <h1 data-lang="hindi">कैसे इंस्टॉल करें?</h1>
+        <h1 data-lang="english">How to Install?</h1>
+    </div>
+
+    <div class="lang-selector">
+        <button class="lang-btn active" onclick="setLang('gujarati')">G</button>
+        <button class="lang-btn" onclick="setLang('hindi')">H</button>
+        <button class="lang-btn" onclick="setLang('english')">E</button>
+    </div>
+
+    <!-- iOS Section -->
+    <div class="section-card">
+        <div class="platform-title">
+            <span></span> iOS (iPhone/iPad)
+        </div>
+        
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text" data-lang="gujarati">Safari બ્રાઉઝરમાં લિંક ખોલો.</div>
+            <div class="step-text" data-lang="hindi">Safari ब्राउज़र में लिंक खोलें।</div>
+            <div class="step-text" data-lang="english">Open link in Safari browser.</div>
+        </div>
+        
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text" data-lang="gujarati">નીચે રહેલા <b>Share</b> આઇકોન ⬆️ પર ટેપ કરો.</div>
+            <div class="step-text" data-lang="hindi">नीचे दिए गए <b>Share</b> आइकन ⬆️ पर टैप करें।</div>
+            <div class="step-text" data-lang="english">Tap the <b>Share</b> icon ⬆️ at the bottom.</div>
+        </div>
+
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text" data-lang="gujarati">નીચે સ્ક્રોલ કરો અને <b>'Add to Home Screen'</b> પર ટેપ કરો.</div>
+            <div class="step-text" data-lang="hindi">नीचे जाएं और <b>'Add to Home Screen'</b> पर टैप करें।</div>
+            <div class="step-text" data-lang="english">Scroll down and tap <b>'Add to Home Screen'</b>.</div>
+        </div>
+
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-text" data-lang="gujarati">ઉપર જમણે ખૂણે <b>Add</b> પર ટેપ કરો. હવે એપ હોમ સ્ક્રીન પર આવી જશે!</div>
+            <div class="step-text" data-lang="hindi">ऊपर दाएं कोने में <b>Add</b> पर टैप करें। अब ऐप होम स्क्रीन पर आ जाएगा!</div>
+            <div class="step-text" data-lang="english">Tap <b>Add</b> in the top right. The app is now on your home screen!</div>
+        </div>
+    </div>
+
+    <!-- Android Section -->
+    <div class="section-card">
+        <div class="platform-title">
+            <span>🤖</span> Android (Chrome)
+        </div>
+        
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text" data-lang="gujarati">Chrome બ્રાઉઝરમાં લિંક ખોલો.</div>
+            <div class="step-text" data-lang="hindi">Chrome ब्राउज़र में लिंक खोलें।</div>
+            <div class="step-text" data-lang="english">Open link in Chrome browser.</div>
+        </div>
+        
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text" data-lang="gujarati">જમણે ખૂણે રહેલા <b>૩ ડોટ્સ (⋮)</b> પર ટેપ કરો.</div>
+            <div class="step-text" data-lang="hindi">दाएं कोने में <b>३ डॉट्स (⋮)</b> पर टैप करें।</div>
+            <div class="step-text" data-lang="english">Tap the <b>3 dots (⋮)</b> in the top right.</div>
+        </div>
+
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text" data-lang="gujarati"><b>'Install App'</b> અથવા <b>'Add to Home Screen'</b> પર ટેપ કરો.</div>
+            <div class="step-text" data-lang="hindi"><b>'Install App'</b> या <b>'Add to Home Screen'</b> पर टैप करें।</div>
+            <div class="step-text" data-lang="english">Tap <b>'Install App'</b> or <b>'Add to Home Screen'</b>.</div>
+        </div>
+
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-text" data-lang="gujarati"><b>Install</b> પર ટેપ કરો. હવે એપ તમારા ફોનમાં આવી જશે!</div>
+            <div class="step-text" data-lang="hindi"><b>Install</b> पर टैप करें। अब ऐप आपके फोन में आ जाएगा!</div>
+            <div class="step-text" data-lang="english">Tap <b>Install</b>. The app is now in your device!</div>
+        </div>
+    </div>
+
+    <div class="footer-links" data-lang="gujarati">
+        <a href="index.html" class="back-link">એપ્લિકેશન ખોલો</a>
+    </div>
+    <div class="footer-links" data-lang="hindi">
+        <a href="index.html" class="back-link">ऐप खोलें</a>
+    </div>
+    <div class="footer-links" data-lang="english">
+        <a href="index.html" class="back-link">Open Application</a>
+    </div>
+</div>
+
+<script>
+    function setLang(lang) {
+        document.querySelectorAll('[data-lang]').forEach(el => {
+            if (el.getAttribute('data-lang') === lang) {
+                el.classList.add('active-lang');
+            } else {
+                el.classList.remove('active-lang');
+            }
+        });
+
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            if (btn.innerText.toLowerCase() === lang.charAt(0)) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+        
+        localStorage.setItem('pooja_guide_lang', lang);
+    }
+
+    // Load saved lang or default to Gujarati
+    const savedLang = localStorage.getItem('pooja_guide_lang') || 'gujarati';
+    setLang(savedLang);
+</script>
+
+</body>
+</html>
