@@ -531,26 +531,24 @@
     }
 
     // Initial Load
-    document.addEventListener('DOMContentLoaded', () => {
+    const initPage = () => {
         const savedLang = localStorage.getItem('pooja_guide_lang') || 'gujarati';
         setLang(savedLang);
         
-        // Auto Detect Platform
-        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-        let detectedPlatform = 'android'; // Default to android
+        let detected = 'android'; // Default
+        const ua = navigator.userAgent.toLowerCase();
         
-        if (/android/i.test(userAgent)) {
-            detectedPlatform = 'android';
-        } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-            detectedPlatform = 'ios';
+        if (ua.indexOf('iphone') > -1 || ua.indexOf('ipad') > -1 || ua.indexOf('ipod') > -1) {
+            detected = 'ios';
         }
 
-        setPlatform(detectedPlatform);
+        setPlatform(detected);
         
-        // Add a "Recommended" badge to the detected tab
-        const activeTab = document.querySelector(`.platform-tab[onclick*="${detectedPlatform}"]`);
-        if (activeTab) {
+        // Add a "Recommended" badge
+        const activeTab = document.querySelector(`.platform-tab[onclick*="${detected}"]`);
+        if (activeTab && !activeTab.querySelector('.auto-badge')) {
             const badge = document.createElement('span');
+            badge.className = 'auto-badge';
             badge.style.fontSize = '0.6rem';
             badge.style.background = 'var(--primary)';
             badge.style.color = '#000';
@@ -561,7 +559,14 @@
             badge.innerText = 'AUTO';
             activeTab.appendChild(badge);
         }
-    });
+    };
+
+    // Run on load
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initPage);
+    } else {
+        initPage();
+    }
 </script>
 
 </body>
