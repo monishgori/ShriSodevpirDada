@@ -4,13 +4,13 @@
     "description": "Devotional app featuring Chalisa, Aarti, Mantras, and Satya Ghatna of Shri Sodevpir Dada.",
     "icons": [
         {
-            "src": "/assets/images/1.png",
+            "src": "/assets/images/new_icon.png?v=4",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "any maskable"
         },
         {
-            "src": "/assets/images/1.png",
+            "src": "/assets/images/new_icon.png?v=4",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "any maskable"
