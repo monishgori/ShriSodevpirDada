@@ -3,17 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>How to Use - Shri Sodevpir Dada</title>
+    <title>How to Install - Shri Sodevpir Dada</title>
     <link rel="icon" type="image/png" href="/assets/images/1.png" />
     <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #ff9933;
             --secondary: #ffcc00;
-            --bg-dark: #1a1a1a;
-            --glass: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.15);
-            --text-gold: #f1c40f;
+            --accent: #f1c40f;
+            --bg-dark: #1a0f00;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-medium: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 215, 0, 0.2);
+            --gold-gradient: linear-gradient(135deg, #f1c40f 0%, #e67e22 100%);
+            --saffron-gradient: linear-gradient(135deg, #ff9933 0%, #d35400 100%);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        @keyframes mandalaRotate {
+            0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); opacity: 0.1; }
+            50% { transform: translate(-50%, -50%) rotate(180deg) scale(1.1); opacity: 0.15; }
+            100% { transform: translate(-50%, -50%) rotate(360deg) scale(1); opacity: 0.1; }
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px var(--primary); }
+            50% { box-shadow: 0 0 20px var(--secondary); }
+            100% { box-shadow: 0 0 5px var(--primary); }
         }
 
         * {
@@ -25,147 +46,266 @@
             margin: 0;
             padding: 0;
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #2c1a05 0%, #000000 100%);
-            color: white;
+            background: #000;
+            color: #fff;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #2c1a05 0%, #000000 100%);
+        }
+
+        /* Ambient Mandala Background */
+        .mandala-bg {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 800px;
+            height: 800px;
+            background: url('https://www.transparenttextures.com/patterns/mandala.png');
+            background-size: contain;
+            pointer-events: none;
+            z-index: 0;
+            animation: mandalaRotate 60s linear infinite;
         }
 
         .container {
+            position: relative;
+            z-index: 1;
             width: 100%;
             max-width: 500px;
+            margin: 0 auto;
             padding: 20px;
         }
 
         .header {
             text-align: center;
-            padding: 40px 0 20px 0;
+            padding: 50px 0 30px 0;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .logo-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
         }
 
         .logo {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
-            border: 2px solid var(--secondary);
-            box-shadow: 0 0 20px rgba(255, 153, 51, 0.4);
-            margin-bottom: 15px;
+            border: 3px solid var(--secondary);
+            padding: 5px;
+            background: #000;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+            opacity: 0.6;
+            z-index: 1;
+            animation: glow 3s ease-in-out infinite;
+            border-radius: 50%;
         }
 
         h1 {
             font-family: 'Tiro Devanagari Hindi', serif;
-            color: var(--text-gold);
-            font-size: 1.8rem;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.2rem;
             margin: 10px 0;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
         .lang-selector {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-bottom: 30px;
+            gap: 15px;
+            margin-bottom: 40px;
         }
 
         .lang-btn {
             background: var(--glass);
             border: 1px solid var(--glass-border);
             color: #fff;
-            padding: 8px 15px;
-            border-radius: 20px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
             cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
+            font-size: 1rem;
+            font-weight: 700;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .lang-btn.active {
-            background: var(--primary);
-            border-color: var(--secondary);
-            font-weight: bold;
+            background: var(--saffron-gradient);
+            border-color: var(--accent);
+            transform: scale(1.2);
+            box-shadow: 0 5px 15px rgba(255, 153, 51, 0.4);
         }
 
         .section-card {
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            background: var(--glass-medium);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            border-radius: 25px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-radius: 30px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,215,0,0.03) 0%, transparent 70%);
+            pointer-events: none;
         }
 
         .platform-title {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 1.2rem;
+            gap: 12px;
+            font-size: 1.4rem;
+            font-weight: 700;
             color: var(--secondary);
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--glass-border);
-            padding-bottom: 10px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-family: 'Tiro Devanagari Hindi', serif;
+        }
+
+        .platform-icon {
+            font-size: 1.6rem;
         }
 
         .step {
             display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
+            gap: 18px;
+            margin-bottom: 25px;
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: fadeInStep 0.5s forwards;
         }
 
+        @keyframes fadeInStep {
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .step:nth-child(2) { animation-delay: 0.1s; }
+        .step:nth-child(3) { animation-delay: 0.2s; }
+        .step:nth-child(4) { animation-delay: 0.3s; }
+        .step:nth-child(5) { animation-delay: 0.4s; }
+
         .step-num {
-            background: var(--primary);
+            background: var(--gold-gradient);
             color: #000;
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            font-size: 0.8rem;
+            font-weight: 800;
+            font-size: 0.9rem;
             flex-shrink: 0;
-            margin-top: 3px;
+            margin-top: 2px;
+            box-shadow: 0 3px 8px rgba(241, 196, 15, 0.3);
         }
 
         .step-text {
-            font-size: 1rem;
-            line-height: 1.5;
-            color: #ecf0f1;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: #f8f9fa;
+            font-family: 'Tiro Devanagari Hindi', serif;
+        }
+
+        .step-text b {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .play-store-btn {
+            display: inline-block;
+            background: #000;
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: 2px solid var(--glass-border);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin: 15px 0;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        .play-store-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            border-color: var(--accent);
+            box-shadow: 0 15px 30px rgba(255, 153, 51, 0.3);
         }
 
         .footer-links {
             text-align: center;
-            margin-top: 30px;
-            padding-bottom: 40px;
+            margin-top: 20px;
+            padding-bottom: 60px;
         }
 
         .back-link {
             display: inline-block;
-            background: var(--primary);
+            background: var(--saffron-gradient);
             color: #000;
             text-decoration: none;
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            box-shadow: 0 4px 15px rgba(255, 153, 51, 0.4);
+            padding: 16px 40px;
+            border-radius: 35px;
+            font-weight: 800;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 25px rgba(255, 153, 51, 0.4);
+            transition: all 0.3s ease;
+            font-family: 'Tiro Devanagari Hindi', serif;
+        }
+
+        .back-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 35px rgba(255, 153, 51, 0.6);
         }
 
         [data-lang]:not(.active-lang) {
             display: none !important;
         }
 
-        @media (max-width: 400px) {
-            h1 { font-size: 1.5rem; }
-            .section-card { padding: 20px; }
+        @media (max-width: 480px) {
+            h1 { font-size: 1.8rem; }
+            .section-card { padding: 25px 20px; }
+            .step-text { font-size: 0.95rem; }
         }
     </style>
 </head>
 <body>
 
+<div class="mandala-bg"></div>
+
 <div class="container">
     <div class="header">
-        <img src="/assets/images/1.png" alt="Sodevpir Dada" class="logo">
+        <div class="logo-container">
+            <div class="logo-glow"></div>
+            <img src="/assets/images/1.png" alt="Sodevpir Dada" class="logo">
+        </div>
         <h1 data-lang="gujarati">કેવી રીતે ઇન્સ્ટોલ કરવું?</h1>
         <h1 data-lang="hindi">कैसे इंस्टॉल करें?</h1>
         <h1 data-lang="english">How to Install?</h1>
@@ -180,14 +320,17 @@
     <!-- iOS Section -->
     <div class="section-card">
         <div class="platform-title">
-            <span></span> iOS (iPhone/iPad)
+            <span class="platform-icon"></span> 
+            <span data-lang="gujarati">iPhone માટે (Safari)</span>
+            <span data-lang="hindi">iPhone के लिए (Safari)</span>
+            <span data-lang="english">For iPhone (Safari)</span>
         </div>
         
         <div class="step">
             <div class="step-num">1</div>
-            <div class="step-text" data-lang="gujarati">Safari બ્રાઉઝરમાં લિંક ખોલો.</div>
-            <div class="step-text" data-lang="hindi">Safari ब्राउज़र में लिंक खोलें।</div>
-            <div class="step-text" data-lang="english">Open link in Safari browser.</div>
+            <div class="step-text" data-lang="gujarati"><b>Safari</b> બ્રાઉઝરમાં લિંક ખોલો.</div>
+            <div class="step-text" data-lang="hindi"><b>Safari</b> ब्राउज़र में लिंक खोलें।</div>
+            <div class="step-text" data-lang="english">Open link in <b>Safari</b> browser.</div>
         </div>
         
         <div class="step">
@@ -199,32 +342,41 @@
 
         <div class="step">
             <div class="step-num">3</div>
-            <div class="step-text" data-lang="gujarati">નીચે સ્ક્રોલ કરો અને <b>'Add to Home Screen'</b> પર ટેપ કરો.</div>
+            <div class="step-text" data-lang="gujarati">નીચે સ્ક્રોલ કરો અને <b>'Add to Home Screen'</b> પર ક્લિક કરો.</div>
             <div class="step-text" data-lang="hindi">नीचे जाएं और <b>'Add to Home Screen'</b> पर टैप करें।</div>
             <div class="step-text" data-lang="english">Scroll down and tap <b>'Add to Home Screen'</b>.</div>
         </div>
 
         <div class="step">
             <div class="step-num">4</div>
-            <div class="step-text" data-lang="gujarati">ઉપર જમણે ખૂણે <b>Add</b> પર ટેપ કરો. હવે એપ હોમ સ્ક્રીન પર આવી જશે!</div>
-            <div class="step-text" data-lang="hindi">ऊपर दाएं कोने में <b>Add</b> पर टैप करें। अब ऐप होम स्क्रीन पर आ जाएगा!</div>
-            <div class="step-text" data-lang="english">Tap <b>Add</b> in the top right. The app is now on your home screen!</div>
+            <div class="step-text" data-lang="gujarati">ઉપર જમણે ખૂણે <b>Add</b> પર ટેપ કરો. હવે એપ હોમ સ્ક્રીન પર આવી જશે! ✨</div>
+            <div class="step-text" data-lang="hindi">ऊपर दाएं कोने में <b>Add</b> पर टैप करें। अब ऐप होम स्क्रीन पर आ जाएगा! ✨</div>
+            <div class="step-text" data-lang="english">Tap <b>Add</b> in the top right. App is now on your home screen! ✨</div>
         </div>
     </div>
 
     <!-- Android Section -->
     <div class="section-card">
         <div class="platform-title">
-            <span>🤖</span> Android (Google Play Store)
+            <span class="platform-icon">🤖</span> 
+            <span data-lang="gujarati">Android માટે (Play Store)</span>
+            <span data-lang="hindi">Android के लिए (Play Store)</span>
+            <span data-lang="english">For Android (Play Store)</span>
         </div>
         
         <div class="step">
             <div class="step-num">1</div>
-            <div class="step-text" data-lang="gujarati">નીચે આપેલ <b>'Download on Play Store'</b> બટન પર ક્લિક કરો.</div>
-            <div class="step-text" data-lang="hindi">नीचे दिए गए <b>'Download on Play Store'</b> बटन पर क्लिक करें।</div>
-            <div class="step-text" data-lang="english">Click the <b>'Download on Play Store'</b> button below.</div>
+            <div class="step-text" data-lang="gujarati">નીચે આપેલ <b>Download</b> બટન પર ક્લિક કરો.</div>
+            <div class="step-text" data-lang="hindi">नीचे दिए गए <b>Download</b> बटन पर क्लिक करें।</div>
+            <div class="step-text" data-lang="english">Click the <b>Download</b> button below.</div>
         </div>
         
+        <div style="text-align: center;">
+            <a href="https://play.google.com/store/apps/details?id=com.monishgori.shrisodevpirdada" target="_blank" class="play-store-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" style="height: 45px;">
+            </a>
+        </div>
+
         <div class="step">
             <div class="step-num">2</div>
             <div class="step-text" data-lang="gujarati">Play Store માં <b>'Install'</b> બટન પર ટેપ કરો.</div>
@@ -232,17 +384,11 @@
             <div class="step-text" data-lang="english">Tap the <b>'Install'</b> button in the Play Store.</div>
         </div>
 
-        <div style="text-align: center; margin: 20px 0;">
-            <a href="https://play.google.com/store/apps/details?id=com.monishgori.shrisodevpirdada" target="_blank" style="display: inline-block; background: #000; padding: 10px 20px; border-radius: 10px; border: 1px solid #333; text-decoration: none;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" style="height: 40px;">
-            </a>
-        </div>
-
         <div class="step">
             <div class="step-num">3</div>
-            <div class="step-text" data-lang="gujarati">ઇન્સ્ટોલ થયા પછી, તમે એપ્લિકેશન વાપરી શકશો અને દરરોજ ભક્તિનો આનંદ માણી શકશો!</div>
-            <div class="step-text" data-lang="hindi">इंस्टॉल होने के बाद, आप ऐप का उपयोग कर पाएंगे और दैनिक भक्ति का आनंद ले पाएंगे!</div>
-            <div class="step-text" data-lang="english">Once installed, you can use the app and enjoy daily devotion!</div>
+            <div class="step-text" data-lang="gujarati">ઇન્સ્ટોલ થયા પછી દરરોજ શ્રી સોદેવપીર દાદાની ભક્તિનો આનંદ માણો! 🙏</div>
+            <div class="step-text" data-lang="hindi">इंस्टॉल होने के बाद श्री सोदेवपीर दादा की भक्ति का आनंद लें! 🙏</div>
+            <div class="step-text" data-lang="english">Once installed, enjoy daily devotion of Shri Sodevpir Dada! 🙏</div>
         </div>
     </div>
 
@@ -278,7 +424,6 @@
         localStorage.setItem('pooja_guide_lang', lang);
     }
 
-    // Load saved lang or default to Gujarati
     const savedLang = localStorage.getItem('pooja_guide_lang') || 'gujarati';
     setLang(savedLang);
 </script>
