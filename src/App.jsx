@@ -252,7 +252,6 @@ function App() {
   }, []);
 
   // Initialize AdMob & Show Banner
-  // 1. GLOBAL AD STATE & PREPARATION
   useEffect(() => {
     const prepareAds = async () => {
       if (!Capacitor.isNativePlatform()) return;
@@ -276,55 +275,13 @@ function App() {
           window.lastBannerError = bannerErr.message;
         }
 
-        // 🚀 NEW: APP OPEN AD PREP (Using Test ID for verification)
-        try {
-          await AdMob.removeAllListeners().catch(() => { });
-
-          await AdMob.addListener('appOpenAdLoaded', () => {
-            console.log("AdMob: App Open READY ✅");
-            setIsAppOpenReady(true);
-            window.lastAdError = null;
-          });
-
-          await AdMob.addListener('appOpenAdFailedToLoad', (err) => {
-            console.log("AdMob: App Open Failed ❌", err.message);
-            window.lastAdError = "AppOpen: " + err.message;
-            setIsAppOpenReady(false);
-            
-            // Retry after 20 seconds
-            setTimeout(() => {
-              AdMob.prepareAppOpenAd({
-                adId: 'ca-app-pub-5914382038291713/2200847101',
-                isTesting: false 
-              }).catch(e => console.log("AdMob Open Retry Failed:", e.message));
-            }, 20000);
-          });
-
-          await AdMob.prepareAppOpenAd({
-            adId: 'ca-app-pub-5914382038291713/2200847101',
-            isTesting: false
-          });
-        } catch (openErr) { console.warn("App Open Setup Error:", openErr.message); }
-
+        // 🚀 NOTE: App Open Ads are not supported in @capacitor-community/admob v8 yet.
+        // Interstitial ads can be used as a full-screen alternative if needed.
+        
       } catch (e) { console.warn("AdMob Global Error:", e.message); }
     };
     prepareAds();
-  }, []); // Run only once to keep listeners stable
-
-  // 2. SHOW APP OPEN AD AFTER SPLASH
-  useEffect(() => {
-    if (!showSplash && isAppOpenReady && Capacitor.isNativePlatform()) {
-      const showAd = async () => {
-        try {
-          console.log("AdMob: Showing App Open Ad! 🚀");
-          await AdMob.showAppOpenAd();
-          setIsAppOpenReady(false); // Reset state
-        } catch (err) { console.log("AdMob Show Failed:", err.message); }
-      };
-      // Short delay for stability
-      setTimeout(showAd, 1000);
-    }
-  }, [showSplash, isAppOpenReady]);
+  }, []);
 
   const backgroundImage = '/assets/images/1.png';
 
