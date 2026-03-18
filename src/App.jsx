@@ -264,14 +264,13 @@ function App() {
         // 🛡️ INDEPENDENT BANNER
         try {
           await AdMob.showBanner({
-            // 🧪 GENERIC TEST ID (for manual verification on any device)
-            adId: 'ca-app-pub-3940256099942544/6300978111', 
-            adSize: BannerAdSize.BANNER, 
+            adId: 'ca-app-pub-5914382038291713/2444272147', 
+            adSize: BannerAdSize.ADAPTIVE_BANNER, 
             position: BannerAdPosition.BOTTOM_CENTER,
             margin: 0,
-            isTesting: true
+            isTesting: false
           });
-          console.log("AdMob: Test Banner Loaded ✅");
+          console.log("AdMob: Production Banner Loaded ✅");
         } catch (bannerErr) { 
           console.error("AdMob Banner Error Details:", bannerErr); 
           window.lastBannerError = bannerErr.message;
@@ -295,16 +294,15 @@ function App() {
             // Retry after 20 seconds
             setTimeout(() => {
               AdMob.prepareAppOpenAd({
-                adId: 'ca-app-pub-3940256099942544/9257395915',
-                isTesting: true 
+                adId: 'ca-app-pub-5914382038291713/2200847101',
+                isTesting: false 
               }).catch(e => console.log("AdMob Open Retry Failed:", e.message));
             }, 20000);
           });
 
           await AdMob.prepareAppOpenAd({
-            // 🧪 GENERIC TEST ID
-            adId: 'ca-app-pub-3940256099942544/9257395915',
-            isTesting: true
+            adId: 'ca-app-pub-5914382038291713/2200847101',
+            isTesting: false
           });
         } catch (openErr) { console.warn("App Open Setup Error:", openErr.message); }
 
