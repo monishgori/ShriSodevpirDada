@@ -9,298 +9,324 @@
     <meta property="og:description" content="Begin your spiritual journey. Download the official app.">
     
     <link rel="icon" type="image/png" href="/assets/images/new_icon.png?v=4" />
-    <link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;700&family=Poppins:wght@300;400;500;600;700&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@300;400;600&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary: #FF8000;
-            --gold: #D4AF37;
-            --gold-light: #FFD700;
-            --bg: #0A0705;
-            --card-glass: rgba(255, 255, 255, 0.03);
-            --border-glass: rgba(255, 215, 0, 0.15);
-            --text-muted: rgba(255, 255, 255, 0.6);
-            --grad-gold: linear-gradient(135deg, #FFD700 0%, #D4AF37 50%, #B8860B 100%);
-            --grad-saffron: linear-gradient(135deg, #FF8800 0%, #E65100 100%);
+            --primary: #FF8800;
+            --secondary: #FFD700;
+            --accent: #FF3300;
+            --dark: #070402;
+            --glass: rgba(255, 255, 255, 0.04);
+            --border: rgba(255, 255, 255, 0.1);
+            --grad-gold: linear-gradient(135deg, #FFD700 0%, #FFAA00 100%);
+            --grad-fire: linear-gradient(135deg, #FF4500 0%, #FF8C00 100%);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background: var(--bg);
+            font-family: 'Inter', sans-serif;
+            background: var(--dark);
             color: #ffffff;
             line-height: 1.6;
+            overflow-x: hidden;
             display: flex;
             justify-content: center;
             min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at top right, rgba(255, 128, 0, 0.08), transparent 40%),
-                radial-gradient(circle at bottom left, rgba(212, 175, 55, 0.05), transparent 40%);
+        }
+
+        /* Animated Background Particles */
+        .bg-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% -20%, #201005, var(--dark));
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--secondary);
+            border-radius: 50%;
+            opacity: 0.1;
+            filter: blur(2px);
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            50% { opacity: 0.2; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
         }
 
         .container {
             width: 100%;
-            max-width: 480px;
-            padding: 60px 20px;
-        }
-
-        /* Header UI */
-        .header { text-align: center; margin-bottom: 50px; }
-        .logo-wrap {
+            max-width: 460px;
+            padding: 60px 24px;
             position: relative;
-            display: inline-block;
-            margin-bottom: 25px;
         }
-        .logo-img {
-            width: 100px; height: 100px;
-            border-radius: 50%;
-            border: 2px solid var(--gold);
-            padding: 3px;
-            box-shadow: 0 0 30px rgba(255, 128, 0, 0.2);
-        }
-        .logo-glow {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            border-radius: 50%;
-            box-shadow: inset 0 0 15px var(--gold);
-            animation: pulse 3s infinite;
-        }
-        @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.7; } }
 
-        .app-title {
-            font-family: 'Spectral', serif;
-            font-size: 2.4rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
+        /* Header section */
+        .header { text-align: center; margin-bottom: 50px; }
+        .logo-ring {
+            width: 110px; height: 110px;
+            margin: 0 auto 20px;
+            padding: 4px;
+            border-radius: 50%;
+            background: var(--grad-gold);
+            box-shadow: 0 0 50px rgba(255, 136, 0, 0.3);
+            position: relative;
+        }
+        .logo-ring::after {
+            content: "";
+            position: absolute;
+            top: -5px; left: -5px; right: -5px; bottom: -5px;
+            border: 1px solid var(--secondary);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: ping 2s infinite cubic-bezier(0, 0, 0.2, 1);
+        }
+        @keyframes ping { 75%, 100% { transform: scale(1.4); opacity: 0; } }
+
+        .logo-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--dark); }
+
+        .app-name {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            letter-spacing: -1px;
             background: var(--grad-gold);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
         }
 
-        /* Lang Segmented Control */
-        .lang-pills {
+        /* Language Controls */
+        .lang-nav {
             display: flex;
             justify-content: center;
             gap: 10px;
-            margin: 30px 0;
-        }
-        .lang-pill {
-            padding: 8px 18px;
-            border-radius: 12px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid var(--border-glass);
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .lang-pill.active {
-            background: var(--grad-saffron);
-            color: #fff;
-            border-color: transparent;
-            box-shadow: 0 4px 15px rgba(230, 81, 0, 0.3);
-        }
-
-        /* Tabs Segmented Control */
-        .tabs-pill {
-            display: flex;
-            background: rgba(255,255,255,0.03);
-            border-radius: 16px;
-            padding: 4px;
             margin-bottom: 40px;
-            border: 1px solid var(--border-glass);
         }
-        .tab {
-            flex: 1;
-            padding: 10px;
-            text-align: center;
+        .btn-lang {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            padding: 8px 18px;
+            border-radius: 30px;
+            color: rgba(255,255,255,0.6);
             font-size: 0.75rem;
             font-weight: 600;
-            color: var(--text-muted);
             cursor: pointer;
-            border-radius: 12px;
+            backdrop-filter: blur(10px);
             transition: 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
-        .tab.active {
+        .btn-lang.active {
+            background: var(--grad-fire);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 10px 20px rgba(255, 69, 0, 0.3);
+        }
+
+        /* Segmented Mode Control */
+        .mode-nav {
+            display: flex;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid var(--border);
+            padding: 4px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(20px);
+        }
+        .mode-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: none;
+            color: rgba(255,255,255,0.4);
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border-radius: 16px;
+            transition: 0.4s;
+            position: relative;
+        }
+        .mode-btn.active {
             background: #ffffff;
             color: #000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
-        /* Sections */
-        .section { display: none; animation: fadeIn 0.6s ease; }
+        /* Content Sections */
+        .section { display: none; animation: pop 0.5s cubic-bezier(0.19, 1, 0.22, 1); }
         .section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pop { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        /* Modern Card Timeline */
+        /* "Hot" Masterpiece Card */
         .card {
-            background: var(--card-glass);
-            border: 1px solid var(--border-glass);
-            border-radius: 20px;
-            padding: 24px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-top: 1px solid rgba(255,255,255,0.2); /* Edge Light */
+            border-radius: 32px;
+            padding: 30px;
             margin-bottom: 24px;
+            backdrop-filter: blur(25px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            transition: all 0.4s ease;
             position: relative;
-            backdrop-filter: blur(10px);
-            transition: transform 0.3s ease, border-color 0.3s;
         }
-        .card:hover { transform: translateY(-4px); border-color: var(--gold); }
+        .card:hover { transform: translateY(-8px); border-color: rgba(255, 215, 0, 0.3); }
 
-        .card-num {
+        .card-meta {
             position: absolute;
-            top: -12px;
-            right: 20px;
-            font-family: 'Spectral', serif;
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: rgba(255, 215, 0, 0.07);
-            user-select: none;
+            top: 25px; right: 25px;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: rgba(255,255,255,0.03);
             line-height: 1;
         }
 
-        .card-header { display: flex; align-items: center; gap: 15px; margin-bottom: 12px; }
-        .icon-box {
-            width: 40px; height: 40px;
-            background: linear-gradient(135deg, rgba(255,215,0,0.1), transparent);
-            border: 1px solid var(--border-glass);
-            border-radius: 10px;
+        .card-icon-wrap {
+            width: 48px; height: 48px;
+            background: var(--grad-gold);
+            border-radius: 16px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem;
-            color: var(--gold-light);
-            flex-shrink: 0;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 16px rgba(255, 215, 0, 0.2);
         }
 
         .card-title {
-            font-size: 1.1rem;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.25rem;
             font-weight: 700;
-            color: var(--gold-light);
-            font-family: 'Spectral', serif;
+            color: var(--secondary);
+            margin-bottom: 12px;
         }
 
         .card-body {
-            font-size: 0.95rem;
-            color: var(--text-muted);
+            font-size: 1rem;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.6;
             font-weight: 300;
-            line-height: 1.7;
         }
 
-        /* Buttons */
-        .btn-primary {
+        /* Primary Action Button */
+        .action-cta {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            background: var(--grad-gold);
+            color: #000;
+            border-radius: 20px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin-top: 10px;
+            box-shadow: 0 15px 30px rgba(255, 170, 0, 0.4);
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+        .action-cta:active { transform: scale(0.96); opacity: 0.9; }
+
+        .action-outline {
             display: block;
             width: 100%;
             padding: 18px;
-            background: var(--grad-gold);
-            color: #000;
-            border-radius: 16px;
-            text-align: center;
+            border: 1px solid var(--secondary);
+            color: var(--secondary);
+            border-radius: 20px;
             text-decoration: none;
-            font-weight: 700;
-            font-size: 1rem;
-            margin-top: 25px;
-            box-shadow: 0 10px 25px rgba(184, 134, 11, 0.3);
-            transition: 0.3s;
-        }
-        .btn-primary:hover { transform: scale(1.02); box-shadow: 0 15px 35px rgba(184, 134, 11, 0.4); }
-
-        .btn-outline {
-            display: block;
-            width: 100%;
-            padding: 16px;
-            background: transparent;
-            color: #fff;
-            border: 1px solid var(--gold);
-            border-radius: 16px;
             text-align: center;
-            text-decoration: none;
             font-weight: 600;
-            font-size: 0.9rem;
             margin-top: 20px;
             transition: 0.3s;
         }
-        .btn-outline:hover { background: rgba(212, 175, 55, 0.1); }
+        .action-outline:hover { background: rgba(255, 215, 0, 0.05); }
 
-        /* Footer */
-        .footer { text-align: center; margin-top: 60px; opacity: 0.4; padding-bottom: 40px; }
-        .vers { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; }
+        .footer { text-align: center; margin-top: 60px; padding-bottom: 40px; }
+        .ver-chip {
+            padding: 6px 14px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50px;
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
 
-        /* Lang Logic */
+        .auto-status {
+            position: absolute;
+            top: -8px; left: 50%; transform: translateX(-50%);
+            background: #fff; color: #000; font-size: 0.5rem;
+            padding: 2px 8px; border-radius: 10px; font-weight: 800;
+        }
+
+        /* Lang Toggles */
         [data-lang]:not(.show-lang) { display: none !important; }
         [data-lang="hindi"] { font-family: 'Tiro Devanagari Hindi', serif; }
-        
-        .badge-auto {
-            position: absolute;
-            top: -10px;
-            background: #fff;
-            color: #000;
-            font-size: 0.5rem;
-            padding: 2px 6px;
-            border-radius: 20px;
-            font-weight: 800;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-        }
+        [data-lang="gujarati"] { font-family: 'Inter', sans-serif; }
     </style>
 </head>
 <body>
 
+<div class="bg-canvas" id="particles">
+    <!-- Particles will be injected by JS -->
+</div>
+
 <div class="container">
     <div class="header">
-        <div class="logo-wrap">
-            <img src="/assets/images/new_icon.png?v=4" alt="logo" class="logo-img">
-            <div class="logo-glow"></div>
+        <div class="logo-ring">
+            <img src="/assets/images/new_icon.png?v=4" alt="Shri Sodevpir Dada" class="logo-img">
         </div>
-        <h1 class="app-title">Shri Sodevpir Dada</h1>
+        <h1 class="app-name">Sodevpir Dada</h1>
         
-        <div class="lang-pills">
-            <div class="lang-pill active" id="l-guj" onclick="changeLang('gujarati')">ગુજરાતી</div>
-            <div class="lang-pill" id="l-hin" onclick="changeLang('hindi')">हिन्दी</div>
-            <div class="lang-pill" id="l-eng" onclick="changeLang('english')">English</div>
+        <div class="lang-nav">
+            <div class="btn-lang active" id="l-guj" onclick="changeLang('gujarati')">ગુજરાતી</div>
+            <div class="btn-lang" id="l-hin" onclick="changeLang('hindi')">हिन्दी</div>
+            <div class="btn-lang" id="l-eng" onclick="changeLang('english')">English</div>
         </div>
     </div>
 
-    <!-- Mode Selector -->
-    <div class="tabs-pill">
-        <div class="tab active" id="t-android" onclick="switchMode('android')">Android</div>
-        <div class="tab" id="t-ios" onclick="switchMode('ios')">iPhone</div>
-        <div class="tab" id="t-tour" onclick="switchMode('tour')">App Guide</div>
+    <div class="mode-nav">
+        <button class="mode-btn active" id="m-android" onclick="switchMode('android')">Android App</button>
+        <button class="mode-btn" id="m-ios" onclick="switchMode('ios')">iPhone setup</button>
+        <button class="mode-btn" id="m-tour" onclick="switchMode('tour')">App Tour</button>
     </div>
 
     <!-- Android View -->
     <div id="android-view" class="section active">
         <div class="card">
-            <span class="card-num">01</span>
-            <div class="card-header">
-                <div class="icon-box">📲</div>
-                <div class="card-title">
-                    <span data-lang="gujarati" class="show-lang">પ્લે સ્ટોર પર જાવ</span>
-                    <span data-lang="hindi">प्ले स्टोर पर जाएं</span>
-                    <span data-lang="english">Open Play Store</span>
-                </div>
-            </div>
+            <div class="card-meta">01</div>
+            <div class="card-icon-wrap">📲</div>
+            <h2 class="card-title">
+                <span data-lang="gujarati" class="show-lang">પ્લે સ્ટોર પર જાવ</span>
+                <span data-lang="hindi">प्ले स्टोर पर जाएं</span>
+                <span data-lang="english">Open Play Store</span>
+            </h2>
             <div class="card-body">
                 <span data-lang="gujarati" class="show-lang">નીચેના બટન પર ક્લિક કરો. તે તમને ગૂગલ પ્લે સ્ટોર પર લઈ જશે.</span>
                 <span data-lang="hindi">नीचे दिए गए बटन पर क्लिक करें। यह आपको गूगल प्ले स्टोर पर ले जाएगा।</span>
                 <span data-lang="english">Click the button below to visit the official Google Play Store page.</span>
             </div>
-            <a href="https://play.google.com/store/apps/details?id=com.monishgori.shrisodevpirdada" target="_blank" class="btn-primary">INSTALL APP</a>
+            <a href="https://play.google.com/store/apps/details?id=com.monishgori.shrisodevpirdada" target="_blank" class="action-cta">INSTALL NOW</a>
         </div>
         
         <div class="card">
-            <span class="card-num">02</span>
-            <div class="card-header">
-                <div class="icon-box">🌟</div>
-                <div class="card-title">
-                    <span data-lang="gujarati" class="show-lang">એપ શરૂ કરો</span>
-                    <span data-lang="hindi">ऐप शुरू करें</span>
-                    <span data-lang="english">Launch Experience</span>
-                </div>
-            </div>
+            <div class="card-meta">02</div>
+            <div class="card-icon-wrap">🚀</div>
+            <h2 class="card-title">
+                <span data-lang="gujarati" class="show-lang">એપ શરૂ કરો</span>
+                <span data-lang="hindi">ऐप शुरू करें</span>
+                <span data-lang="english">Start Divine App</span>
+            </h2>
             <div class="card-body">
                 <span data-lang="gujarati" class="show-lang">ઇન્સ્ટોલ થયા પછી હોમ સ્ક્રીન પર 'Shri Sodevpir Dada' આઇકોન શોધીને ઓપન કરો.</span>
                 <span data-lang="hindi">इंस्टॉल होने के बाद होम स्क्रीन पर आइकन ढूंढें और ऐप खोलें।</span>
-                <span data-lang="english">Once installed, find the icon on your home screen and open it.</span>
+                <span data-lang="english">Once installed, find the icon on your home screen and begin your journey.</span>
             </div>
         </div>
     </div>
@@ -308,67 +334,59 @@
     <!-- iOS View -->
     <div id="ios-view" class="section">
         <div class="card">
-            <span class="card-num">01</span>
-            <div class="card-header">
-                <div class="icon-box">🌐</div>
-                <div class="card-title">
-                    <span data-lang="gujarati" class="show-lang">Safari માં લિંક ખોલો</span>
-                    <span data-lang="hindi">Safari में लिंक खोलें</span>
-                    <span data-lang="english">Access via Safari</span>
-                </div>
-            </div>
+            <div class="card-meta">01</div>
+            <div class="card-icon-wrap">🧭</div>
+            <h2 class="card-title">
+                <span data-lang="gujarati" class="show-lang">Safari માં લિંક ખોલો</span>
+                <span data-lang="hindi">Safari में लिंक खोलें</span>
+                <span data-lang="english">Use Safari Browser</span>
+            </h2>
             <div class="card-body">
                 <span data-lang="gujarati" class="show-lang">આ લિંક તમારા iPhone ના 'Safari' બ્રાઉઝર માં જ ખોલેલી હોવી જોઈએ.</span>
                 <span data-lang="hindi">यह लिंक आपके iPhone के 'Safari' ब्राउज़र में ही खुली होनी चाहिए।</span>
-                <span data-lang="english">Make sure you are viewing this page in the Safari browser.</span>
+                <span data-lang="english">Make sure you are viewing this page in the official Safari browser.</span>
             </div>
         </div>
         <div class="card">
-            <span class="card-num">02</span>
-            <div class="card-header">
-                <div class="icon-box">⬆️</div>
-                <div class="card-title">
-                    <span data-lang="gujarati" class="show-lang">'Share' બટન દબાવો</span>
-                    <span data-lang="hindi">'Share' बटन दबाएं</span>
-                    <span data-lang="english">Locate Share Icon</span>
-                </div>
-            </div>
+            <div class="card-meta">02</div>
+            <div class="card-icon-wrap">📤</div>
+            <h2 class="card-title">
+                <span data-lang="gujarati" class="show-lang">'Share' બટન દબાવો</span>
+                <span data-lang="hindi">'Share' बटन दबाएं</span>
+                <span data-lang="english">Tap Share</span>
+            </h2>
             <div class="card-body">
                 <span data-lang="gujarati" class="show-lang">નીચે દેખાતા 'ચોરસ અને ઉપર એરો' (⬆️) બટન પર ક્લિક કરો.</span>
                 <span data-lang="hindi">नीचे दिख रहे 'Share' (⬆️) बटन पर क्लिक करें।</span>
-                <span data-lang="english">Tap the Share button (square with an arrow) at the bottom.</span>
+                <span data-lang="english">Tap the Share icon (square with upward arrow) at the bottom.</span>
             </div>
         </div>
         <div class="card">
-            <span class="card-num">03</span>
-            <div class="card-header">
-                <div class="icon-box">🏗️</div>
-                <div class="card-title">
-                    <span data-lang="gujarati" class="show-lang">Home Screen માં ઉમેરો</span>
-                    <span data-lang="hindi">Home Screen में जोड़ें</span>
-                    <span data-lang="english">Add to Desktop</span>
-                </div>
-            </div>
+            <div class="card-meta">03</div>
+            <div class="card-icon-wrap">❇️</div>
+            <h2 class="card-title">
+                <span data-lang="gujarati" class="show-lang">Home Screen માં ઉમેરો</span>
+                <span data-lang="hindi">Home Screen में जोड़ें</span>
+                <span data-lang="english">Add to Home</span>
+            </h2>
             <div class="card-body">
                 <span data-lang="gujarati" class="show-lang">લિસ્ટમાં 'Add to Home Screen' (+) વિકલ્પ શોધીને તેના પર ક્લિક કરો.</span>
                 <span data-lang="hindi">लिस्ट में 'Add to Home Screen' (+) विकल्प चुनें।</span>
-                <span data-lang="english">Scroll down and tap 'Add to Home Screen' (+ icon).</span>
+                <span data-lang="english">Scroll through options and select 'Add to Home Screen'.</span>
             </div>
         </div>
-        <a href="https://shrisodevpirdada.vercel.app/" target="_blank" class="btn-outline">START ONLINE VERSION</a>
+        <a href="https://shrisodevpirdada.vercel.app/" target="_blank" class="action-outline">LAUNCH WEB VERSION</a>
     </div>
 
-    <!-- App Tour -->
+    <!-- Tour View -->
     <div id="tour-view" class="section">
         <div class="card">
-            <div class="card-header">
-                <div class="icon-box">🔘</div>
-                <div class="card-title">
-                    <span data-lang="gujarati" class="show-lang">મેનુ ક્યાં છે?</span>
-                    <span data-lang="hindi">मेनू कहाँ है?</span>
-                    <span data-lang="english">Accessing Menu</span>
-                </div>
-            </div>
+            <div class="card-icon-wrap">🔘</div>
+            <h2 class="card-title">
+                <span data-lang="gujarati" class="show-lang">મેનુ ક્યાં છે?</span>
+                <span data-lang="hindi">मेनू कहाँ है?</span>
+                <span data-lang="english">App Menu</span>
+            </h2>
             <div class="card-body">
                 <span data-lang="gujarati" class="show-lang">પ્લે/પોઝ બટનની ડાબી બાજુએ આપેલ 'ત્રણ ટપકાં' (...) પર ક્લિક કરવાથી બધા ભજન અને સેટિંગ્સ ખુલશે.</span>
                 <span data-lang="hindi">प्ले/पॉज बटन के बाईं ओर दिए गए 'तीन डॉट्स' (...) पर क्लिक करने से सभी भजन और सेटिंग्स खुलेंगे।</span>
@@ -376,64 +394,71 @@
             </div>
         </div>
         <div class="card">
-            <div class="card-header">
-                <div class="icon-box">🪔</div>
-                <div class="card-title">
-                    <span data-lang="gujarati" class="show-lang">ભક્તિ સાધનો</span>
-                    <span data-lang="hindi">भक्ति साधन</span>
-                    <span data-lang="english">Divine Offerings</span>
-                </div>
-            </div>
+            <div class="card-icon-wrap">🪔</div>
+            <h2 class="card-title">
+                <span data-lang="gujarati" class="show-lang">ભક્તિ સાધનો</span>
+                <span data-lang="hindi">भक्ति साधन</span>
+                <span data-lang="english">Spiritual Tools</span>
+            </h2>
             <div class="card-body">
                 <span data-lang="gujarati" class="show-lang">કંટ્રોલ બોક્સની ઉપર આપેલ આઇકોનથી તમે ઘંટડી 🔔, શંખ 🐚, ફૂલ 🌸 અને દીવો 🪔 પ્રગટાવી શકો છો.</span>
-                <span data-lang="hindi">कंट्रोल बॉक्स के ऊपर दिए गए आइकन से आप घंटी 🔔, शंख 🐚, फूल 🌸 और दीया 🪔 जला सकते हैं।</span>
-                <span data-lang="english">Use icons above the controls to ring the Bell 🔔, blow the Shankh 🐚, offer Flowers 🌸, or light the Lamp 🪔.</span>
+                <span data-lang="hindi">कंट्रोल बॉक्स के ऊपर दिए गए आइकन से आप घंटी 🔔, शंख 🐚, फूल 🌸 और दीया य जला सकते हैं।</span>
+                <span data-lang="english">Use festive icons above controls to ring the Bell 🔔, blow the Shankh 🐚, offer Flowers 🌸, or light the Lamp 🪔.</span>
             </div>
         </div>
         <div class="card">
-            <div class="card-header">
-                <div class="icon-box">🎵</div>
-                <div class="card-title">
-                    <span data-lang="gujarati" class="show-lang">ભજન અને મંત્ર</span>
-                    <span data-lang="hindi">भजन और मंत्र</span>
-                    <span data-lang="english">Sacred Music</span>
-                </div>
-            </div>
+            <div class="card-icon-wrap">🎵</div>
+            <h2 class="card-title">
+                <span data-lang="gujarati" class="show-lang">ભજન અને મંત્ર</span>
+                <span data-lang="hindi">भजन और मंत्र</span>
+                <span data-lang="english">Audios</span>
+            </h2>
             <div class="card-body">
                 <span data-lang="gujarati" class="show-lang">કોઈ પણ લિસ્ટમાંથી ભજન પર ક્લિક કરો. તમે નીચેના પ્લેયરથી તેને ચાલુ કે બંધ કરી શકો છો.</span>
                 <span data-lang="hindi">किसी भी लिस्ट से भजन पर क्लिक करें। आप नीचे दिए गए प्लेयर से इसे कंट्रोल कर सकते हैं।</span>
-                <span data-lang="english">Tap any title in the menu to start audio. Control it from the bottom player bar.</span>
+                <span data-lang="english">Select any title to play. Control playback via the floating bottom bar.</span>
             </div>
         </div>
         <div class="card">
-            <div class="card-header">
-                <div class="icon-box">🌍</div>
-                <div class="card-title">
-                    <span data-lang="gujarati" class="show-lang">ભાષા અને રીમાઇન્ડર</span>
-                    <span data-lang="hindi">भाषा और रिमाइंडर</span>
-                    <span data-lang="english">Settings Hub</span>
-                </div>
-            </div>
+            <div class="card-icon-wrap">🌍</div>
+            <h2 class="card-title">
+                <span data-lang="gujarati" class="show-lang">ભાષા અને રીમાઇન્ડર</span>
+                <span data-lang="hindi">भाषा और रिमाइंडर</span>
+                <span data-lang="english">Preferences</span>
+            </h2>
             <div class="card-body">
                 <span data-lang="gujarati" class="show-lang">મેનુમાં આપેલ 'ગ્લોબ' આઇકોનથી ભાષા અને 'ઘડિયાળ' આઇકોનથી રીમાઇન્ડર સેટ કરો.</span>
                 <span data-lang="hindi">मेनू में 'ग्लोब' आइकन से भाषा और 'घड़ी' आइकन से रिमाइंडर सेट करें।</span>
-                <span data-lang="english">Change language via the Globe icon and set prayer times via the Clock icon in the menu.</span>
+                <span data-lang="english">Switch language via the Globe icon and set custom prayer reminders via the Clock icon.</span>
             </div>
         </div>
     </div>
 
     <div class="footer">
-        <p class="vers">Vers 1.42 • Divine Experience</p>
+        <span class="ver-chip">VERSION 1.42 • MASTERPIECE</span>
     </div>
 </div>
 
 <script>
+    // Particle Generator
+    const particlesContainer = document.getElementById('particles');
+    for (let i = 0; i < 15; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const size = Math.random() * 5 + 2;
+        p.style.width = size + 'px';
+        p.style.height = size + 'px';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.animationDelay = Math.random() * 20 + 's';
+        particlesContainer.appendChild(p);
+    }
+
     function changeLang(lang) {
         document.querySelectorAll('[data-lang]').forEach(el => {
             el.classList.remove('show-lang');
             if (el.getAttribute('data-lang') === lang) el.classList.add('show-lang');
         });
-        document.querySelectorAll('.lang-pill').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.btn-lang').forEach(btn => btn.classList.remove('active'));
         if(lang === 'gujarati') document.getElementById('l-guj').classList.add('active');
         if(lang === 'hindi') document.getElementById('l-hin').classList.add('active');
         if(lang === 'english') document.getElementById('l-eng').classList.add('active');
@@ -442,9 +467,9 @@
 
     function switchMode(mode) {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(mode + '-view').classList.add('active');
-        document.getElementById('t-' + mode).classList.add('active');
+        document.getElementById('m-' + mode).classList.add('active');
     }
 
     window.onload = () => {
@@ -455,11 +480,11 @@
         const target = isIos ? 'ios' : 'android';
         switchMode(target);
         
-        const btn = document.getElementById('t-' + target);
+        const btn = document.getElementById('m-' + target);
         if (btn) {
             const badge = document.createElement('span');
-            badge.innerText = 'AUTO';
-            badge.className = 'badge-auto';
+            badge.innerText = 'DETECTED';
+            badge.className = 'auto-status';
             btn.appendChild(badge);
         }
     };
