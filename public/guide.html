@@ -9,7 +9,7 @@
     <meta property="og:description" content="Begin your spiritual journey. Download the official app.">
     
     <link rel="icon" type="image/png" href="/assets/images/new_icon.png?v=4" />
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@200;400;600&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Inter:wght@200;400;600&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -41,28 +41,29 @@
             position: relative;
         }
 
-        /* Artistic Header */
-        .header { margin-bottom: 70px; text-align: left; position: relative; }
+        /* Adjusted Header */
+        .header { margin-bottom: 60px; text-align: left; position: relative; z-index: 5; }
+        
         .lux-logo-frame {
             position: absolute;
-            top: -20px; right: 0px;
-            width: 120px; height: 120px;
+            top: -50px; right: -10px;
+            width: 100px; height: 100px;
             opacity: 0.1;
-            filter: grayscale(100%) brightness(200%);
+            filter: grayscale(100%) brightness(300%);
             pointer-events: none;
             z-index: -1;
         }
 
         .title-h {
-            font-family: 'Syne', sans-serif;
-            font-weight: 800;
-            font-size: 3rem;
-            line-height: 1;
-            letter-spacing: -1px;
-            background: linear-gradient(to right, #fff, rgba(255,255,255,0.4));
+            font-family: 'Outfit', sans-serif;
+            font-weight: 900;
+            font-size: 3.2rem;
+            line-height: 1.1;
+            letter-spacing: 0px;
+            background: linear-gradient(to bottom, #fff 40%, rgba(255,255,255,0.4));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             text-transform: uppercase;
         }
 
@@ -124,10 +125,10 @@
             display: flex; align-items: center; justify-content: center;
             z-index: 2;
         }
-        .card-dot::after { content: ""; width: 6px; height: 6px; background: var(--p-gold); border-radius: 50%; }
+        .card-dot::after { content: ""; width: 4px; height: 4px; background: var(--p-gold); border-radius: 50%; }
 
-        .card-head { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 700; margin-bottom: 10px; letter-spacing: -1px; }
-        .card-body { font-size: 0.95rem; color: var(--text-dim); font-weight: 300; margin-bottom: 25px; line-height: 1.6; }
+        .card-head { font-family: 'Outfit', sans-serif; font-size: 1.6rem; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.5px; color: var(--p-gold); }
+        .card-body { font-size: 1rem; color: var(--text-dim); font-weight: 300; margin-bottom: 25px; line-height: 1.6; }
 
         /* Links */
         .action-link {
@@ -166,7 +167,7 @@
             backdrop-filter: blur(20px);
             border-radius: 40px;
             border: 1px solid var(--card-edge);
-            z-index: 10;
+            z-index: 100;
         }
         .lang-item {
             font-size: 0.6rem;
@@ -193,7 +194,7 @@
 <div class="container">
     <div class="header">
         <img src="/assets/images/new_icon.png?v=4" class="lux-logo-frame">
-        <h1 class="title-h">SHRI SODEVPIR<br>DADA</h1>
+        <h1 class="title-h">SHRI<br>SODEVPIR<br>DADA</h1>
         <span class="subtitle-h">The Official Guide</span>
     </div>
 
