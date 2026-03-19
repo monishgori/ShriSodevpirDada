@@ -35,11 +35,11 @@
             position: relative;
         }
 
-        /* Solid Mobile-Optimized Background Fix */
+        /* Standard Locked Background */
         .bg-layer {
             position: fixed;
-            top: -50px; left: -50px;
-            right: -50px; bottom: -50px;
+            top: 0; left: 0;
+            right: 0; bottom: 0;
             z-index: -10;
             background-image: 
                 linear-gradient(rgba(3, 3, 2, 0.7), rgba(3, 3, 2, 0.8)),
@@ -47,8 +47,6 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            transform: translateZ(0); /* Hardware Acceleration */
-            will-change: transform;
             pointer-events: none;
         }
 
