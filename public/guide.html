@@ -9,443 +9,353 @@
     <meta property="og:description" content="Begin your spiritual journey. Download the official app.">
     
     <link rel="icon" type="image/png" href="/assets/images/new_icon.png?v=4" />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Montserrat:wght@900&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@200;400;600&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --p-saffron: #FF8A00;
             --p-gold: #FFD700;
-            --p-fire: #FF4D00;
-            --bg-black: #050302;
-            --glass-white: rgba(255, 255, 255, 0.05);
-            --glass-gold: rgba(255, 215, 0, 0.05);
-            --border: rgba(255, 255, 255, 0.12);
-            --shadow-lux: 0 30px 60px rgba(0,0,0,0.8);
+            --p-glow: rgba(255, 215, 0, 0.4);
+            --p-bg: #030303;
+            --card-edge: rgba(255, 255, 255, 0.08);
+            --text-main: #FFFFFF;
+            --text-dim: rgba(255, 255, 255, 0.5);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            font-family: 'Outfit', sans-serif;
-            background: var(--bg-black);
-            color: #ffffff;
-            line-height: 1.5;
+            font-family: 'Inter', sans-serif;
+            background: var(--p-bg);
+            color: var(--text-main);
+            line-height: 1.4;
             display: flex;
             justify-content: center;
             min-height: 100vh;
-            perspective: 1000px;
             overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
         }
 
-        /* Luxury Particle Vortex Background */
-        .bg-vortex {
+        /* Animated Mesh Background (Unseen UI) */
+        .mesh-bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            background: radial-gradient(circle at 50% 0%, #201005 0%, var(--bg-black) 70%);
+            background: radial-gradient(at 0% 0%, #150a00 0%, transparent 50%),
+                        radial-gradient(at 100% 100%, #100600 0%, transparent 50%),
+                        radial-gradient(at 50% 50%, #050505 0%, #000 100%);
         }
 
-        .halo-glow {
+        .aurora {
             position: fixed;
-            top: -200px; left: 50%;
-            width: 800px; height: 800px;
-            background: radial-gradient(circle, rgba(255, 138, 0, 0.15), transparent 70%);
-            transform: translateX(-50%);
-            z-index: -1;
-            animation: breathe 8s infinite ease-in-out;
+            top: -10%; left: -10%;
+            width: 120%; height: 120%;
+            background: radial-gradient(circle at 50% 0%, rgba(255, 136, 0, 0.05), transparent 40%);
+            animation: moveAurora 15s infinite alternate ease-in-out;
+            pointer-events: none;
         }
-        @keyframes breathe { 0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.15; } 50% { transform: translateX(-50%) scale(1.1); opacity: 0.25; } }
+        @keyframes moveAurora { from { transform: translate(-2%, -2%); } to { transform: translate(2%, 2%); } }
 
         .container {
             width: 100%;
-            max-width: 440px;
-            padding: 70px 24px;
+            max-width: 420px;
+            padding: 80px 24px;
             position: relative;
         }
 
-        /* Dynamic Header */
-        .header { text-align: center; margin-bottom: 60px; }
-        .lux-logo-wrap {
-            position: relative;
-            width: 120px; height: 120px;
-            margin: 0 auto 30px;
-        }
-
-        .lux-logo {
-            width: 100%; height: 100%;
-            border-radius: 50%;
-            padding: 5px;
-            background: linear-gradient(135deg, var(--p-gold), var(--p-saffron), var(--p-gold));
-            box-shadow: 0 20px 50px rgba(255, 138, 0, 0.4);
-            position: relative;
-            z-index: 2;
-        }
-
-        .logo-ring {
+        /* Artistic Header (Avant-Garde) */
+        .header { margin-bottom: 70px; text-align: left; position: relative; }
+        .lux-logo-frame {
             position: absolute;
-            top: -10px; left: -10px; right: -10px; bottom: -10px;
-            border: 2px solid var(--p-gold);
-            border-radius: 50%;
-            opacity: 0.3;
-            animation: luxPulse 4s infinite linear;
-        }
-        @keyframes luxPulse { from { transform: rotate(0deg); border-style: dashed; } to { transform: rotate(360deg); border-style: dotted; } }
-
-        .app-name-lux {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 900;
-            font-size: 2.6rem;
-            letter-spacing: -2px;
-            text-transform: uppercase;
-            background: linear-gradient(to bottom, #fff, #aaa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-        }
-
-        /* Premium Controls */
-        .nav-pills {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin: 40px 0;
-        }
-        .pill {
-            padding: 10px 22px;
-            border-radius: 40px;
-            background: var(--glass-white);
-            border: 1px solid var(--border);
-            color: rgba(255,255,255,0.5);
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-            backdrop-filter: blur(15px);
-        }
-        .pill.active {
-            background: #fff;
-            color: #000;
-            border-color: transparent;
-            transform: scale(1.05);
-            box-shadow: 0 10px 20px rgba(255,255,255,0.1);
-        }
-
-        .mode-segmented {
-            display: flex;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border);
-            padding: 5px;
-            border-radius: 24px;
-            margin-bottom: 50px;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
-        }
-        .m-tab {
-            flex: 1;
-            padding: 14px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: rgba(255,255,255,0.3);
-            text-align: center;
-            transition: 0.5s;
-        }
-        .m-tab.active {
-            background: linear-gradient(to right, #FF8A00, #FFD700);
-            color: #000;
-            box-shadow: 0 8px 15px rgba(255, 138, 0, 0.4);
-        }
-
-        /* 3D Infinity Cards */
-        .section { display: none; transform-style: preserve-3d; }
-        .section.active { display: block; animation: reveal 0.8s cubic-bezier(0.165, 0.84, 0.44, 1); }
-        @keyframes reveal { from { opacity: 0; transform: translateY(30px) translateZ(-100px); } to { opacity: 1; transform: translateY(0) translateZ(0); } }
-
-        .lux-card {
-            background: var(--glass-white);
-            border: 1.5px solid var(--border);
-            border-radius: 40px;
-            padding: 35px;
-            margin-bottom: 30px;
-            backdrop-filter: blur(30px);
-            box-shadow: var(--shadow-lux);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-        }
-        .lux-card:hover { border-color: var(--p-gold); transform: translateY(-10px) rotateX(2deg); }
-
-        .lux-card::after {
-            content: "";
-            position: absolute;
-            top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.1), transparent);
-            transition: 0.8s ease-in-out;
-        }
-        .lux-card:hover::after { left: 100%; }
-
-        .num-tag {
-            font-family: 'Outfit', sans-serif;
-            font-weight: 900;
-            font-size: 5rem;
-            position: absolute;
-            top: 0; right: 20px;
-            color: rgba(255, 255, 255, 0.02);
+            top: -40px; right: -20px;
+            width: 140px; height: 140px;
+            opacity: 0.15;
+            filter: grayscale(100%) brightness(200%);
             pointer-events: none;
         }
 
-        .icon-sphere {
-            width: 56px; height: 56px;
-            background: linear-gradient(135deg, var(--p-fire), var(--p-saffron));
-            border-radius: 18px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.6rem;
-            margin-bottom: 25px;
-            box-shadow: 0 15px 30px rgba(255, 77, 0, 0.3);
-        }
-
-        .card-title-lux {
-            font-size: 1.4rem;
+        .title-h {
+            font-family: 'Syne', sans-serif;
             font-weight: 800;
-            margin-bottom: 12px;
-            word-spacing: 2px;
+            font-size: 3.2rem;
+            line-height: 0.9;
+            letter-spacing: -3px;
+            background: linear-gradient(to right, #fff, rgba(255,255,255,0.3));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
         }
 
-        .card-body-lux {
-            font-size: 1.05rem;
-            color: rgba(255,255,255,0.6);
-            line-height: 1.7;
-            font-weight: 300;
-        }
+        .subtitle-h { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 4px; color: var(--p-gold); font-weight: 700; margin-bottom: 40px; display: block; }
 
-        /* High Voltage Buttons */
-        .lux-cta {
-            display: block;
-            width: 100%;
-            padding: 22px;
-            background: #fff;
-            color: #000;
-            border-radius: 20px;
-            font-weight: 900;
-            font-size: 1.1rem;
+        /* Floating Pill Selectors */
+        .selector-pills {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 30px;
+            background: rgba(255,255,255,0.03);
+            padding: 5px;
+            border-radius: 12px;
+            border: 1px solid var(--card-edge);
+        }
+        .pill {
+            flex: 1;
+            padding: 10px;
             text-align: center;
-            text-decoration: none;
+            font-size: 0.65rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-top: 25px;
-            box-shadow: 0 20px 40px rgba(255,255,255,0.1);
-            transition: 0.4s;
-        }
-        .lux-cta:hover { transform: scale(1.02) translateY(-2px); box-shadow: 0 25px 50px rgba(255,255,255,0.2); }
-
-        .lux-outline {
-            display: block;
-            width: 100%;
-            padding: 20px;
-            border: 2px solid var(--p-gold);
-            color: var(--p-gold);
-            border-radius: 20px;
-            text-align: center;
-            text-decoration: none;
             font-weight: 800;
             letter-spacing: 1px;
-            margin-top: 20px;
+            color: var(--text-dim);
+            cursor: pointer;
+            border-radius: 8px;
             transition: 0.4s;
         }
-        .lux-outline:hover { background: var(--p-gold); color: #000; }
+        .pill.active { background: #fff; color: #000; box-shadow: 0 5px 15px rgba(255,255,255,0.2); }
 
-        .footer-lux { text-align: center; margin-top: 80px; padding-bottom: 60px; }
-        .version-badge {
-            background: var(--glass-white);
-            padding: 8px 18px;
-            border-radius: 50px;
-            font-size: 0.7rem;
-            font-weight: 900;
-            letter-spacing: 2px;
-            color: var(--p-gold);
+        /* Step Logic UI (Kinetic Flow) */
+        .section { display: none; }
+        .section.active { display: block; animation: flowIn 1s cubic-bezier(0.23, 1, 0.32, 1); }
+        @keyframes flowIn { from { filter: blur(10px); opacity: 0; transform: translateX(20px); } to { filter: blur(0); opacity: 1; transform: translateX(0); } }
+
+        .ultra-card {
+            position: relative;
+            padding-left: 50px;
+            margin-bottom: 50px;
         }
 
-        .detect-chip {
+        .ultra-card::before {
+            content: "";
             position: absolute;
-            top: -12px; left: 50%; transform: translateX(-50%);
-            background: var(--p-fire); color: #fff; font-size: 0.55rem;
-            padding: 3px 10px; border-radius: 10px; font-weight: 900;
-            box-shadow: 0 4px 10px rgba(255,0,0,0.3);
+            left: 10px; top: 0; bottom: -50px;
+            width: 1px;
+            background: linear-gradient(to bottom, var(--p-gold), transparent);
+            opacity: 0.3;
         }
+        .ultra-card:last-of-type::before { bottom: 0; }
+
+        .card-dot {
+            position: absolute;
+            left: 0; top: 0;
+            width: 20px; height: 20px;
+            background: var(--p-bg);
+            border: 1px solid var(--p-gold);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 10px var(--p-glow);
+            z-index: 2;
+        }
+        .card-dot::after { content: ""; width: 6px; height: 6px; background: var(--p-gold); border-radius: 50%; }
+
+        .card-head { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 700; margin-bottom: 10px; letter-spacing: -1px; }
+        .card-body { font-size: 0.95rem; color: var(--text-dim); font-weight: 300; margin-bottom: 25px; line-height: 1.6; }
+
+        /* Glass Interactive Logic */
+        .action-link {
+            display: inline-block;
+            background: var(--p-gold);
+            color: #000;
+            padding: 16px 32px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
+        }
+        .action-link:hover { transform: scale(1.05) rotate(-1deg); box-shadow: 0 10px 30px var(--p-glow); }
+
+        .outline-link {
+            display: inline-block;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 14px 28px;
+            border-radius: 4px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Lang Orbit */
+        .lang-orbit {
+            position: fixed;
+            bottom: 30px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 40px;
+            padding: 15px 30px;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 40px;
+            border: 1px solid var(--card-edge);
+            z-index: 10;
+        }
+        .lang-item {
+            font-size: 0.6rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .lang-item.active { color: var(--p-gold); transform: scale(1.2); }
+
+        /* Footer */
+        .footer { margin-top: 100px; text-align: left; opacity: 0.3; }
+        .vers { font-size: 0.5rem; font-weight: 900; letter-spacing: 5px; }
+
+        .auto-chip { font-size: 0.5rem; color: var(--p-gold); font-weight: 900; letter-spacing: 2px; margin-top: 15px; display: block; }
 
         /* Lang Logic */
         [data-lang]:not(.show-lang) { display: none !important; }
         [data-lang="hindi"] { font-family: 'Tiro Devanagari Hindi', serif; }
-        [data-lang="gujarati"] { font-family: 'Outfit', sans-serif; }
     </style>
 </head>
 <body>
 
-<div class="bg-vortex"></div>
-<div class="halo-glow"></div>
+<div class="mesh-bg"></div>
+<div class="aurora"></div>
 
 <div class="container">
     <div class="header">
-        <div class="lux-logo-wrap">
-            <img src="/assets/images/new_icon.png?v=4" alt="Icon" class="lux-logo">
-            <div class="logo-ring"></div>
-        </div>
-        <h1 class="app-name-lux">Sodevpir Dada</h1>
-        
-        <div class="nav-pills">
-            <div class="pill active" id="l-guj" onclick="changeLang('gujarati')">ગુજરાતી</div>
-            <div class="pill" id="l-hin" onclick="changeLang('hindi')">हिन्दी</div>
-            <div class="pill" id="l-eng" onclick="changeLang('english')">English</div>
-        </div>
+        <img src="/assets/images/new_icon.png?v=4" class="lux-logo-frame">
+        <h1 class="title-h">Sodevpir<br>Dada</h1>
+        <span class="subtitle-h">The Official Guide</span>
     </div>
 
-    <div class="mode-segmented">
-        <div class="m-tab active" id="m-android" onclick="switchMode('android')">Android</div>
-        <div class="m-tab" id="m-ios" onclick="switchMode('ios')">iPhone</div>
-        <div class="m-tab" id="m-tour" onclick="switchMode('tour')">Explore</div>
+    <!-- Mode Select (Avant-Garde Pills) -->
+    <div class="selector-pills">
+        <div class="pill active" id="m-android" onclick="switchMode('android')">Android App</div>
+        <div class="pill" id="m-ios" onclick="switchMode('ios')">iPhone</div>
+        <div class="pill" id="m-tour" onclick="switchMode('tour')">Experience</div>
     </div>
 
     <!-- Android View -->
     <div id="android-view" class="section active">
-        <div class="lux-card">
-            <div class="num-tag">01</div>
-            <div class="icon-sphere">🪁</div>
-            <h2 class="card-title-lux">
+        <div class="ultra-card">
+            <div class="card-dot"></div>
+            <h2 class="card-head">
                 <span data-lang="gujarati" class="show-lang">પ્લે સ્ટોર પર જાવ</span>
                 <span data-lang="hindi">प्ले स्टोर पर जाएं</span>
                 <span data-lang="english">Open Play Store</span>
             </h2>
-            <div class="card-body-lux">
+            <div class="card-body">
                 <span data-lang="gujarati" class="show-lang">નીચેના બટન પર ક્લિક કરો. તે તમને ગૂગલ પ્લે સ્ટોર પર લઈ જશે.</span>
                 <span data-lang="hindi">नीचे दिए गए बटन पर क्लिक करें। यह आपको गूगल प्ले स्टोर पर ले जाएगा।</span>
-                <span data-lang="english">Click the button below to visit the official Google Play Store page.</span>
+                <span data-lang="english">Tap the button below for the official store page.</span>
             </div>
-            <a href="https://play.google.com/store/apps/details?id=com.monishgori.shrisodevpirdada" target="_blank" class="lux-cta">UPGRADE NOW</a>
+            <a href="https://play.google.com/store/apps/details?id=com.monishgori.shrisodevpirdada" target="_blank" class="action-link">INSTALL NOW</a>
         </div>
-        <div class="lux-card">
-            <div class="num-tag">02</div>
-            <div class="icon-sphere">👑</div>
-            <h2 class="card-title-lux">
+        
+        <div class="ultra-card">
+            <div class="card-dot"></div>
+            <h2 class="card-head">
                 <span data-lang="gujarati" class="show-lang">એપ શરૂ કરો</span>
                 <span data-lang="hindi">ऐप शुरू करें</span>
-                <span data-lang="english">Launch App</span>
+                <span data-lang="english">Start Divine App</span>
             </h2>
-            <div class="card-body-lux">
+            <div class="card-body">
                 <span data-lang="gujarati" class="show-lang">ઇન્સ્ટોલ થયા પછી હોમ સ્ક્રીન પર 'Shri Sodevpir Dada' આઇકોન શોધીને ઓપન કરો.</span>
                 <span data-lang="hindi">इंस्टॉल होने के बाद होम स्क्रीन पर आइकन ढूंढें और ऐप खोलें।</span>
-                <span data-lang="english">Once installed, locate the gold icon on your home screen and open.</span>
+                <span data-lang="english">Find the icon on your screen and begin.</span>
             </div>
         </div>
     </div>
 
     <!-- iOS View -->
     <div id="ios-view" class="section">
-        <div class="lux-card">
-            <div class="num-tag">01</div>
-            <div class="icon-sphere">🪐</div>
-            <h2 class="card-title-lux">
+        <div class="ultra-card">
+            <div class="card-dot"></div>
+            <h2 class="card-head">
                 <span data-lang="gujarati" class="show-lang">Safari માં લિંક ખોલો</span>
                 <span data-lang="hindi">Safari में लिंक खोलें</span>
-                <span data-lang="english">Open in Safari</span>
+                <span data-lang="english">Access via Safari</span>
             </h2>
-            <div class="card-body-lux">
+            <div class="card-body">
                 <span data-lang="gujarati" class="show-lang">આ લિંક તમારા iPhone ના 'Safari' બ્રાઉઝર માં જ ખોલેલી હોવી જોઈએ.</span>
                 <span data-lang="hindi">यह लिंक आपके iPhone के 'Safari' ब्राउज़र में ही खुली होनी चाहिए।</span>
-                <span data-lang="english">Make sure you are viewing this page in the official Safari browser.</span>
+                <span data-lang="english">Use the official Safari browser on iPhone.</span>
             </div>
         </div>
-        <div class="lux-card">
-            <div class="num-tag">02</div>
-            <div class="icon-sphere">💎</div>
-            <h2 class="card-title-lux">
+        <div class="ultra-card">
+            <div class="card-dot"></div>
+            <h2 class="card-head">
                 <span data-lang="gujarati" class="show-lang">'Share' બટન દબાવો</span>
                 <span data-lang="hindi">'Share' बटन दबाएं</span>
-                <span data-lang="english">Tap Share</span>
+                <span data-lang="english">Tap Share Icon</span>
             </h2>
-            <div class="card-body-lux">
+            <div class="card-body">
                 <span data-lang="gujarati" class="show-lang">નીચે દેખાતા 'ચોરસ અને ઉપર એરો' (⬆️) બટન પર ક્લિક કરો.</span>
                 <span data-lang="hindi">नीचे दिख रहे 'Share' (⬆️) बटन पर क्लिक करें।</span>
-                <span data-lang="english">Tap the Share icon (square with upward arrow) at the bottom.</span>
+                <span data-lang="english">Tap the Share (⬆️) button at the bottom navigation bar.</span>
             </div>
         </div>
-        <div class="lux-card">
-            <div class="num-tag">03</div>
-            <div class="icon-sphere">🔥</div>
-            <h2 class="card-title-lux">
+        <div class="ultra-card">
+            <div class="card-dot"></div>
+            <h2 class="card-head">
                 <span data-lang="gujarati" class="show-lang">Home Screen માં ઉમેરો</span>
                 <span data-lang="hindi">Home Screen में जोड़ें</span>
-                <span data-lang="english">Add to Home</span>
+                <span data-lang="english">Add to Desktop</span>
             </h2>
-            <div class="card-body-lux">
+            <div class="card-body">
                 <span data-lang="gujarati" class="show-lang">લિસ્ટમાં 'Add to Home Screen' (+) વિકલ્પ શોધીને તેના પર ક્લિક કરો.</span>
                 <span data-lang="hindi">लिस्ट में 'Add to Home Screen' (+) विकल्प चुनें।</span>
-                <span data-lang="english">Find and select 'Add to Home Screen' in the floating menu.</span>
+                <span data-lang="english">Select 'Add to Home Screen' in the system menu.</span>
             </div>
         </div>
-        <a href="https://shrisodevpirdada.vercel.app/" target="_blank" class="lux-outline">BEGIN ONLINE</a>
+        <a href="https://shrisodevpirdada.vercel.app/" target="_blank" class="outline-link">START WEB VERSION</a>
     </div>
 
     <!-- Tour View -->
     <div id="tour-view" class="section">
-        <div class="lux-card">
-            <div class="icon-sphere">🔘</div>
-            <h2 class="card-title-lux">
+        <div class="ultra-card">
+            <h2 class="card-head">
                 <span data-lang="gujarati" class="show-lang">મેનુ ક્યાં છે?</span>
                 <span data-lang="hindi">मेनू कहाँ है?</span>
-                <span data-lang="english">Smarter Menu</span>
+                <span data-lang="english">Smart Menu</span>
             </h2>
-            <div class="card-body-lux">
+            <div class="card-body">
                 <span data-lang="gujarati" class="show-lang">પ્લે/પોઝ બટનની ડાબી બાજુએ આપેલ 'ત્રણ ટપકાં' (...) પર ક્લિક કરવાથી બધા ભજન અને સેટિંગ્સ ખુલશે.</span>
                 <span data-lang="hindi">प्ले/पॉज बटन के बाईं ओर दिए गए 'तीन डॉट्स' (...) पर क्लिक करने से सभी भजन और सेटिंग्स खुलेंगे।</span>
                 <span data-lang="english">Click the 'Three Dots' (...) on the left side of the play/pause button to access Bhajans and Settings.</span>
             </div>
         </div>
-        <div class="lux-card">
-            <div class="icon-sphere">🪔</div>
-            <h2 class="card-title-lux">
+        <div class="ultra-card">
+            <h2 class="card-head">
                 <span data-lang="gujarati" class="show-lang">ભક્તિ સાધનો</span>
                 <span data-lang="hindi">भक्ति साधन</span>
-                <span data-lang="english">Divine Offerings</span>
+                <span data-lang="english">Divine Tools</span>
             </h2>
-            <div class="card-body-lux">
+            <div class="card-body">
                 <span data-lang="gujarati" class="show-lang">કંટ્રોલ બોક્સની ઉપર આપેલ આઇકોનથી તમે ઘંટડી 🔔, શંખ 🐚, ફૂલ 🌸 અને દીવો 🪔 પ્રગટાવી શકો છો.</span>
                 <span data-lang="hindi">कंट्रोल बॉक्स के ऊपर दिए गए आइकन से आप घंटी 🔔, शंख 🐚, फूल 🌸 और दीया जला सकते हैं।</span>
-                <span data-lang="english">Use festive icons above controls to ring the Bell 🔔, blow the Shankh 🐚, offer Flowers 🌸, or light the Lamp 🪔.</span>
+                <span data-lang="english">Icons above controls: Bell 🔔, Shankh 🐚, Flowers 🌸, and Lamp 🪔.</span>
             </div>
         </div>
-        <div class="lux-card">
-            <div class="icon-sphere">🎵</div>
-            <h2 class="card-title-lux">
+        <div class="ultra-card">
+            <h2 class="card-head">
                 <span data-lang="gujarati" class="show-lang">ભજન અને મંત્ર</span>
                 <span data-lang="hindi">भजन और मंत्र</span>
-                <span data-lang="english">Audio Library</span>
+                <span data-lang="english">Audios</span>
             </h2>
-            <div class="card-body-lux">
+            <div class="card-body">
                 <span data-lang="gujarati" class="show-lang">કોઈ પણ લિસ્ટમાંથી ભજન પર ક્લિક કરો. તમે નીચેના પ્લેયરથી તેને ચાલુ કે બંધ કરી શકો છો.</span>
                 <span data-lang="hindi">किसी भी लिस्ट से भजन पर क्लिक करें। आप नीचे दिए गए प्लेयर से इसे कंट्रोल कर सकते हैं।</span>
-                <span data-lang="english">Select any title to play. Control playback via the floating bottom bar.</span>
-            </div>
-        </div>
-        <div class="lux-card">
-            <div class="icon-sphere">🌍</div>
-            <h2 class="card-title-lux">
-                <span data-lang="gujarati" class="show-lang">ભાષા અને રીમાઇન્ડર</span>
-                <span data-lang="hindi">भाषा और रिमाइंडर</span>
-                <span data-lang="english">Custom Setup</span>
-            </h2>
-            <div class="card-body-lux">
-                <span data-lang="gujarati" class="show-lang">મેનુમાં આપેલ 'ગ્લોબ' આઇકોનથી ભાષા અને 'ઘડિયાળ' આઇકોનથી રીમાઇન્ડર સેટ કરો.</span>
-                <span data-lang="hindi">मेनू में 'ग्लोब' आइकन से भाषा और 'घड़ी' आइकन से रिमाइंडर सेट करें।</span>
-                <span data-lang="english">Switch language via the Globe icon and set custom prayer reminders via the Clock icon.</span>
+                <span data-lang="english">Tap any title in the menu to play. Use the bottom bar to pause.</span>
             </div>
         </div>
     </div>
 
-    <div class="footer-lux">
-        <span class="version-badge">EDITION 1.42 • LUXURY UI</span>
+    <!-- Lang Dock (Unseen Floating Orbit) -->
+    <div class="lang-orbit">
+        <div class="lang-item active" id="o-guj" onclick="changeLang('gujarati')">GUJ</div>
+        <div class="lang-item" id="o-hin" onclick="changeLang('hindi')">HIN</div>
+        <div class="lang-item" id="o-eng" onclick="changeLang('english')">ENG</div>
+    </div>
+
+    <div class="footer">
+        <p class="vers">V1.42 • AVANT-GARDE EDITION</p>
+        <span id="auto-tag"></span>
     </div>
 </div>
 
@@ -455,16 +365,16 @@
             el.classList.remove('show-lang');
             if (el.getAttribute('data-lang') === lang) el.classList.add('show-lang');
         });
-        document.querySelectorAll('.pill').forEach(btn => btn.classList.remove('active'));
-        if(lang === 'gujarati') document.getElementById('l-guj').classList.add('active');
-        if(lang === 'hindi') document.getElementById('l-hin').classList.add('active');
-        if(lang === 'english') document.getElementById('l-eng').classList.add('active');
+        document.querySelectorAll('.lang-item').forEach(btn => btn.classList.remove('active'));
+        if(lang === 'gujarati') document.getElementById('o-guj').classList.add('active');
+        if(lang === 'hindi') document.getElementById('o-hin').classList.add('active');
+        if(lang === 'english') document.getElementById('o-eng').classList.add('active');
         localStorage.setItem('guide_lang', lang);
     }
 
     function switchMode(mode) {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('.m-tab').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.pill').forEach(b => b.classList.remove('active'));
         document.getElementById(mode + '-view').classList.add('active');
         document.getElementById('m-' + mode).classList.add('active');
     }
@@ -477,12 +387,10 @@
         const target = isIos ? 'ios' : 'android';
         switchMode(target);
         
-        const btn = document.getElementById('m-' + target);
-        if (btn) {
-            const badge = document.createElement('span');
-            badge.innerText = 'AUTO-DETECTED';
-            badge.className = 'detect-chip';
-            btn.appendChild(badge);
+        const tag = document.getElementById('auto-tag');
+        if (tag) {
+            tag.innerText = isIos ? 'DETECTED : APPLE CORE' : 'DETECTED : ANDROID NATIVE';
+            tag.className = 'auto-chip';
         }
     };
 </script>
