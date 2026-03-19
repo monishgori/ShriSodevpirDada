@@ -386,13 +386,16 @@
         <button class="lang-tab" onclick="setLang('english')">English</button>
     </div>
 
-    <!-- Platform Selector -->
+    <!-- Platform/Feature Selector -->
     <div class="platform-tabs">
-        <button class="platform-tab active" onclick="setPlatform('ios')">
-            <span class="platform-icon"></span> iOS / iPhone
+        <button class="platform-tab active" id="tab-ios" onclick="setPlatform('ios')">
+            <span class="platform-icon"></span> iOS
         </button>
-        <button class="platform-tab" onclick="setPlatform('android')">
+        <button class="platform-tab" id="tab-android" onclick="setPlatform('android')">
             <span class="platform-icon">🤖</span> Android
+        </button>
+        <button class="platform-tab" id="tab-usage" onclick="setPlatform('usage')">
+            <span class="platform-icon">📖</span> <span data-lang="gujarati">માર્ગદર્શિકા</span><span data-lang="hindi">उपयोग गाइड</span><span data-lang="english">How to Use</span>
         </button>
     </div>
 
@@ -479,6 +482,53 @@
         </div>
     </div>
 
+    <!-- How to Use / App Tour -->
+    <div id="usage-content" class="tab-content">
+        <div class="card">
+            <h3 style="text-align: center; color: var(--secondary); margin-bottom: 20px; font-family: 'Tiro Devanagari Hindi', serif;">
+                <span data-lang="gujarati">એપ કેવી રીતે વાપરવી?</span>
+                <span data-lang="hindi">ऐप कैसे चलाएं?</span>
+                <span data-lang="english">App Features Tour</span>
+            </h3>
+
+            <div class="step-item">
+                <div class="step-visual"><div class="step-num">🗂️</div><div class="step-line"></div></div>
+                <div class="step-content">
+                    <div class="step-text" data-lang="gujarati"><b>મેનૂ (Menu):</b> નીચે ડાબી બાજુએ ટ્રે બટન દબાવો. ત્યાં તમને ચાલિસા, મંત્ર, ભજન અને ઇતિહાસ જોવા મળશે.</div>
+                    <div class="step-text" data-lang="hindi"><b>मेनू (Menu):</b> नीचे बाईं ओर ट्रे बटन दबाएं। वहां आपको चालीसा, मंत्र, भजन और इतिहास मिलेगा।</div>
+                    <div class="step-text" data-lang="english"><b>Menu:</b> Tap the tray icon at the bottom-left to access Chalisa, Mantras, Bhajans, and History.</div>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-visual"><div class="step-num">🎵</div><div class="step-line"></div></div>
+                <div class="step-content">
+                    <div class="step-text" data-lang="gujarati"><b>ઓડિયો પ્લેયર:</b> ભજન કે મંત્ર ચાલુ કરવા તેના પર ક્લિક કરો. ઉપર ખેંચીને તમે સંગીત બદલી શકો છો.</div>
+                    <div class="step-text" data-lang="hindi"><b>ऑडियो प्लेयर:</b> भजन या मंत्र शुरू करने के लिए उस पर क्लिक करें। स्वाइप अप करके आप प्लेयर कंट्रोल देख सकते हैं।</div>
+                    <div class="step-text" data-lang="english"><b>Music Player:</b> Click any track to play. Swipe up on the bottom bar to see full player controls.</div>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-visual"><div class="step-num">🌍</div><div class="step-line"></div></div>
+                <div class="step-content">
+                    <div class="step-text" data-lang="gujarati"><b>ભાષા (Language):</b> ઉપર જમણી બાજુએ આપેલ ગ્લોબ આઇકોનથી તમે ગુજરાતી, હિન્દી કે અંગ્રેજી પસંદ કરી શકો છો.</div>
+                    <div class="step-text" data-lang="hindi"><b>भाषा (Language):</b> ऊपर दाईं ओर ग्लोब आइकन से आप अपनी पसंद की भाषा (गुजराती, हिंदी, अंग्रेजी) चुन सकते हैं।</div>
+                    <div class="step-text" data-lang="english"><b>Language:</b> Click the globe icon at the top-right to switch between Gujarati, Hindi, and English.</div>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-visual"><div class="step-num">⏰</div><div class="step-line"></div></div>
+                <div class="step-content">
+                    <div class="step-text" data-lang="gujarati"><b>નોટિફિકેશન:</b> મેનૂમાં નીચે સેટિંગ્સમાં જઈને તમે સવાર અને સાંજની ભક્તિ માટે તમારો સમય સેટ કરી શકો છો.</div>
+                    <div class="step-text" data-lang="hindi"><b>नोटिफिकेशन:</b> मेनू में नीचे सेटिंग्स में जाकर आप सुबह और शाम की भक्ति के लिए अपना समय चुन सकते हैं।</div>
+                    <div class="step-text" data-lang="english"><b>Alarms:</b> Set your preferred time for daily morning quotes and evening aarti in the settings menu.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="footer">
         <img src="/assets/images/new_icon.png?v=4" class="footer-logo" alt="icon"><br>
         <span data-lang="gujarati">શ્રી સોદેવપીર દાદા આપનું કલ્યાણ કરે.</span>
@@ -521,8 +571,7 @@
         });
 
         document.querySelectorAll('.platform-tab').forEach(btn => {
-            const btnText = btn.innerText.toLowerCase();
-            if (btnText.includes(platform)) {
+            if (btn.id === 'tab-' + platform) {
                 btn.classList.add('active');
             } else {
                 btn.classList.remove('active');
@@ -545,7 +594,7 @@
         setPlatform(detected);
         
         // Add a "Recommended" badge
-        const activeTab = document.querySelector(`.platform-tab[onclick*="${detected}"]`);
+        const activeTab = document.getElementById('tab-' + detected);
         if (activeTab && !activeTab.querySelector('.auto-badge')) {
             const badge = document.createElement('span');
             badge.className = 'auto-badge';
