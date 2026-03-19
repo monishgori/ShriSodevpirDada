@@ -10,167 +10,257 @@
     
     <meta name="theme-color" content="#FF9933">
     <link rel="icon" type="image/png" href="/assets/images/new_icon.png?v=4" />
-    <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@300;400;600;700&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary: #FF9933;
+            --primary: #FF8800;
             --secondary: #FFD700;
-            --accent: #FF5E00;
-            --bg-dark: #0F0500;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --card-border: rgba(255, 215, 0, 0.2);
-            --gradient-saffron: linear-gradient(135deg, #FF9933 0%, #FF5E00 100%);
-            --gradient-gold: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+            --accent: #E65100;
+            --bg-deep: #0C0805;
+            --glass-bg: rgba(20, 15, 10, 0.7);
+            --glass-border: rgba(255, 215, 0, 0.15);
+            --gold-gradient: linear-gradient(135deg, #FFD700, #B8860B, #FFD700);
+            --saffron-gradient: linear-gradient(135deg, #FF9933, #FF5E00);
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            font-family: 'Poppins', 'Tiro Devanagari Hindi', sans-serif;
-            background: var(--bg-dark);
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-deep);
             color: #ffffff;
             line-height: 1.6;
             overflow-x: hidden;
             display: flex;
             justify-content: center;
             min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 50% 10%, rgba(255, 136, 0, 0.1), transparent),
+                radial-gradient(circle at 0% 100%, rgba(255, 215, 0, 0.05), transparent);
         }
 
-        .bg-glow {
+        /* Decorative Mandala Background */
+        body::before {
+            content: "";
             position: fixed;
-            width: 300px;
-            height: 300px;
-            background: var(--primary);
-            filter: blur(150px);
-            opacity: 0.15;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZyBmaWxsPSJub25lIiBzdHJva2U9InJnYmEoMjU1LDIxNSwwLDAuMDUpIiBzdHJva2Utd2lkdGg9IjAuNSI+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iNDAiLz48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSIzNSIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMwIi8+PHBhdGggZD0iTTUwIDEwIEw1MCA5MCBNMTAgNTAgTDkwIDUwIE0yMS43IDIxLjcgTDc4LjMgNzguMyBNMjEuNyA3OC4zIEw3OC4zIDIxLjciLz48L2c+PC9zdmc+');
+            background-size: cover;
             z-index: -1;
-            border-radius: 50%;
+            opacity: 0.3;
+            animation: slowRotate 120s linear infinite;
         }
+
+        @keyframes slowRotate { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
 
         .content-container {
             width: 100%;
             max-width: 500px;
-            padding: 40px 20px;
+            padding: 50px 24px;
             position: relative;
         }
 
-        .hero { text-align: center; margin-bottom: 40px; }
+        .hero { text-align: center; margin-bottom: 50px; }
         .app-logo {
-            width: 100px; height: 100px;
+            width: 110px; height: 110px;
             border-radius: 50%;
-            border: 3px solid var(--secondary);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
-            margin-bottom: 15px;
+            padding: 4px;
+            background: var(--gold-gradient);
+            box-shadow: 0 10px 40px rgba(255, 136, 0, 0.3);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
         }
+        .app-logo:hover { transform: scale(1.05) rotate(5deg); }
 
         .title {
-            font-family: 'Tiro Devanagari Hindi', serif;
-            font-size: 2rem;
-            background: var(--gradient-gold);
+            font-family: 'Cinzel', serif;
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+            background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-weight: 800;
-        }
-
-        .tabs {
-            display: flex;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 15px;
-            border: 1px solid var(--card-border);
-            margin-bottom: 30px;
-            padding: 5px;
-            gap: 5px;
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            background: none;
-            color: #aaa;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            font-size: 0.85rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-        }
-
-        .tab-btn.active {
-            background: var(--gradient-saffron);
-            color: #000;
-        }
-
-        .tab-btn .label-small { font-size: 0.65rem; opacity: 0.8; }
-
-        .section { display: none; animation: fadeIn 0.4s ease; }
-        .section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 15px;
-            padding: 18px;
-            margin-bottom: 15px;
-            transition: transform 0.2s;
-        }
-
-        .card:active { transform: scale(0.98); }
-
-        .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-        .card-icon { font-size: 1.4rem; width: 35px; text-align: center; }
-        .card-title { font-size: 1rem; font-weight: 700; color: var(--secondary); font-family: 'Tiro Devanagari Hindi', serif; }
-        .card-desc { font-size: 0.9rem; color: #ccc; font-family: 'Tiro Devanagari Hindi', serif; }
-
-        .cta-btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background: var(--gradient-saffron);
-            color: #000;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 800;
-            text-decoration: none;
-            text-align: center;
-            margin: 15px 0;
+            font-weight: 700;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
         .lang-switch {
             display: flex;
             justify-content: center;
-            gap: 8px;
-            margin-bottom: 25px;
+            gap: 12px;
+            margin: 25px 0;
         }
 
         .lang-btn {
-            padding: 6px 15px;
-            border-radius: 20px;
-            border: 1px solid var(--card-border);
-            background: rgba(255,255,255,0.05);
-            color: #fff;
-            font-size: 0.75rem;
+            padding: 8px 20px;
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: rgba(255,255,255,0.7);
+            font-size: 0.8rem;
+            font-weight: 500;
             cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
         }
 
         .lang-btn.active {
-            background: var(--primary);
-            color: #000;
-            border-color: var(--primary);
+            background: var(--saffron-gradient);
+            color: #ffffff;
+            border-color: transparent;
+            box-shadow: 0 5px 15px rgba(230, 81, 0, 0.4);
         }
 
-        [data-lang]:not(.show-lang) { display: none !important; }
-        .badge { font-size: 0.6rem; background: #fff; color: #000; padding: 1px 4px; border-radius: 4px; margin-top: 2px; }
+        .tabs {
+            display: flex;
+            background: var(--glass-bg);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 40px;
+            padding: 6px;
+            backdrop-filter: blur(15px);
+            box-shadow: var(--card-shadow);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: none;
+            color: rgba(255,255,255,0.4);
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 15px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 0.85rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .tab-btn.active {
+            background: #ffffff;
+            color: #000;
+            box-shadow: 0 5px 15px rgba(255,255,255,0.2);
+        }
+
+        .tab-btn .label-small { font-size: 0.6rem; text-transform: uppercase; margin-top: 2px; }
+
+        .section { display: none; animation: slideUp 0.5s ease; }
+        .section.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            transition: 0.5s;
+        }
+        .card:hover::before { left: 100%; }
+        .card:hover { border-color: rgba(255,215,0,0.4); transform: translateY(-5px); }
+
+        .card-header { display: flex; align-items: flex-start; gap: 18px; margin-bottom: 12px; }
+        
+        .card-icon { 
+            font-size: 1.25rem; 
+            width: 44px; height: 44px; 
+            background: var(--glass-bg);
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            border: 1px solid var(--glass-border);
+            color: var(--secondary);
+            flex-shrink: 0;
+        }
+
+        .card-title { 
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem; 
+            font-weight: 700; 
+            color: var(--secondary); 
+        }
+
+        .card-desc { 
+            font-size: 0.95rem; 
+            color: rgba(255,255,255,0.7); 
+            font-weight: 300;
+            line-height: 1.7;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            width: 100%;
+            padding: 16px;
+            background: var(--gold-gradient);
+            color: #000;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            text-align: center;
+            margin: 20px 0 0 0;
+            box-shadow: 0 10px 20px rgba(184, 134, 11, 0.4);
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(184, 134, 11, 0.5); }
+
+        .badge { 
+            position: absolute;
+            top: -10px;
+            font-size: 0.55rem; 
+            background: var(--secondary); 
+            color: #000; 
+            padding: 2px 8px; 
+            border-radius: 20px; 
+            font-weight: 800;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-bottom: 40px;
+        }
+
+        .version-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 1px;
+        }
+
+        /* Lang styles for specific fonts */
+        [data-lang="gujarati"] { font-family: 'Poppins', sans-serif; }
+        [data-lang="hindi"] { font-family: 'Tiro Devanagari Hindi', sans-serif; }
+
     </style>
 </head>
 <body>
-
-<div class="bg-glow" style="top: -100px; right: -100px;"></div>
 
 <div class="content-container">
     <div class="hero">
@@ -188,15 +278,15 @@
     <div class="tabs">
         <button class="tab-btn active" id="tabbtn-android" onclick="switchMode('android')">
             <span>🤖 Android</span>
-            <span class="label-small">Install</span>
+            <span class="label-small">Official App</span>
         </button>
         <button class="tab-btn" id="tabbtn-ios" onclick="switchMode('ios')">
             <span> iPhone</span>
-            <span class="label-small">Setup</span>
+            <span class="label-small">Configuration</span>
         </button>
         <button class="tab-btn" id="tabbtn-tour" onclick="switchMode('tour')">
             <span>✨ Tour</span>
-            <span class="label-small">App Guide</span>
+            <span class="label-small">Guide Menu</span>
         </button>
     </div>
 
@@ -204,7 +294,7 @@
     <div id="android-view" class="section active">
         <div class="card">
             <div class="card-header">
-                <div class="card-icon">1️⃣</div>
+                <div class="card-icon">01</div>
                 <div class="card-title">
                     <span data-lang="gujarati" class="show-lang">પ્લે સ્ટોર પર જાવ</span>
                     <span data-lang="hindi">प्ले स्टोर पर जाएं</span>
@@ -216,15 +306,15 @@
                 <span data-lang="hindi">नीचे दिए गए बटन पर क्लिक करें। यह आपको गूगल प्ले स्टोर पर ले जाएगा।</span>
                 <span data-lang="english">Click the button below to visit the official Google Play Store page.</span>
             </p>
-            <a href="https://play.google.com/store/apps/details?id=com.monishgori.shrisodevpirdada" target="_blank" class="cta-btn">INSTALL NOW</a>
+            <a href="https://play.google.com/store/apps/details?id=com.monishgori.shrisodevpirdada" target="_blank" class="cta-btn">INSTALL APP</a>
         </div>
         <div class="card">
             <div class="card-header">
-                <div class="card-icon">2️⃣</div>
+                <div class="card-icon">02</div>
                 <div class="card-title">
                     <span data-lang="gujarati" class="show-lang">એપ શરૂ કરો</span>
                     <span data-lang="hindi">ऐप शुरू करें</span>
-                    <span data-lang="english">Launch App</span>
+                    <span data-lang="english">Launch Experience</span>
                 </div>
             </div>
             <p class="card-desc">
@@ -239,11 +329,11 @@
     <div id="ios-view" class="section">
         <div class="card">
             <div class="card-header">
-                <div class="card-icon">1️⃣</div>
+                <div class="card-icon">01</div>
                 <div class="card-title">
                     <span data-lang="gujarati" class="show-lang">Safari માં લિંક ખોલો</span>
                     <span data-lang="hindi">Safari में लिंक खोलें</span>
-                    <span data-lang="english">Open in Safari</span>
+                    <span data-lang="english">Access via Safari</span>
                 </div>
             </div>
             <p class="card-desc">
@@ -254,11 +344,11 @@
         </div>
         <div class="card">
             <div class="card-header">
-                <div class="card-icon">2️⃣</div>
+                <div class="card-icon">02</div>
                 <div class="card-title">
                     <span data-lang="gujarati" class="show-lang">'Share' બટન દબાવો</span>
                     <span data-lang="hindi">'Share' बटन दबाएं</span>
-                    <span data-lang="english">Tap Share Icon</span>
+                    <span data-lang="english">Locate Share Icon</span>
                 </div>
             </div>
             <p class="card-desc">
@@ -269,11 +359,11 @@
         </div>
         <div class="card">
             <div class="card-header">
-                <div class="card-icon">3️⃣</div>
+                <div class="card-icon">03</div>
                 <div class="card-title">
                     <span data-lang="gujarati" class="show-lang">Home Screen માં ઉમેરો</span>
                     <span data-lang="hindi">Home Screen में जोड़ें</span>
-                    <span data-lang="english">Add to Home Screen</span>
+                    <span data-lang="english">Add to Desktop</span>
                 </div>
             </div>
             <p class="card-desc">
@@ -282,7 +372,7 @@
                 <span data-lang="english">Scroll down and tap 'Add to Home Screen' (+ icon).</span>
             </p>
         </div>
-        <a href="https://shrisodevpirdada.vercel.app/" target="_blank" class="cta-btn">OPEN WEB VERSION</a>
+        <a href="https://shrisodevpirdada.vercel.app/" target="_blank" class="cta-btn" style="background: var(--glass-bg); color: #fff; box-shadow: none; border: 1px solid var(--secondary)">START ONLINE VERSION</a>
     </div>
 
     <!-- App Tour -->
@@ -293,7 +383,7 @@
                 <div class="card-title">
                     <span data-lang="gujarati" class="show-lang">મેનુ ક્યાં છે?</span>
                     <span data-lang="hindi">मेनू कहाँ है?</span>
-                    <span data-lang="english">Main Menu</span>
+                    <span data-lang="english">Accessing Menu</span>
                 </div>
             </div>
             <p class="card-desc">
@@ -308,7 +398,7 @@
                 <div class="card-title">
                     <span data-lang="gujarati" class="show-lang">ભક્તિ સાધનો</span>
                     <span data-lang="hindi">भक्ति साधन</span>
-                    <span data-lang="english">Devotional Tools</span>
+                    <span data-lang="english">Divine Offerings</span>
                 </div>
             </div>
             <p class="card-desc">
@@ -323,7 +413,7 @@
                 <div class="card-title">
                     <span data-lang="gujarati" class="show-lang">ભજન અને મંત્ર</span>
                     <span data-lang="hindi">भजन और मंत्र</span>
-                    <span data-lang="english">Bhajans & Mantras</span>
+                    <span data-lang="english">Sacred Music</span>
                 </div>
             </div>
             <p class="card-desc">
@@ -338,7 +428,7 @@
                 <div class="card-title">
                     <span data-lang="gujarati" class="show-lang">ભાષા અને રીમાઇન્ડર</span>
                     <span data-lang="hindi">भाषा और रिमाइंडर</span>
-                    <span data-lang="english">Settings</span>
+                    <span data-lang="english">Settings Hub</span>
                 </div>
             </div>
             <p class="card-desc">
@@ -349,8 +439,8 @@
         </div>
     </div>
 
-    <div style="text-align: center; margin-top: 40px;">
-        <p style="font-size: 0.75rem; color: #666;">Vers 1.42 | Made with Love for Devotees</p>
+    <div class="footer">
+        <p class="version-tag">VERS 1.42 • PURE SACRED EXPERIENCE</p>
     </div>
 </div>
 
@@ -385,7 +475,7 @@
         const btn = document.getElementById('tabbtn-' + target);
         if (btn) {
             const badge = document.createElement('span');
-            badge.innerText = 'AUTO';
+            badge.innerText = 'AUTO STATUS';
             badge.className = 'badge';
             btn.appendChild(badge);
         }
