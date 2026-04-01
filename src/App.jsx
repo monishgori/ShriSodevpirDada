@@ -210,33 +210,6 @@ function App() {
     try { return localStorage.getItem('sodev_evening_time') || '18:30'; } catch { return '18:30'; }
   });
 
-  const [streak, setStreak] = useState(0);
-
-  // Daily Streak Logic
-  useEffect(() => {
-    const today = new Date().toISOString().split('T')[0];
-    const lastOpenDate = localStorage.getItem('sodev_last_open_date');
-    const currentStreak = Number(localStorage.getItem('sodev_streak')) || 0;
-
-    if (lastOpenDate === today) {
-      setStreak(currentStreak);
-    } else {
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-      const yesterdayStr = yesterday.toISOString().split('T')[0];
-
-      if (lastOpenDate === yesterdayStr) {
-        const newStreak = currentStreak + 1;
-        setStreak(newStreak);
-        localStorage.setItem('sodev_streak', newStreak.toString());
-      } else {
-        setStreak(1);
-        localStorage.setItem('sodev_streak', '1');
-      }
-      localStorage.setItem('sodev_last_open_date', today);
-    }
-  }, []);
-
   // Handle Notification Scheduling
   useEffect(() => {
     const setupNotifications = async () => {
@@ -432,23 +405,6 @@ function App() {
       }).catch(console.error);
     } else {
       alert("Sharing is not supported on this browser/device.");
-    }
-  };
-
-  const shareQuote = () => {
-    triggerHaptic();
-    const text = dailyQuote[language] || dailyQuote.hindi || dailyQuote.english;
-    const shareText = `🚩 Shri Sodevpir Dada 🚩\n\n"${text}"\n\nRead more daily wisdom on the official app:\nhttps://shrisodevpirdada.vercel.app/`;
-    
-    if (navigator.share) {
-      navigator.share({
-        title: 'Daily Wisdom',
-        text: shareText,
-      }).catch(console.error);
-    } else {
-      // Fallback: Copy to clipboard or WhatsApp link
-      const encoded = encodeURIComponent(shareText);
-      window.open(`https://wa.me/?text=${encoded}`, '_blank');
     }
   };
 
@@ -727,27 +683,15 @@ function App() {
           <div className="top-bar-side-content">
             <div className="header-greeting" onClick={() => setIsLyricsVisible(false)}>
               <div className={`greeting-text lang-${language}`}>{getGreeting()}</div>
-              {streak > 0 && (
-                <div className="streak-badge">
-                   <span className="streak-icon">🔥</span>
-                   <span className="streak-count">{streak}</span>
-                   <span className="streak-label">{language === 'gujarati' ? 'દિવસ શ્રેણી' : language === 'english' ? 'Day Streak' : 'दिनों की श्रेणी'}</span>
-                </div>
-              )}
             </div>
 
             {!isLyricsVisible && !isFocusMode && dailyQuote && (
               <div className="daily-quote-card glass-panel">
                 <div className="quote-header">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span className="quote-icon">❝</span>
-                    <span className="quote-label">
-                      {language === 'gujarati' ? 'આજનો વિચાર' : language === 'english' ? 'Thought of the Day' : 'आज का विचार'}
-                    </span>
-                  </div>
-                  <button className="quote-share-btn" onClick={(e) => { e.stopPropagation(); shareQuote(); }}>
-                    <span style={{ fontSize: '1.1rem' }}>➡️</span>
-                  </button>
+                  <span className="quote-icon">❝</span>
+                  <span className="quote-label">
+                    {language === 'gujarati' ? 'આજનો વિચાર' : language === 'english' ? 'Thought of the Day' : 'आज का विचार'}
+                  </span>
                 </div>
                 <div className="quote-content">
                   <div className="main-quote">
