@@ -567,13 +567,14 @@
 
     function detectMode() {
         const ua = navigator.userAgent.toLowerCase();
-        const isIos = /iphone|ipad|ipod/.test(ua);
-        const isAndroid = /android/.test(ua);
-        const isMobile = /mobile/.test(ua) || isIos || isAndroid;
+        const platform = (navigator.platform || "").toLowerCase();
+        const isIpadOsDesktopUa = /macintosh/.test(ua) && navigator.maxTouchPoints > 1;
+        const isIos = /iphone|ipad|ipod/.test(ua) || isIpadOsDesktopUa;
+        const isDesktopPlatform = /mac|win|linux/.test(platform) && !isIos;
+        const isAndroid = /android/.test(ua) && !isDesktopPlatform;
 
         if (isIos) return { mode: 'ios', manual: false };
         if (isAndroid) return { mode: 'android', manual: false };
-        if (!isMobile) return { mode: 'android', manual: true };
         return { mode: 'android', manual: true };
     }
 
