@@ -107,5 +107,14 @@ export const videos = [
             english: "Shri sodevapira dada kori ૨",
     youtubeId: "9psE9oAjraE",
     thumbnail: "https://img.youtube.com/vi/9psE9oAjraE/mqdefault.jpg"
+  },
+  {
+    id: 13,
+    title: "Shri Sodevpir Chalisa - Superfast Non-stop",
+    gujarati: "શ્રી સોદેવપીર ચાલીસા - સુપરફાસ્ટ નોન-સ્ટોપ",
+    hindi: "श्री सोदेवपीर चालीसा - सुपरफास्ट नॉन-स्टॉप",
+    english: "Shri Sodevpir Chalisa - Superfast Non-stop",
+    youtubeId: "mqw7P4snFvs",
+    thumbnail: "https://img.youtube.com/vi/mqw7P4snFvs/mqdefault.jpg"
   }
 ];
