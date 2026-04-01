@@ -120,6 +120,87 @@
             font-size: clamp(0.95rem, 2.2vw, 1.05rem);
         }
 
+        .onboarding {
+            background: linear-gradient(165deg, rgba(28, 17, 8, 0.9), rgba(15, 9, 4, 0.86));
+            border: 1px solid var(--card-edge);
+            border-radius: 24px;
+            padding: 18px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+            margin-bottom: 14px;
+        }
+
+        .onb-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.28rem;
+            color: #ffe3aa;
+            margin-bottom: 8px;
+        }
+
+        .onb-sub {
+            color: var(--text-soft);
+            font-size: 0.95rem;
+            margin-bottom: 14px;
+        }
+
+        .choice-label {
+            font-size: 0.76rem;
+            color: #ffdc98;
+            text-transform: uppercase;
+            letter-spacing: 1.4px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .choice-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .choice-grid.two {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .choice-btn {
+            border: 1px solid rgba(255, 221, 142, 0.35);
+            background: rgba(255, 221, 142, 0.08);
+            color: var(--text-main);
+            border-radius: 12px;
+            padding: 12px 10px;
+            font-size: 0.86rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .choice-btn.active {
+            background: linear-gradient(90deg, var(--gold-1), var(--gold-2));
+            color: #1f1308;
+            border-color: transparent;
+        }
+
+        .start-btn {
+            width: 100%;
+            border: 0;
+            border-radius: 12px;
+            padding: 14px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 800;
+            cursor: pointer;
+            background: linear-gradient(90deg, var(--gold-1), var(--gold-2));
+            color: #1c1107;
+        }
+
+        .start-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .device-focus {
             margin-top: 14px;
             border: 1px solid rgba(126, 240, 170, 0.45);
@@ -339,6 +420,13 @@
             padding: 7px 10px;
         }
 
+        body.preselect .guide-shell,
+        body.preselect .lang-orbit,
+        body.preselect .device-focus,
+        body.preselect .switch-wrap {
+            display: none;
+        }
+
         [data-lang]:not(.show-lang) { display: none !important; }
         [data-lang="hindi"] { font-family: 'Tiro Devanagari Hindi', serif; }
 
@@ -354,6 +442,7 @@
             }
 
             .hero,
+            .onboarding,
             .guide-shell {
                 border-radius: 18px;
             }
@@ -362,13 +451,21 @@
                 font-size: 2.15rem;
             }
 
+            .choice-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .choice-grid.two {
+                grid-template-columns: 1fr;
+            }
+
             .card-body {
                 font-size: 0.95rem;
             }
         }
     </style>
 </head>
-<body>
+<body class="preselect">
 <div class="bg-layer"></div>
 
 <div class="container">
@@ -381,13 +478,33 @@
             </div>
         </div>
 
-        <p class="hero-copy">First-time setup made simple for all ages. Follow only your device guide and start your devotional journey without confusion.</p>
+        <p class="hero-copy">First-time setup made simple for all ages. Choose your language and device first, then follow only that guide.</p>
 
-        <div class="device-focus" id="device-focus-msg">Detecting your device guide...</div>
+        <div class="device-focus" id="device-focus-msg">Guide ready.</div>
 
         <div class="switch-wrap">
             <button class="switch-btn" id="switch-guide-btn" type="button" onclick="toggleGuideChooser()">Using another phone? Change guide</button>
         </div>
+    </div>
+
+    <div class="onboarding" id="onboarding">
+        <h2 class="onb-title">Start Here</h2>
+        <p class="onb-sub">Please choose language and device before reading the guide.</p>
+
+        <div class="choice-label">1) Choose Language</div>
+        <div class="choice-grid" id="language-choice-grid">
+            <button class="choice-btn" type="button" id="lang-choice-gujarati" onclick="setPreLanguage('gujarati')">ગુજરાતી</button>
+            <button class="choice-btn" type="button" id="lang-choice-hindi" onclick="setPreLanguage('hindi')">हिंदी</button>
+            <button class="choice-btn" type="button" id="lang-choice-english" onclick="setPreLanguage('english')">English</button>
+        </div>
+
+        <div class="choice-label">2) Choose Device</div>
+        <div class="choice-grid two" id="device-choice-grid">
+            <button class="choice-btn" type="button" id="device-choice-android" onclick="setPreDevice('android')">Android (Play Store)</button>
+            <button class="choice-btn" type="button" id="device-choice-ios" onclick="setPreDevice('ios')">iPhone (Safari)</button>
+        </div>
+
+        <button class="start-btn" id="start-guide-btn" type="button" onclick="startGuide()" disabled>Continue to Guide</button>
     </div>
 
     <div class="guide-shell">
@@ -539,6 +656,9 @@
 </div>
 
 <script>
+    let selectedLang = null;
+    let selectedDevice = null;
+
     function changeLang(lang) {
         document.querySelectorAll('[data-lang]').forEach((el) => {
             el.classList.remove('show-lang');
@@ -551,6 +671,24 @@
         if (lang === 'english') document.getElementById('o-eng').classList.add('active');
 
         localStorage.setItem('guide_lang', lang);
+    }
+
+    function setPreLanguage(lang) {
+        selectedLang = lang;
+        document.querySelectorAll('#language-choice-grid .choice-btn').forEach((el) => el.classList.remove('active'));
+        document.getElementById('lang-choice-' + lang).classList.add('active');
+        updateStartButton();
+    }
+
+    function setPreDevice(device) {
+        selectedDevice = device;
+        document.querySelectorAll('#device-choice-grid .choice-btn').forEach((el) => el.classList.remove('active'));
+        document.getElementById('device-choice-' + device).classList.add('active');
+        updateStartButton();
+    }
+
+    function updateStartButton() {
+        document.getElementById('start-guide-btn').disabled = !(selectedLang && selectedDevice);
     }
 
     function switchMode(mode) {
@@ -567,43 +705,47 @@
 
     function detectMode() {
         const ua = navigator.userAgent.toLowerCase();
-        const platform = (navigator.platform || "").toLowerCase();
+        const platform = (navigator.platform || '').toLowerCase();
         const isIpadOsDesktopUa = /macintosh/.test(ua) && navigator.maxTouchPoints > 1;
         const isIos = /iphone|ipad|ipod/.test(ua) || isIpadOsDesktopUa;
         const isDesktopPlatform = /mac|win|linux/.test(platform) && !isIos;
         const isAndroid = /android/.test(ua) && !isDesktopPlatform;
 
-        if (isIos) return { mode: 'ios', manual: false };
-        if (isAndroid) return { mode: 'android', manual: false };
-        return { mode: 'android', manual: true };
+        if (isIos) return 'ios';
+        if (isAndroid) return 'android';
+        return 'android';
     }
 
-    function setFocusMessage(mode, manual) {
+    function setFocusMessage(mode) {
         const focus = document.getElementById('device-focus-msg');
         const tag = document.getElementById('auto-tag');
 
         if (mode === 'ios') {
-            focus.textContent = 'Detected iPhone: Please follow iPhone Guide below.';
-            tag.innerText = 'DETECTED : IPHONE SAFARI FLOW';
-        } else if (manual) {
-            focus.textContent = 'Please select your device guide below.';
-            tag.innerText = 'DETECTED : MANUAL GUIDE SELECTION';
-            document.getElementById('selector-pills').classList.remove('collapsed');
+            focus.textContent = 'Selected iPhone guide. Please follow Safari steps below.';
+            tag.innerText = 'SELECTED : IPHONE SAFARI FLOW';
         } else {
-            focus.textContent = 'Detected Android: Please follow Android App Guide below.';
-            tag.innerText = 'DETECTED : ANDROID PLAY STORE FLOW';
+            focus.textContent = 'Selected Android guide. Please follow Play Store steps below.';
+            tag.innerText = 'SELECTED : ANDROID PLAY STORE FLOW';
         }
 
         tag.className = 'auto-chip';
     }
 
+    function startGuide() {
+        if (!selectedLang || !selectedDevice) return;
+
+        changeLang(selectedLang);
+        switchMode(selectedDevice);
+        setFocusMessage(selectedDevice);
+
+        document.body.classList.remove('preselect');
+        document.getElementById('selector-pills').classList.add('collapsed');
+    }
+
     window.onload = () => {
         const savedLang = localStorage.getItem('guide_lang') || 'gujarati';
-        changeLang(savedLang);
-
-        const detection = detectMode();
-        switchMode(detection.mode);
-        setFocusMessage(detection.mode, detection.manual);
+        setPreLanguage(savedLang);
+        updateStartButton();
     };
 </script>
 </body>
