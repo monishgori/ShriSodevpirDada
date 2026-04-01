@@ -11,7 +11,7 @@ export const aartis = [
         id: "a2",
         name: "Verse 1",
         gujarati: "શ્રી સોદેવપીર દાદા પીર અવતારી, સદા સમાધીમાં મગ્ન રહે\nઅલખ નિરંજન સબ દું:ખ ભંજન, નાદ નિરંજન જાપ જપે\nશ્રી સોદવજી શિવશંકર નું તપ કરે, માં રૂપાંદે પીરજી સંઘ ધ્યાન ધરે\nશ્રી સદગુરું અલખનો આરાધ કરે, જય જય સોદવપીર",
-        hindi: "श्री सोदेवपीर दादा पीर अवतारी, सदा समाधि में मग्न रहे\nअलख निरंजन सब दुःख भंजन, नाद निरंजन जाप जपे\nश्री सोदेवजी शिवशंकर का तप करें, माँ रूपांदे पीरजी संग ध्यान धरें\nश्री सद्गुरु अलख का आराध करें, जय जय सोदेवपीर",
+        hindi: "श्री सोदेवपीर दादा पीर अवतारी, सदा समाधि में मग्न रहें\nअलख निरंजन सब दुःख भंजन, नाद निरंजन जाप जपें\nश्री सोदेवजी शिवशंकर का तप करें, माँ रूपांदे पीरजी संग ध्यान धरें\nश्री सद्गुरु अलख का आराध करें, जय जय सोदेवपीर",
         english: "Shri Sodevpir Dada Peer avatari, sada samadhi maa magna rahe\nAlakh niranjan sab dukh bhanjan, naad niranjan jaap jape\nShri Sodevji Shivshankar nu tap kare, Maa Roopande Peerji sang dhyan dhare\nShri Sadguru alakh no aaradh kare, Jai Jai Sodevpir"
     },
     {
