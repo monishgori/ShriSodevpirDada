@@ -2,7 +2,7 @@
   --primary: hsl(28, 100%, 60%);
   --secondary: hsl(45, 100%, 55%);
   --accent: hsl(50, 100%, 70%);
-  --bg-dark: hsl(0, 0%, 4%);
+  --bg-dark: hsl(15, 60%, 4%); /* Deep Sacred Mahogany */
   --glass: hsla(0, 0%, 100%, 0.05);
   --glass-heavy: hsla(0, 0%, 0%, 0.85);
   --glass-border: hsla(0, 0%, 100%, 0.12);
@@ -18,7 +18,8 @@
 }
 
 body {
-  background-color: var(--bg-dark);
+  background: radial-gradient(circle at 50% 20%, hsl(20, 80%, 10%), var(--bg-dark));
+  background-attachment: fixed;
   color: var(--text-primary);
   overflow: hidden;
   height: 100vh;
@@ -123,7 +124,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 50% 10%, hsla(28, 100%, 50%, 0.15) 0%, var(--bg-dark) 85%);
+  background: radial-gradient(circle at 50% 15%, hsla(28, 100%, 50%, 0.2) 0%, hsla(10, 80%, 5%, 0.9) 85%);
   z-index: 0;
   pointer-events: none;
 }
