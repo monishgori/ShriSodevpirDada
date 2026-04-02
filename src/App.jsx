@@ -19,9 +19,9 @@ const ImpactStyle = {
 };
 
 // Memoized Library Tray to prevent jumping/flickering on re-renders (Critical for iOS Safari)
-const DevotionalLibrary = React.memo(({ 
+const DevotionalLibrary = React.memo(({
   isLibraryOpen, setIsLibraryOpen, language, startReading, morningToggle, eveningToggle, isMorningOn, isEveningOn,
-  morningTime, setMorningTime, eveningTime, setEveningTime 
+  morningTime, setMorningTime, eveningTime, setEveningTime
 }) => {
   return (
     <>
@@ -37,50 +37,50 @@ const DevotionalLibrary = React.memo(({
 
         <div className="library-grid">
           <button className="library-card" onClick={(e) => { e.stopPropagation(); startReading('chalisa'); }}>
-            
+
             <span className="lib-hindi">
-               {language === 'gujarati' ? 'સોદેવ ચાલીસા' : language === 'english' ? 'Sodev Chalisa' : 'सोदेव चालीसा'}
+              {language === 'gujarati' ? 'સોદેવ ચાલીસા' : language === 'english' ? 'Sodev Chalisa' : 'सोदेव चालीसा'}
             </span>
             <span className="lib-eng">CHALISA</span>
           </button>
           <button className="library-card" onClick={(e) => { e.stopPropagation(); startReading('mantras'); }}>
-            
+
             <span className="lib-hindi">
-               {language === 'gujarati' ? 'સિદ્ધ મંત્ર' : language === 'english' ? 'Siddh Mantras' : 'सिद्ध मंत्र'}
+              {language === 'gujarati' ? 'સિદ્ધ મંત્ર' : language === 'english' ? 'Siddh Mantras' : 'सिद्ध मंत्र'}
             </span>
             <span className="lib-eng">MANTRAS</span>
           </button>
           <button className="library-card" onClick={(e) => { e.stopPropagation(); startReading('bhajans'); }}>
-            
+
             <span className="lib-hindi">
-               {language === 'gujarati' ? 'ભજન સંગ્રહ' : language === 'english' ? 'Bhajan Sangrah' : 'भजन संग्रह'}
+              {language === 'gujarati' ? 'ભજન સંગ્રહ' : language === 'english' ? 'Bhajan Sangrah' : 'भजन संग्रह'}
             </span>
             <span className="lib-eng">BHAJANS</span>
           </button>
           <button className="library-card" onClick={(e) => { e.stopPropagation(); startReading('aartis'); }}>
-            
+
             <span className="lib-hindi">
-               {language === 'gujarati' ? 'સોદેવ આરતી' : language === 'english' ? 'Sodev Aarti' : 'सोदेव आरती'}
+              {language === 'gujarati' ? 'સોદેવ આરતી' : language === 'english' ? 'Sodev Aarti' : 'सोदेव आरती'}
             </span>
             <span className="lib-eng">AARTI</span>
           </button>
           <button className="library-card" onClick={(e) => { e.stopPropagation(); startReading('stutis'); }}>
-            
+
             <span className="lib-hindi">
-               {language === 'gujarati' ? 'સોદેવ સ્તુતિ' : language === 'english' ? 'Sodev Stuti' : 'सोदेव स्तुति'}
+              {language === 'gujarati' ? 'સોદેવ સ્તુતિ' : language === 'english' ? 'Sodev Stuti' : 'सोदेव स्तुति'}
             </span>
             <span className="lib-eng">STUTI</span>
           </button>
           <button className="library-card" onClick={(e) => { e.stopPropagation(); startReading('history'); }}>
-            
+
             <span className="lib-hindi">
-               {language === 'gujarati' ? 'જીવન ચરિત્ર' : language === 'english' ? 'Life History' : 'जीवन चरित्र'}
+              {language === 'gujarati' ? 'જીવન ચરિત્ર' : language === 'english' ? 'Life History' : 'जीवन चरित्र'}
             </span>
             <span className="lib-eng">HISTORY</span>
           </button>
           <button className="library-card library-card-wide" onClick={(e) => { e.stopPropagation(); startReading('videos'); }}>
             <div className="wide-card-content">
-              
+
               <div className="wide-text">
                 <span className="lib-hindi" style={{ fontSize: '1.3rem' }}>
                   {language === 'gujarati' ? 'યુટ્યુબ ભક્તિ' : language === 'english' ? 'YouTube Devotional' : 'यूट्यूब भक्ति'}
@@ -95,57 +95,57 @@ const DevotionalLibrary = React.memo(({
           <div style={{ color: 'var(--secondary)', fontSize: '0.85rem', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '1px' }}>
             {language === 'gujarati' ? 'દૈનિક સૂચનાઓ (Reminders)' : language === 'english' ? 'Daily Reminders' : 'दैनिक सूचनाएं (Reminders)'}
           </div>
-          
+
           <div className="setting-row glass-panel" style={{ display: 'flex', flexDirection: 'column', padding: '12px 15px', marginBottom: '10px', borderRadius: '15px' }}>
-             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-               <div style={{ color: '#fff', fontSize: '0.9rem' }}>
-                  <span style={{ fontSize: '1.2rem', marginRight: '8px' }}>🌅</span> 
-                  {language === 'gujarati' ? 'આજનો વિચાર' : language === 'english' ? 'Morning Quote' : 'सुबह का विचार'}
-               </div>
-               <div className={`switch ${isMorningOn ? 'on' : ''}`} onClick={(e) => { e.stopPropagation(); morningToggle(!isMorningOn); }}>
-                  <div className="switch-knob"></div>
-               </div>
-             </div>
-             {isMorningOn && (
-                <div className="time-picker-row" style={{ marginTop: '12px', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--secondary)' }}>
-                    {language === 'gujarati' ? 'સમય પસંદ કરો:' : language === 'english' ? 'Select Time:' : 'समय चुनें:'}
-                  </span>
-                  <input 
-                    type="time" 
-                    value={morningTime} 
-                    onChange={(e) => setMorningTime(e.target.value)}
-                    className="settings-time-input"
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                </div>
-             )}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+              <div style={{ color: '#fff', fontSize: '0.9rem' }}>
+                <span style={{ fontSize: '1.2rem', marginRight: '8px' }}>🌅</span>
+                {language === 'gujarati' ? 'આજનો વિચાર' : language === 'english' ? 'Morning Quote' : 'सुबह का विचार'}
+              </div>
+              <div className={`switch ${isMorningOn ? 'on' : ''}`} onClick={(e) => { e.stopPropagation(); morningToggle(!isMorningOn); }}>
+                <div className="switch-knob"></div>
+              </div>
+            </div>
+            {isMorningOn && (
+              <div className="time-picker-row" style={{ marginTop: '12px', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--secondary)' }}>
+                  {language === 'gujarati' ? 'સમય પસંદ કરો:' : language === 'english' ? 'Select Time:' : 'समय चुनें:'}
+                </span>
+                <input
+                  type="time"
+                  value={morningTime}
+                  onChange={(e) => setMorningTime(e.target.value)}
+                  className="settings-time-input"
+                  onClick={(e) => e.stopPropagation()}
+                />
+              </div>
+            )}
           </div>
 
           <div className="setting-row glass-panel" style={{ display: 'flex', flexDirection: 'column', padding: '12px 15px', borderRadius: '15px' }}>
-             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-               <div style={{ color: '#fff', fontSize: '0.9rem' }}>
-                  <span style={{ fontSize: '1.2rem', marginRight: '8px' }}>🪔</span> 
-                  {language === 'gujarati' ? 'સાંજ ની આરતી' : language === 'english' ? 'Evening Aarti' : 'शाम की आरती'}
-               </div>
-               <div className={`switch ${isEveningOn ? 'on' : ''}`} onClick={(e) => { e.stopPropagation(); eveningToggle(!isEveningOn); }}>
-                  <div className="switch-knob"></div>
-               </div>
-             </div>
-             {isEveningOn && (
-                <div className="time-picker-row" style={{ marginTop: '12px', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--secondary)' }}>
-                    {language === 'gujarati' ? 'સમય પસંદ કરો:' : language === 'english' ? 'Select Time:' : 'समय चुनें:'}
-                  </span>
-                  <input 
-                    type="time" 
-                    value={eveningTime} 
-                    onChange={(e) => setEveningTime(e.target.value)}
-                    className="settings-time-input"
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                </div>
-              )}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+              <div style={{ color: '#fff', fontSize: '0.9rem' }}>
+                <span style={{ fontSize: '1.2rem', marginRight: '8px' }}>🪔</span>
+                {language === 'gujarati' ? 'સાંજ ની આરતી' : language === 'english' ? 'Evening Aarti' : 'शाम की आरती'}
+              </div>
+              <div className={`switch ${isEveningOn ? 'on' : ''}`} onClick={(e) => { e.stopPropagation(); eveningToggle(!isEveningOn); }}>
+                <div className="switch-knob"></div>
+              </div>
+            </div>
+            {isEveningOn && (
+              <div className="time-picker-row" style={{ marginTop: '12px', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--secondary)' }}>
+                  {language === 'gujarati' ? 'સમય પસંદ કરો:' : language === 'english' ? 'Select Time:' : 'समय चुनें:'}
+                </span>
+                <input
+                  type="time"
+                  value={eveningTime}
+                  onChange={(e) => setEveningTime(e.target.value)}
+                  className="settings-time-input"
+                  onClick={(e) => e.stopPropagation()}
+                />
+              </div>
+            )}
           </div>
         </div>
 
@@ -219,55 +219,55 @@ function App() {
           if (morningNotification || eveningNotification) {
             const reqStatus = await LocalNotifications.requestPermissions();
             if (reqStatus.display !== 'granted') {
-               console.log('Permission not granted for notifications');
-               setMorningNotification(false);
-               setEveningNotification(false);
-               return;
+              console.log('Permission not granted for notifications');
+              setMorningNotification(false);
+              setEveningNotification(false);
+              return;
             }
           } else {
-             return; // no perms and not trying to turn on
+            return; // no perms and not trying to turn on
           }
         }
 
         // Cancel existing
         const pending = await LocalNotifications.getPending();
         if (pending.notifications.length > 0) {
-            await LocalNotifications.cancel({ notifications: pending.notifications.map(n => ({ id: n.id })) });
+          await LocalNotifications.cancel({ notifications: pending.notifications.map(n => ({ id: n.id })) });
         }
 
         const notificationsList = [];
 
         if (morningNotification) {
-            const [h, m] = morningTime.split(':').map(Number);
-            const quoteText = dailyQuote[language] || dailyQuote.hindi || "";
-            const snippet = quoteText.length > 50 ? quoteText.substring(0, 50) + "..." : quoteText;
-            
-            notificationsList.push({
-                title: language === 'gujarati' ? 'શુભ પ્રભાત ધન્ય દિવસ! 🌅' : language === 'english' ? 'Good Morning! 🌅' : 'शुभ प्रभात धन्य दिन! 🌅',
-                body: snippet || (language === 'gujarati' ? 'તમારો આજનો વિચાર વાંચવા માટે ટચ કરો.' : language === 'english' ? 'Tap to read your thought of the day.' : 'आज का विचार पढ़ने के लिए टैप करें।'),
-                id: 1,
-                schedule: { on: { hour: h, minute: m }, allowWhileIdle: true }
-            });
+          const [h, m] = morningTime.split(':').map(Number);
+          const quoteText = dailyQuote[language] || dailyQuote.hindi || "";
+          const snippet = quoteText.length > 50 ? quoteText.substring(0, 50) + "..." : quoteText;
+
+          notificationsList.push({
+            title: language === 'gujarati' ? 'શુભ પ્રભાત ધન્ય દિવસ! 🌅' : language === 'english' ? 'Good Morning! 🌅' : 'शुभ प्रभात धन्य दिन! 🌅',
+            body: snippet || (language === 'gujarati' ? 'તમારો આજનો વિચાર વાંચવા માટે ટચ કરો.' : language === 'english' ? 'Tap to read your thought of the day.' : 'आज का विचार पढ़ने के लिए टैप करें।'),
+            id: 1,
+            schedule: { on: { hour: h, minute: m }, allowWhileIdle: true }
+          });
         }
 
         if (eveningNotification) {
-            const [h, m] = eveningTime.split(':').map(Number);
-            notificationsList.push({
-                title: language === 'gujarati' ? 'આરતી નો સમય' : language === 'english' ? 'Evening Aarti Time' : 'आरती का समय',
-                body: language === 'gujarati' ? 'શ્રી સોદેવપીર દાદા ની સાંજની આરતી કરવાનો સમય થઈ ગયો છે.' : language === 'english' ? 'It is time for Shri Sodevpir Dada evening Aarti.' : 'श्री सोदेवपीर दादा की शाम की आरती का समय हो गया है।',
-                id: 2,
-                schedule: { on: { hour: h, minute: m }, allowWhileIdle: true }
-            });
+          const [h, m] = eveningTime.split(':').map(Number);
+          notificationsList.push({
+            title: language === 'gujarati' ? 'આરતી નો સમય' : language === 'english' ? 'Evening Aarti Time' : 'आरती का समय',
+            body: language === 'gujarati' ? 'શ્રી સોદેવપીર દાદા ની સાંજની આરતી કરવાનો સમય થઈ ગયો છે.' : language === 'english' ? 'It is time for Shri Sodevpir Dada evening Aarti.' : 'श्री सोदेवपीर दादा की शाम की आरती का समय हो गया है।',
+            id: 2,
+            schedule: { on: { hour: h, minute: m }, allowWhileIdle: true }
+          });
         }
 
         if (notificationsList.length > 0) {
-           await LocalNotifications.schedule({ notifications: notificationsList });
+          await LocalNotifications.schedule({ notifications: notificationsList });
         }
       } catch (e) {
-         console.log('Notification setup failed', e);
+        console.log('Notification setup failed', e);
       }
     };
-    
+
     setupNotifications();
     localStorage.setItem('sodev_morning_notif', morningNotification.toString());
     localStorage.setItem('sodev_evening_notif', eveningNotification.toString());
@@ -312,21 +312,21 @@ function App() {
         // 🛡️ INDEPENDENT BANNER
         try {
           await AdMob.showBanner({
-            adId: 'ca-app-pub-5914382038291713/2444272147', 
-            adSize: BannerAdSize.ADAPTIVE_BANNER, 
+            adId: 'ca-app-pub-5914382038291713/2444272147',
+            adSize: BannerAdSize.ADAPTIVE_BANNER,
             position: BannerAdPosition.BOTTOM_CENTER,
             margin: 0,
             isTesting: false
           });
           console.log("AdMob: Production Banner Loaded ✅");
-        } catch (bannerErr) { 
-          console.error("AdMob Banner Error Details:", bannerErr); 
+        } catch (bannerErr) {
+          console.error("AdMob Banner Error Details:", bannerErr);
           window.lastBannerError = bannerErr.message;
         }
 
         // 🚀 NOTE: App Open Ads are not supported in @capacitor-community/admob v8 yet.
         // Interstitial ads can be used as a full-screen alternative if needed.
-        
+
       } catch (e) { console.warn("AdMob Global Error:", e.message); }
     };
     prepareAds();
@@ -862,8 +862,8 @@ function App() {
             <div className="top-actions-row">
               <div className="back-btn glass-panel" onClick={() => setIsLyricsVisible(false)}>
                 <span className="back-icon">←</span> {
-                  language === 'gujarati' ? 'વાંચન બંધ કરો' : 
-                  language === 'english' ? 'Close Reading' : 'पठन बंद करें'
+                  language === 'gujarati' ? 'વાંચન બંધ કરો' :
+                    language === 'english' ? 'Close Reading' : 'पठन बंद करें'
                 }
               </div>
               {currentMode === 'history' && historyView !== 'menu' && (
@@ -876,8 +876,8 @@ function App() {
                   triggerHaptic();
                 }}>
                   <span className="back-icon">↺</span> {
-                    language === 'gujarati' ? 'પાછા જાઓ' : 
-                    language === 'english' ? 'Go Back' : 'वापस जाएं'
+                    language === 'gujarati' ? 'પાછા જાઓ' :
+                      language === 'english' ? 'Go Back' : 'वापस जाएं'
                   }
                 </div>
               )}
@@ -886,43 +886,43 @@ function App() {
             <div className="page-header">
               <div className="page-title">
                 {language === 'gujarati' ? (
-                  currentMode === 'chalisa' ? 'સોદેવ ચાલીસા' :
-                    currentMode === 'mantras' ? 'સિદ્ધ મંત્ર સંગ્રહ' :
-                      currentMode === 'bhajans' ? 'ભજન સંગ્રહ' :
-                        currentMode === 'aartis' ? 'સોદેવ આરતી' :
-                          currentMode === 'stutis' ? 'સોદેવ સ્તુતિ' :
+                  currentMode === 'chalisa' ? 'દાદા ની ચાલીસા' :
+                    currentMode === 'mantras' ? 'દાદા ના સિદ્ધ મંત્ર' :
+                      currentMode === 'bhajans' ? 'દાદા ના ભજન' :
+                        currentMode === 'aartis' ? 'દાદા ની આરતી' :
+                          currentMode === 'stutis' ? 'દાદા ની સ્તુતિ' :
                             currentMode === 'history' ? (
-                              historyView === 'menu' ? 'શ્રી સોદેવપીર ઇતિહાસ' :
-                                historyView === 'lifeStory' ? 'શ્રી સોદેવપીર જીવન ચરિત્ર' :
-                                  historyView === 'incidentDetail' && activeIncidentIndex !== null ? historyData.incidents[activeIncidentIndex].title[language] : 'દાદાના ચમત્કારો'
+                              historyView === 'menu' ? 'દાદા નો ઇતિહાસ' :
+                                historyView === 'lifeStory' ? 'દાદા ની જીવન કથા' :
+                                  historyView === 'incidentDetail' && activeIncidentIndex !== null ? historyData.incidents[activeIncidentIndex].title[language] : 'દાદા ના ચમત્કારો'
                             ) :
-                              currentMode === 'videos' ? 'સોદેવપીર દર્શન' :
+                              currentMode === 'videos' ? 'દાદા ના દર્શન' :
                                 currentMode === 'policy' ? 'ગોપનીયતા નીતિ' : 'સોદેવ પૂજા'
                 ) : language === 'english' ? (
-                  currentMode === 'chalisa' ? 'Sodev Chalisa' :
-                    currentMode === 'mantras' ? 'Siddh Mantra Collection' :
-                      currentMode === 'bhajans' ? 'Bhajan Collection' :
-                        currentMode === 'aartis' ? 'Sodev Aarti' :
-                          currentMode === 'stutis' ? 'Sodev Stuti' :
+                  currentMode === 'chalisa' ? 'Dada Ni Chalisa' :
+                    currentMode === 'mantras' ? 'Dada Na Siddh Mantra' :
+                      currentMode === 'bhajans' ? 'Dada Na Bhajan' :
+                        currentMode === 'aartis' ? 'Dada Ni Aarti' :
+                          currentMode === 'stutis' ? 'Dada Ni Stuti' :
                             currentMode === 'history' ? (
-                              historyView === 'menu' ? 'Sodevpir History' :
-                                historyView === 'lifeStory' ? 'Sodevpir Life Story' :
-                                  historyView === 'incidentDetail' && activeIncidentIndex !== null ? historyData.incidents[activeIncidentIndex].title[language] : 'Life Miracles'
+                              historyView === 'menu' ? 'Dada Ni History' :
+                                historyView === 'lifeStory' ? 'Dada Ni Life Story' :
+                                  historyView === 'incidentDetail' && activeIncidentIndex !== null ? historyData.incidents[activeIncidentIndex].title[language] : 'Dada Na Miracles'
                             ) :
-                              currentMode === 'videos' ? 'Sodevpir Darshan' :
+                              currentMode === 'videos' ? 'Dada Na Darshan' :
                                 currentMode === 'policy' ? 'Privacy Policy' : 'Sodev Pooja'
                 ) : (
-                  currentMode === 'chalisa' ? 'सोदेव चालीसा' :
-                    currentMode === 'mantras' ? 'सिद्ध मंत्र संग्रह' :
-                      currentMode === 'bhajans' ? 'भजन संग्रह' :
-                        currentMode === 'aartis' ? 'सोदेव आरती' :
-                          currentMode === 'stutis' ? 'सोदेव स्तुति' :
+                  currentMode === 'chalisa' ? 'दादा की चालीसा' :
+                    currentMode === 'mantras' ? 'दादा के सिद्ध मंत्र' :
+                      currentMode === 'bhajans' ? 'दादा के भजन' :
+                        currentMode === 'aartis' ? 'दादा की आरती' :
+                          currentMode === 'stutis' ? 'दादा की स्तुति' :
                             currentMode === 'history' ? (
-                              historyView === 'menu' ? 'श्री सोदेवपीर इतिहास' :
-                                historyView === 'lifeStory' ? 'श्री सोदेवपीर जीवन चरित्र' :
+                              historyView === 'menu' ? 'दादा का इतिहास' :
+                                historyView === 'lifeStory' ? 'दादा की जीवन कथा' :
                                   historyView === 'incidentDetail' && activeIncidentIndex !== null ? historyData.incidents[activeIncidentIndex].title[language] : 'दादा के चमत्कार'
                             ) :
-                              currentMode === 'videos' ? 'सोदेवपीर दर्शन' :
+                              currentMode === 'videos' ? 'दादा के दर्शन' :
                                 currentMode === 'policy' ? 'गोपनीयता नीति' : 'सोदेव पूजा'
                 )}
               </div>
@@ -933,8 +933,8 @@ function App() {
                   </div>
                 )}
                 {currentMode === 'videos' && (
-                  language === 'gujarati' ? 'સોદેવપીર દર્શન સંગ્રહ' : 
-                  language === 'english' ? 'Sodevpir Darshan Collection' : 'सोदेवपीर दर्शन संग्रह'
+                  language === 'gujarati' ? 'સોદેવપીર દર્શન સંગ્રહ' :
+                    language === 'english' ? 'Sodevpir Darshan Collection' : 'सोदेवपीर दर्शन संग्रह'
                 )}
               </div>
             </div>
@@ -960,8 +960,8 @@ function App() {
                 >
                   <div style={{ color: 'var(--secondary)', fontSize: '0.9rem', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '1px' }}>
                     {mantra.name} {activeItemIndex === index && (
-                      language === 'gujarati' ? ' (પસંદ કરેલ)' : 
-                      language === 'english' ? ' (Selected)' : ' (चयनित)'
+                      language === 'gujarati' ? ' (પસંદ કરેલ)' :
+                        language === 'english' ? ' (Selected)' : ' (चयनित)'
                     )}
                   </div>
                   <div className="hindi-text" style={{ fontSize: '1.2rem' }}>
@@ -984,8 +984,8 @@ function App() {
                 >
                   <div style={{ color: 'var(--secondary)', fontSize: '0.9rem' }}>
                     {bhajan[language] || bhajan.name} {activeItemIndex === index && (
-                      language === 'gujarati' ? ' (પસંદ કરેલ)' : 
-                      language === 'english' ? ' (Selected)' : ' (चयनित)'
+                      language === 'gujarati' ? ' (પસંદ કરેલ)' :
+                        language === 'english' ? ' (Selected)' : ' (चयनित)'
                     )}
                   </div>
                 </div>
@@ -1014,8 +1014,8 @@ function App() {
                         <div className="menu-card-icon">📖</div>
                         <div className="menu-card-content">
                           <div className="menu-card-title">{
-                            language === 'gujarati' ? 'જીવન ચરિત્ર' : 
-                            language === 'english' ? 'Life History' : 'जीवन चरित्र'
+                            language === 'gujarati' ? 'જીવન ચરિત્ર' :
+                              language === 'english' ? 'Life History' : 'जीवन चरित्र'
                           }</div>
                           <div className="menu-card-subtitle">{
                             language === 'english' ? 'Sacred Story & Journey' : 'Life Story & Miracles'
@@ -1026,8 +1026,8 @@ function App() {
                         <div className="menu-card-icon">✨</div>
                         <div className="menu-card-content">
                           <div className="menu-card-title">{
-                            language === 'gujarati' ? 'દાદાના ચમત્કારો' : 
-                            language === 'english' ? 'Divine Miracles' : 'दादा के चमत्कार'
+                            language === 'gujarati' ? 'દાદાના ચમત્કારો' :
+                              language === 'english' ? 'Divine Miracles' : 'दादा के चमत्कार'
                           }</div>
                           <div className="menu-card-subtitle">{
                             language === 'english' ? 'True Incidents of Dada' : 'True Incidents Index'
@@ -1079,8 +1079,8 @@ function App() {
                   <div className="selected-incident-viewer-fullscreen active-verse">
                     <div className="page-header center-header">
                       <div className="page-subtitle">{
-                        language === 'gujarati' ? 'ચમત્કારનો ઇતિહાસ' : 
-                        language === 'english' ? 'History of Miracle' : 'चमत्कार का इतिहास'
+                        language === 'gujarati' ? 'ચમત્કારનો ઇતિહાસ' :
+                          language === 'english' ? 'History of Miracle' : 'चमत्कार का इतिहास'
                       }</div>
                     </div>
                     {activeIncidentIndex !== null && historyData.incidents[activeIncidentIndex] && (
