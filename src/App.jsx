@@ -899,17 +899,17 @@ function App() {
                               currentMode === 'videos' ? 'દાદા ના દર્શન' :
                                 currentMode === 'policy' ? 'ગોપનીયતા નીતિ' : 'સોદેવ પૂજા'
                 ) : language === 'english' ? (
-                  currentMode === 'chalisa' ? 'Dada Ni Chalisa' :
-                    currentMode === 'mantras' ? 'Dada Na Siddh Mantra' :
-                      currentMode === 'bhajans' ? 'Dada Na Bhajan' :
-                        currentMode === 'aartis' ? 'Dada Ni Aarti' :
-                          currentMode === 'stutis' ? 'Dada Ni Stuti' :
+                  currentMode === 'chalisa' ? "Dada's Chalisa" :
+                    currentMode === 'mantras' ? "Dada's Siddh Mantras" :
+                      currentMode === 'bhajans' ? "Dada's Bhajans" :
+                        currentMode === 'aartis' ? "Dada's Aarti" :
+                          currentMode === 'stutis' ? "Dada's Stuti" :
                             currentMode === 'history' ? (
-                              historyView === 'menu' ? 'Dada Ni History' :
-                                historyView === 'lifeStory' ? 'Dada Ni Life Story' :
-                                  historyView === 'incidentDetail' && activeIncidentIndex !== null ? historyData.incidents[activeIncidentIndex].title[language] : 'Dada Na Miracles'
+                              historyView === 'menu' ? "Dada's History" :
+                                historyView === 'lifeStory' ? "Dada's Life Story" :
+                                  historyView === 'incidentDetail' && activeIncidentIndex !== null ? historyData.incidents[activeIncidentIndex].title[language] : "Dada's Miracles"
                             ) :
-                              currentMode === 'videos' ? 'Dada Na Darshan' :
+                              currentMode === 'videos' ? "Dada's Darshan" :
                                 currentMode === 'policy' ? 'Privacy Policy' : 'Sodev Pooja'
                 ) : (
                   currentMode === 'chalisa' ? 'दादा की चालीसा' :
