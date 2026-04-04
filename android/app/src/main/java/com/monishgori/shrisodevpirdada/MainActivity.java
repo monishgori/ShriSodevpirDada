@@ -18,10 +18,10 @@ public class MainActivity extends BridgeActivity {
     private boolean isShowingAd = false;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        // Initialize Mobile Ads SDK
+        // Initialize Mobile Ads SDK safely
         MobileAds.initialize(this, initializationStatus -> {
             Log.d(TAG, "AdMob Initialized");
             fetchAd();
@@ -29,53 +29,38 @@ public class MainActivity extends BridgeActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
         showAdIfAvailable();
     }
 
-    /**
-     * Request an ad
-     */
     public void fetchAd() {
-        if (isAdAvailable()) {
-            return;
-        }
+        if (isAdAvailable()) return;
 
         AdRequest request = new AdRequest.Builder().build();
-        AppOpenAd.load(
-                this, AD_UNIT_ID, request,
-                new AppOpenAd.AppOpenAdLoadCallback() {
-                    @Override
-                    public void onAdLoaded(@NonNull AppOpenAd ad) {
-                        Log.d(TAG, "App Open Ad Loaded ✅ (Ready)");
-                        MainActivity.this.appOpenAd = ad;
-                        // For the very first launch, try to show it immediately
-                        showAdIfAvailable();
-                    }
+        AppOpenAd.load(this, AD_UNIT_ID, request, new AppOpenAd.AppOpenAdLoadCallback() {
+            @Override
+            public void onAdLoaded(@NonNull AppOpenAd ad) {
+                Log.d(TAG, "App Open Ad Loaded ✅");
+                MainActivity.this.appOpenAd = ad;
+                showAdIfAvailable();
+            }
 
-                    @Override
-                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                        Log.e(TAG, "App Open Ad Failed: " + loadAdError.getMessage());
-                        // Retry after 5s
-                        new android.os.Handler().postDelayed(() -> fetchAd(), 5000);
-                    }
-                });
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                Log.e(TAG, "App Open Ad Failed: " + loadAdError.getMessage());
+                new android.os.Handler().postDelayed(() -> fetchAd(), 5000);
+            }
+        });
     }
 
-    /**
-     * Shows the ad if one isn't already showing.
-     */
     public void showAdIfAvailable() {
         if (!isShowingAd && isAdAvailable()) {
-            Log.d(TAG, "Displaying App Open Ad...");
-
             appOpenAd.setFullScreenContentCallback(new FullScreenContentCallback() {
                 @Override
                 public void onAdDismissedFullScreenContent() {
                     MainActivity.this.appOpenAd = null;
                     isShowingAd = false;
-                    Log.d(TAG, "Ad Dismissed");
                     fetchAd(); 
                 }
 
@@ -83,7 +68,6 @@ public class MainActivity extends BridgeActivity {
                 public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
                     MainActivity.this.appOpenAd = null;
                     isShowingAd = false;
-                    Log.e(TAG, "Ad Failed to Show: " + adError.getMessage());
                     fetchAd();
                 }
 
@@ -92,18 +76,12 @@ public class MainActivity extends BridgeActivity {
                     isShowingAd = true;
                 }
             });
-
             appOpenAd.show(MainActivity.this);
-
         } else {
-            Log.d(TAG, "Ad not ready or already showing.");
             fetchAd();
         }
     }
 
-    /**
-     * Check if ad exists and can be shown.
-     */
     private boolean isAdAvailable() {
         return appOpenAd != null;
     }
