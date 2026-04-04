@@ -151,7 +151,7 @@ const DevotionalLibrary = React.memo(({
 
         <div className="tray-privacy-footer" style={{ textAlign: 'center', padding: '20px 0 15px 0', opacity: 0.5, display: 'flex', flexDirection: 'column', gap: '8px' }}>
           <div style={{ fontSize: '0.6rem', letterSpacing: '2px', color: 'var(--secondary)', fontWeight: 'bold' }}>
-            {language === 'gujarati' ? 'ડેવલપર: મોનિશ મહેશ ગોરી' : language === 'english' ? 'DEVELOPER: MONISH MAHESH GORI' : 'डेवलपर: मोनिश महेश गोरी'}
+            {language === 'gujarati' ? 'ડેવલપર: DS Digital\'s' : language === 'english' ? 'DEVELOPER: DS DIGITAL\'S' : 'डेवलपर: DS Digital\'s'}
           </div>
           <button
             onClick={(e) => { e.stopPropagation(); startReading('policy'); }}
@@ -1155,7 +1155,7 @@ function App() {
         {/* Divine Signature Footer */}
         <footer style={{ textAlign: 'center', padding: '40px 0 120px 0', opacity: 0.25 }}>
           <div style={{ fontSize: '0.65rem', letterSpacing: '4px', textTransform: 'uppercase', fontWeight: '900' }}>
-            {language === 'gujarati' ? 'બનાવ્યું: મોનિશ મહેશ ગોરી' : language === 'english' ? 'CREATED BY: MONISH MAHESH GORI' : 'बनाया गया: मोनिश महेश गोरी'}
+            {language === 'gujarati' ? 'બનાવ્યું: DS Digital\'s' : language === 'english' ? 'CREATED BY: DS DIGITAL\'S' : 'बनाया गया: DS Digital\'s'}
           </div>
           <div style={{ fontSize: '0.5rem', letterSpacing: '2px', marginTop: '5px', opacity: 0.8 }}>
             DIVINE ENGINE V1.2.0

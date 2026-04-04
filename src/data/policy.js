@@ -4,7 +4,7 @@ export const policyData = {
         hindi: "गोपनीयता नीति",
         english: "Privacy Policy"
     },
-    lastUpdated: "February 26, 2026",
+    lastUpdated: "April 04, 2026",
     sections: [
         {
             subtitle: {
