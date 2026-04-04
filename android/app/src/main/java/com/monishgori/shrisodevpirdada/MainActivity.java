@@ -1,6 +1,8 @@
 package com.monishgori.shrisodevpirdada;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import com.getcapacitor.BridgeActivity;
@@ -16,22 +18,29 @@ public class MainActivity extends BridgeActivity {
     private static final String TAG = "AdMobNative";
     private AppOpenAd appOpenAd = null;
     private boolean isShowingAd = false;
+    private long lastAdShowTime = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        // Initialize Mobile Ads SDK safely
         MobileAds.initialize(this, initializationStatus -> {
             Log.d(TAG, "AdMob Initialized");
             fetchAd();
+            
+            // Show first ad after 4 seconds (to allow Splash Screen the user to see Dada's photo)
+            new Handler(Looper.getMainLooper()).postDelayed(this::showAdIfAvailable, 4000);
         });
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        showAdIfAvailable();
+        // Only show if at least 2 minutes have passed since last ad (avoiding annoyance)
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastAdShowTime > 120000) {
+            showAdIfAvailable();
+        }
     }
 
     public void fetchAd() {
@@ -43,13 +52,12 @@ public class MainActivity extends BridgeActivity {
             public void onAdLoaded(@NonNull AppOpenAd ad) {
                 Log.d(TAG, "App Open Ad Loaded ✅");
                 MainActivity.this.appOpenAd = ad;
-                showAdIfAvailable();
             }
 
             @Override
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                 Log.e(TAG, "App Open Ad Failed: " + loadAdError.getMessage());
-                new android.os.Handler().postDelayed(() -> fetchAd(), 5000);
+                new Handler(Looper.getMainLooper()).postDelayed(() -> fetchAd(), 10000);
             }
         });
     }
@@ -61,7 +69,8 @@ public class MainActivity extends BridgeActivity {
                 public void onAdDismissedFullScreenContent() {
                     MainActivity.this.appOpenAd = null;
                     isShowingAd = false;
-                    fetchAd(); 
+                    lastAdShowTime = System.currentTimeMillis();
+                    fetchAd(); // Prepare next one but don't show yet
                 }
 
                 @Override
