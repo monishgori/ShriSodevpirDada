@@ -67,7 +67,10 @@
     <main class="max-w-md mx-auto px-6 py-20 relative min-h-screen">
 
         <!-- HEADER HERO -->
-        <header id="divine-header" class="mb-20 text-center animate-fade-up">
+        <header id="divine-header" class="mb-20 text-center animate-fade-up relative">
+            <button id="back-btn" onclick="goBack()" class="hidden absolute left-0 top-0 p-3 opacity-40 hover:opacity-100 transition-opacity">
+                <span class="text-xs font-black tracking-widest">← BACK</span>
+            </button>
             <h1 class="font-heading font-black text-6xl tracking-tighter uppercase leading-[0.8] mb-4 saffron-glow">
                 Shri<br><span class="text-dada-gold italic">Sodevpir</span><br>Dada
             </h1>
@@ -267,6 +270,7 @@
 
     <script>
         let currentLang = 'gujarati';
+        let currentStep = 0; // 0: Lang, 1: Device, 2: Showcase
 
         function nav(type, value) {
             if (type === 'lang') {
@@ -278,6 +282,8 @@
                     const next = document.getElementById('step-device');
                     next.classList.remove('hidden');
                     next.classList.add('animate-fade-up');
+                    currentStep = 1;
+                    document.getElementById('back-btn').classList.remove('hidden');
                 }, 500);
             } else if (type === 'device') {
                 document.getElementById('step-device').classList.add('section-exit');
@@ -288,11 +294,32 @@
                     next.classList.add('animate-fade-up');
                     document.getElementById('lang-dock').classList.remove('hidden');
                     
-                    if(value === 'android') document.getElementById('install-android').classList.remove('hidden');
-                    else document.getElementById('install-ios').classList.remove('hidden');
+                    if(value === 'android') {
+                        document.getElementById('install-android').classList.remove('hidden');
+                        document.getElementById('install-ios').classList.add('hidden');
+                    } else {
+                        document.getElementById('install-android').classList.add('hidden');
+                        document.getElementById('install-ios').classList.remove('hidden');
+                    }
                     
+                    currentStep = 2;
                     initScrollReveal();
                 }, 500);
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function goBack() {
+            if (currentStep === 1) {
+                document.getElementById('step-device').classList.add('hidden');
+                document.getElementById('step-lang').classList.remove('hidden', 'section-exit');
+                document.getElementById('back-btn').classList.add('hidden');
+                currentStep = 0;
+            } else if (currentStep === 2) {
+                document.getElementById('step-showcase').classList.add('hidden');
+                document.getElementById('step-device').classList.remove('hidden', 'section-exit');
+                document.getElementById('lang-dock').classList.add('hidden');
+                currentStep = 1;
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
