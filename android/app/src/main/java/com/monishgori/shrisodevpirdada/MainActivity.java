@@ -28,6 +28,12 @@ public class MainActivity extends BridgeActivity {
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        showAdIfAvailable();
+    }
+
     /**
      * Request an ad
      */
@@ -42,14 +48,17 @@ public class MainActivity extends BridgeActivity {
                 new AppOpenAd.AppOpenAdLoadCallback() {
                     @Override
                     public void onAdLoaded(@NonNull AppOpenAd ad) {
-                        Log.d(TAG, "App Open Ad Loaded ✅");
+                        Log.d(TAG, "App Open Ad Loaded ✅ (Ready)");
                         MainActivity.this.appOpenAd = ad;
-                        showAdIfAvailable(); // Show immediately on first load
+                        // For the very first launch, try to show it immediately
+                        showAdIfAvailable();
                     }
 
                     @Override
                     public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                         Log.e(TAG, "App Open Ad Failed: " + loadAdError.getMessage());
+                        // Retry after 5s
+                        new android.os.Handler().postDelayed(() -> fetchAd(), 5000);
                     }
                 });
     }
@@ -59,16 +68,15 @@ public class MainActivity extends BridgeActivity {
      */
     public void showAdIfAvailable() {
         if (!isShowingAd && isAdAvailable()) {
-            Log.d(TAG, "Showing App Open Ad...");
+            Log.d(TAG, "Displaying App Open Ad...");
 
             appOpenAd.setFullScreenContentCallback(new FullScreenContentCallback() {
                 @Override
                 public void onAdDismissedFullScreenContent() {
-                    // Set the ad reference to null so isAdAvailable() returns false.
                     MainActivity.this.appOpenAd = null;
                     isShowingAd = false;
                     Log.d(TAG, "Ad Dismissed");
-                    fetchAd(); // Load next ad
+                    fetchAd(); 
                 }
 
                 @Override
@@ -88,7 +96,7 @@ public class MainActivity extends BridgeActivity {
             appOpenAd.show(MainActivity.this);
 
         } else {
-            Log.d(TAG, "Ad not ready yet.");
+            Log.d(TAG, "Ad not ready or already showing.");
             fetchAd();
         }
     }
