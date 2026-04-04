@@ -39,7 +39,6 @@ public class MainActivity extends BridgeActivity {
         AdRequest request = new AdRequest.Builder().build();
         AppOpenAd.load(
                 this, AD_UNIT_ID, request,
-                AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT,
                 new AppOpenAd.AppOpenAdLoadCallback() {
                     @Override
                     public void onAdLoaded(@NonNull AppOpenAd ad) {
