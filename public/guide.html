@@ -3,12 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Shri Sodevpir Dada - Divine Onboarding Guide</title>
+    <title>Shri Sodevpir Dada - Digital Onboarding</title>
     
-    <!-- Premium Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Inter:wght@200;400;600&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS (CDN for standalone simplicity) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -16,10 +13,10 @@
                 extend: {
                     colors: {
                         'dada-gold': '#FFD700',
-                        'dada-bright': '#FFAC1C',
+                        'dada-saffron': '#FF8C00',
                         'dada-bg': '#030302',
-                        'dada-glass': 'rgba(255, 255, 255, 0.05)',
-                        'dada-edge': 'rgba(255, 255, 255, 0.1)',
+                        'glass-main': 'rgba(255, 255, 255, 0.05)',
+                        'glass-edge': 'rgba(255, 255, 255, 0.08)',
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
@@ -28,16 +25,17 @@
                     },
                     animation: {
                         'fade-up': 'fadeUp 0.8s ease-out forwards',
-                        'glow': 'glow 2s infinite alternate',
+                        'slow-pulse': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
                     },
                     keyframes: {
                         fadeUp: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
                             '100%': { opacity: '1', transform: 'translateY(0)' },
                         },
-                        glow: {
-                            '0%': { boxShadow: '0 0 5px rgba(255, 215, 0, 0.2)' },
-                            '100%': { boxShadow: '0 0 20px rgba(255, 215, 0, 0.5)' },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-15px)' },
                         }
                     }
                 }
@@ -47,222 +45,239 @@
 
     <style>
         ::-webkit-scrollbar { width: 0px; }
-        .glass-card { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
-        .section-hidden { display: none; }
-        .reveal-active { animation: fadeUp 0.8s ease-out forwards; }
-        
-        /* Sacred Gradient Overlays */
-        .divine-overlay {
-            background: linear-gradient(180deg, rgba(3,3,2,0.4) 0%, rgba(3,3,2,0.85) 100%);
-        }
+        .glass-blur { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+        .lux-border { border: 1px solid rgba(255, 215, 0, 0.15); }
+        .lux-border:hover { border: 1px solid rgba(255, 215, 0, 0.5); }
+        .saffron-glow { text-shadow: 0 0 15px rgba(255, 140, 0, 0.4); }
+        .section-exit { opacity: 0; transform: translateY(-20px); transition: all 0.5s ease-in-out; pointer-events: none; }
+        .reveal { opacity: 0; transform: translateY(20px); transition: all 0.7s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 
 <body class="bg-dada-bg text-white font-sans selection:bg-dada-gold selection:text-black">
 
-    <!-- Background Layer -->
+    <!-- Immersive Background -->
     <div class="fixed inset-0 z-[-1] overflow-hidden">
-        <img src="/assets/images/guide_bg1.jpg?v=4" class="w-full h-full object-cover scale-[1.1] transition-transform duration-[10s] hover:scale-[1.2]" alt="">
-        <div class="absolute inset-0 divine-overlay"></div>
+        <img src="/assets/images/guide_bg1.jpg?v=4" class="w-full h-full object-cover scale-[1.1] opacity-60" alt="">
+        <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/80 to-dada-bg"></div>
     </div>
 
-    <!-- MAIN CONTAINER -->
-    <main class="max-w-md mx-auto px-6 pt-24 pb-32">
+    <!-- MAIN WRAPPER -->
+    <main class="max-w-md mx-auto px-6 py-20 relative min-h-screen">
 
-        <!-- STEP 1: LANGUAGE GATE -->
-        <section id="step-language" class="min-h-screen flex flex-col justify-center items-start space-y-12 animate-fade-up">
-            <header>
-                <span class="text-dada-gold uppercase tracking-[4px] font-bold text-[10px] mb-4 block">DIVINE EXPERIENCE</span>
-                <h1 class="font-heading font-black text-6xl leading-[0.9] tracking-tighter uppercase mb-2">Language<br>Selection</h1>
-                <p class="text-white/50 font-light text-sm uppercase tracking-widest">Select your heart's tongue</p>
-            </header>
+        <!-- HEADER HERO -->
+        <header id="divine-header" class="mb-20 text-center animate-fade-up">
+            <h1 class="font-heading font-black text-6xl tracking-tighter uppercase leading-[0.8] mb-4 saffron-glow">
+                Shri<br><span class="text-dada-gold italic">Sodevpir</span><br>Dada
+            </h1>
+            <p class="text-[10px] tracking-[6px] font-black uppercase text-white/30">Official Spiritual Onboarding</p>
+        </header>
 
-            <div class="grid grid-cols-1 gap-4 w-full">
-                <button onclick="pickLang('gujarati')" class="group relative w-full p-6 bg-dada-glass border border-dada-edge rounded-3xl hover:bg-white hover:text-black transition-all duration-500 text-left overflow-hidden">
-                    <span class="relative z-10 block text-xs tracking-widest uppercase opacity-40 group-hover:opacity-100 mb-1 transition-opacity">Maatrubhasha</span>
-                    <span class="relative z-10 block text-3xl font-black font-heading transition-transform group-active:scale-95 lowercase">ગુજરાતી</span>
-                    <div class="absolute inset-0 bg-dada-gold translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+        <!-- STEP 1: LANGUAGE -->
+        <section id="step-lang" class="space-y-10 animate-fade-up">
+            <div class="text-center">
+                <h2 class="text-dada-gold font-black text-xs uppercase tracking-[4px] mb-2">Pavitra Bhasha</h2>
+                <p class="text-white/40 text-xs">Select your heart's native language</p>
+            </div>
+
+            <div class="grid gap-3">
+                <button onclick="nav('lang', 'gujarati')" class="group relative p-6 glass-blur bg-glass-main lux-border rounded-3xl transition-all duration-500 overflow-hidden active:scale-95">
+                    <span class="relative z-10 block text-2xl font-black font-heading lowercase tracking-tighter">ગુજરાતી</span>
+                    <span class="relative z-10 block text-[9px] uppercase tracking-[3px] opacity-40">Maatrubhasha</span>
+                    <div class="absolute inset-0 bg-dada-gold origin-bottom scale-y-0 group-hover:scale-y-100 transition-transform duration-500 opacity-10"></div>
                 </button>
-                
-                <button onclick="pickLang('hindi')" class="group relative w-full p-6 bg-dada-glass border border-dada-edge rounded-3xl hover:bg-white hover:text-black transition-all duration-500 text-left overflow-hidden">
-                    <span class="relative z-10 block text-xs tracking-widest uppercase opacity-40 group-hover:opacity-100 mb-1 transition-opacity">Dharam Bhasha</span>
-                    <span class="relative z-10 block text-3xl font-black font-hindi transition-transform group-active:scale-95">हिन्दी</span>
-                    <div class="absolute inset-0 bg-dada-gold translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                <button onclick="nav('lang', 'hindi')" class="group relative p-6 glass-blur bg-glass-main lux-border rounded-3xl transition-all duration-500 overflow-hidden active:scale-95">
+                    <span class="relative z-10 block text-2xl font-black font-hindi tracking-wide">हिन्दी</span>
+                    <span class="relative z-10 block text-[9px] uppercase tracking-[3px] opacity-40">Dharam Bhasha</span>
+                    <div class="absolute inset-0 bg-dada-gold origin-bottom scale-y-0 group-hover:scale-y-100 transition-transform duration-500 opacity-10"></div>
                 </button>
-                
-                <button onclick="pickLang('english')" class="group relative w-full p-6 bg-dada-glass border border-dada-edge rounded-3xl hover:bg-white hover:text-black transition-all duration-500 text-left overflow-hidden">
-                    <span class="relative z-10 block text-xs tracking-widest uppercase opacity-40 group-hover:opacity-100 mb-1 transition-opacity">Global Reach</span>
-                    <span class="relative z-10 block text-3xl font-black font-heading transition-transform group-active:scale-95 lowercase uppercase">english</span>
-                    <div class="absolute inset-0 bg-dada-gold translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                <button onclick="nav('lang', 'english')" class="group relative p-6 glass-blur bg-glass-main lux-border rounded-3xl transition-all duration-500 overflow-hidden active:scale-95">
+                    <span class="relative z-10 block text-2xl font-black font-heading uppercase tracking-tighter">English</span>
+                    <span class="relative z-10 block text-[9px] uppercase tracking-[3px] opacity-40">Global Reach</span>
+                    <div class="absolute inset-0 bg-dada-gold origin-bottom scale-y-0 group-hover:scale-y-100 transition-transform duration-500 opacity-10"></div>
                 </button>
             </div>
         </section>
 
-        <!-- STEP 2: DEVICE SELECTION -->
-        <section id="step-device" class="section-hidden min-h-screen flex flex-col justify-center items-start space-y-12">
-            <header>
-                <span class="text-dada-gold uppercase tracking-[4px] font-bold text-[10px] mb-4 block">PLATFORM ACCESS</span>
-                <h1 class="font-heading font-black text-6xl leading-[0.9] tracking-tighter uppercase mb-2">Select<br>Device</h1>
-                <p class="text-white/50 font-light text-sm uppercase tracking-widest">Connect to your portal</p>
-            </header>
+        <!-- STEP 2: DEVICE -->
+        <section id="step-device" class="hidden space-y-10">
+            <div class="text-center">
+                <h2 class="text-dada-gold font-black text-xs uppercase tracking-[4px] mb-2">Connect Platform</h2>
+                <p class="text-white/40 text-xs">Choose your divine portal</p>
+            </div>
 
-            <div class="flex flex-col gap-4 w-full">
-                <button onclick="pickDevice('android')" class="group p-8 glass-card bg-dada-glass border border-dada-edge rounded-[40px] flex items-center justify-between hover:border-dada-gold transition-all duration-500">
-                    <div>
-                        <h3 class="text-3xl font-black font-heading uppercase text-white/90">Android</h3>
-                        <p class="text-white/40 text-xs tracking-widest uppercase mt-1">Play Store Native</p>
-                    </div>
+            <div class="grid gap-4">
+                <button onclick="nav('device', 'android')" class="p-8 glass-blur bg-glass-main lux-border rounded-[40px] text-left group active:scale-95 transition-all">
+                    <h3 class="text-4xl font-black font-heading uppercase tracking-tighter group-hover:text-dada-gold">Android</h3>
+                    <p class="text-[9px] tracking-[4px] uppercase opacity-30">Google Play Store</p>
                 </button>
-                
-                <button onclick="pickDevice('ios')" class="group p-8 glass-card bg-dada-glass border border-dada-edge rounded-[40px] flex items-center justify-between hover:border-dada-gold transition-all duration-500">
-                    <div>
-                        <h3 class="text-3xl font-black font-heading uppercase text-white/90">iPhone</h3>
-                        <p class="text-white/40 text-xs tracking-widest uppercase mt-1">Safari Experience</p>
-                    </div>
+                <button onclick="nav('device', 'ios')" class="p-8 glass-blur bg-glass-main lux-border rounded-[40px] text-left group active:scale-95 transition-all">
+                    <h3 class="text-4xl font-black font-heading uppercase tracking-tighter group-hover:text-dada-gold">iPhone</h3>
+                    <p class="text-[9px] tracking-[4px] uppercase opacity-30">Safari Experience</p>
                 </button>
             </div>
         </section>
 
-        <!-- STEP 3: WELCOME & GREETING -->
-        <section id="step-preview" class="section-hidden space-y-16">
-            <div class="pt-20">
-                <div class="mb-12">
-                    <img src="/assets/images/new_icon.png" class="w-24 h-24 rounded-[32px] shadow-2xl shadow-dada-gold/20 mb-8 p-1 bg-white/10" alt="Dada Icon">
-                    <h2 class="text-dada-gold text-xs font-black tracking-[5px] uppercase mb-4">MUBARAK! 🔱</h2>
-                    
-                    <p data-lang-set="gujarati" class="text-4xl font-black font-heading lowercase leading-tight">તમારું દાદાના દરબારમાં સ્વાગત છે. અખંડ ભક્તિની શરૂઆત કરો.</p>
-                    <p data-lang-set="hindi" class="hidden text-4xl font-black font-hindi leading-tight">आपका दादा के दरबार में स्वागत है। अब भक्ति की नई शुरुआत करें।</p>
-                    <p data-lang-set="english" class="hidden text-4xl font-black font-heading uppercase leading-tight">Welcome to the Divine Court. Begin your journey.</p>
-                </div>
-
-                <div class="grid grid-cols-1 gap-6">
-                    <div class="p-8 glass-card bg-dada-glass border border-white/5 rounded-3xl">
-                        <div class="text-dada-gold font-black text-[10px] tracking-[4px] uppercase mb-4">DAILY BHAKTI</div>
-                        <p data-lang-set="gujarati" class="text-white/70 font-light leading-relaxed">આ એપ માં 365 દિવસ ના દાદા ના સુવિચારો, મંત્રો અને ભજનો છે.</p>
-                        <p data-lang-set="hindi" class="hidden text-white/70 font-light leading-relaxed">इस ऐप में 365 दिनों के दादा के सुविचार, मंत्र और भजन उपलब्ध हैं।</p>
-                        <p data-lang-set="english" class="hidden text-white/70 font-light leading-relaxed">Access 365 days of wisdom, mantras, and daily devotional media.</p>
-                    </div>
-
-                    <div class="p-8 glass-card bg-dada-glass border border-white/5 rounded-3xl">
-                        <div class="text-dada-gold font-black text-[10px] tracking-[4px] uppercase mb-4">DIGITAL RITUALS</div>
-                        <p data-lang-set="gujarati" class="text-white/70 font-light leading-relaxed">ઘંટડી, શંખ, ફૂલ અને દીવો પ્રગટાવી તમે પર્સનલ ભક્તિ કરી શકો છો.</p>
-                        <p data-lang-set="hindi" class="hidden text-white/70 font-light leading-relaxed">घंटी, शंख और दीया जलाकर आप अपनी व्यक्तिगत भक्ति कर सकते हैं।</p>
-                        <p data-lang-set="english" class="hidden text-white/70 font-light leading-relaxed">Real-time interactions like Bell ringing, Shankh playing, and Lamps.</p>
-                    </div>
-                </div>
+        <!-- STEP 3: FEATURE SHOWCASE -->
+        <section id="step-showcase" class="hidden space-y-12">
+            <div class="text-center animate-slow-pulse">
+                <img src="/assets/images/new_icon.png" class="w-20 h-20 mx-auto rounded-[28px] lux-border p-1 bg-white/5 mb-6" alt="">
+                <h2 class="text-white text-3xl font-black font-heading lowercase tracking-tighter" data-lang="gujarati">તમારી ભક્તિ સફર અહીંથી શરૂ થાય છે.</h2>
+                <h2 class="hidden text-white text-3xl font-black font-hindi" data-lang="hindi">आपकी भक्ति यात्रा यहाँ से शुरू होती है।</h2>
+                <h2 class="hidden text-white text-3xl font-black font-heading uppercase tracking-tighter" data-lang="english">Your divine journey begins here.</h2>
             </div>
 
-            <!-- DYNAMIC GUIDE (BASED ON DEVICE) -->
-            <div id="guide-content" class="py-20 border-t border-white/10 space-y-24">
+            <!-- FEATURE GRID -->
+            <div class="grid grid-cols-1 gap-4">
                 
-                <!-- ANDROID GUIDE -->
-                <div id="guide-android" class="space-y-12">
-                    <div class="relative pl-12 border-l border-dada-gold/30 space-y-4">
-                        <div class="absolute left-[-6px] top-0 w-3 h-3 bg-dada-gold rounded-full shadow-[0_0_10px_#FFD700]"></div>
-                        <h4 class="text-2xl font-black font-heading lowercase uppercase tracking-wider">INSTALLATION</h4>
-                        <p class="text-white/50 text-sm leading-relaxed" data-lang-set="gujarati">નીચેના 'Install' બટન પર ક્લિક કરો, તે તમને પ્લે સ્ટોર પેજ પર લઇ જશે.</p>
-                        <p class="hidden text-white/50 text-sm leading-relaxed" data-lang-set="hindi">नीचे दिए गए 'Install' बटन पर क्लिक करें।</p>
-                        <p class="hidden text-white/50 text-sm leading-relaxed" data-lang-set="english">Tap the Install button below to visit the official Play Store page.</p>
-                        <a href="https://play.google.com/store/apps/details?id=com.monishgori.shrisodevpirdada" target="_blank" class="inline-block px-10 py-5 bg-white text-black font-black text-xs tracking-[3px] uppercase rounded-full hover:bg-dada-gold transition-colors duration-500">LAUNCH PLAY STORE</a>
-                    </div>
-
-                    <div class="relative pl-12 border-l border-white/5 space-y-4">
-                        <div class="absolute left-[-5px] top-0 w-2.5 h-2.5 bg-white/20 rounded-full"></div>
-                        <h4 class="text-2xl font-black font-heading lowercase uppercase tracking-wider">HOW TO USE</h4>
-                        <p class="text-white/50 text-sm leading-relaxed" data-lang-set="gujarati">એપ ખોલીને 'ત્રણ ટપકાં' (...) મેનુમાં જાઓ અને તમારી પંસદ ના ભજન વગાડો.</p>
-                        <p class="hidden text-white/50 text-sm leading-relaxed" data-lang-set="hindi">ऐप खोलें और 'तीन डॉट्स' (...) मेनू में जाकर भजन चुनें।</p>
-                        <p class="hidden text-white/50 text-sm leading-relaxed" data-lang-set="english">Open the app, tap the Three Dots (...) menu to explorer library.</p>
+                <!-- Satyavani -->
+                <div class="reveal p-6 glass-blur bg-glass-main/40 lux-border rounded-3xl flex gap-5">
+                    <div class="text-3xl">📜</div>
+                    <div class="flex-1">
+                        <h4 class="text-dada-gold text-[10px] font-black tracking-[3px] uppercase mb-1">Satyavani</h4>
+                        <p class="text-sm text-white/50 leading-relaxed font-light" data-lang="gujarati">દરરોજ નવા દાદાના અમૃત વચનો વાંચો (કુલ ૩૬૫ દિવસ).</p>
+                        <p class="hidden text-sm text-white/50 leading-relaxed font-light font-hindi" data-lang="hindi">प्रतिदिन दादा के ३६५ नए सुविचार और अमृत वचन पढ़ें।</p>
+                        <p class="hidden text-sm text-white/50 leading-relaxed font-light" data-lang="english">Receive unique wisdom from Dada every day of the year.</p>
                     </div>
                 </div>
 
-                <!-- IOS GUIDE -->
-                <div id="guide-ios" class="hidden space-y-12">
-                    <div class="relative pl-12 border-l border-dada-gold/30 space-y-4">
-                        <div class="absolute left-[-6px] top-0 w-3 h-3 bg-dada-gold rounded-full shadow-[0_0_10px_#FFD700]"></div>
-                        <h4 class="text-2xl font-black font-heading lowercase uppercase tracking-wider">WEB APP ACCESS</h4>
-                        <p class="text-white/50 text-sm leading-relaxed" data-lang-set="gujarati">iPhone માં એપ સ્ટોર નથી, આ માટે તમારે નીચેની લિંક Safari માં ખોલવી પડશે.</p>
-                        <p class="hidden text-white/50 text-sm leading-relaxed" data-lang-set="hindi">iPhone के लिए कृपया सफारी ब्राउज़र का उपयोग करें।</p>
-                        <p class="hidden text-white/50 text-sm leading-relaxed" data-lang-set="english">For iPhones, please use Safari to access the Web Portal.</p>
+                <!-- Gyaan Kendra -->
+                <div class="reveal p-6 glass-blur bg-glass-main/40 lux-border rounded-3xl flex gap-5">
+                    <div class="text-3xl">⋯</div>
+                    <div class="flex-1">
+                        <h4 class="text-dada-gold text-[10px] font-black tracking-[3px] uppercase mb-1">Divine Menu</h4>
+                        <p class="text-sm text-white/50 leading-relaxed font-light" data-lang="gujarati">મેનુ બટન થી ચાલીસા, મંત્રો, ભજનો અને ઇતિહાસ ની લાયબ્રેરી એક્સેસ કરો.</p>
+                        <p class="hidden text-sm text-white/50 leading-relaxed font-light font-hindi" data-lang="hindi">मेनु बटन से चालीसा, मंत्र, भजन और इतिहास की लाइब्रेरी खोलें।</p>
+                        <p class="hidden text-sm text-white/50 leading-relaxed font-light" data-lang="english">Tap the dots to explorer Chalisa, Mantras, and History library.</p>
                     </div>
+                </div>
 
-                    <div class="relative pl-12 border-l border-white/5 space-y-4">
-                        <div class="absolute left-[-5px] top-0 w-2.5 h-2.5 bg-white/20 rounded-full"></div>
-                        <h4 class="text-2xl font-black font-heading lowercase uppercase tracking-wider">ADD TO DESKTOP</h4>
-                        <p class="text-white/50 text-sm leading-relaxed" data-lang-set="gujarati">Safari માં 'Share' (⬆️) બટન દબાવી 'Add to Home Screen' ( + ) પસંદ કરો.</p>
-                        <p class="hidden text-white/50 text-sm leading-relaxed" data-lang-set="hindi">सफारी में 'Share' (⬆️) बटन दबाकर 'Add to Home Screen' चुनें।</p>
-                        <p class="hidden text-white/50 text-sm leading-relaxed" data-lang-set="english">Tap 'Share' (⬆️) in Safari UI and select 'Add to Home Screen' (+).</p>
-                        <a href="https://shrisodevpirdada.vercel.app/" target="_blank" class="inline-block px-10 py-5 border border-white/20 text-white font-black text-xs tracking-[3px] uppercase rounded-full hover:bg-white hover:text-black transition-all duration-500">START WEB PORTAL</a>
+                <!-- Sadhana -->
+                <div class="reveal p-6 glass-blur bg-glass-main/40 lux-border rounded-3xl flex gap-5">
+                    <div class="text-3xl">▶</div>
+                    <div class="flex-1">
+                        <h4 class="text-dada-gold text-[10px] font-black tracking-[3px] uppercase mb-1">Sadhana Player</h4>
+                        <p class="text-sm text-white/50 leading-relaxed font-light" data-lang="gujarati">૧૦૮ જાપ અને રીપીટ મોડ સાથે ભક્તિનો અવિરત આનંદ માણો.</p>
+                        <p class="hidden text-sm text-white/50 leading-relaxed font-light font-hindi" data-lang="hindi">१०८ जाप और रिपीट मोड के साथ मंत्रों का निरंतर जप करें।</p>
+                        <p class="hidden text-sm text-white/50 leading-relaxed font-light" data-lang="english">Unlimited chanting with 108x Jaap and intelligent Repeat mode.</p>
+                    </div>
+                </div>
+
+                <!-- Vidhi -->
+                <div class="reveal p-6 glass-blur bg-glass-main/40 lux-border rounded-3xl flex gap-5">
+                    <div class="text-3xl">🔱</div>
+                    <div class="flex-1">
+                        <h4 class="text-dada-gold text-[10px] font-black tracking-[3px] uppercase mb-1">Ritual Chamber</h4>
+                        <p class="text-sm text-white/50 leading-relaxed font-light" data-lang="gujarati">ઘંટડી 🔔, શંખ 🐚, ફૂલ 🌸 અને દીવો 🪔 પ્રગટાવી પર્સનલ પૂજા કરો.</p>
+                        <p class="hidden text-sm text-white/50 leading-relaxed font-light font-hindi" data-lang="hindi">घंटी, शंख और दीया जलाकर अपने घर बैठे व्यक्तिगत पूजा करें।</p>
+                        <p class="hidden text-sm text-white/50 leading-relaxed font-light" data-lang="english">Real rituals: interactive Bell, Shankh, Flowers, and Lamps.</p>
+                    </div>
+                </div>
+
+                <!-- Smaran -->
+                <div class="reveal p-6 glass-blur bg-glass-main/40 lux-border rounded-3xl flex gap-5">
+                    <div class="text-3xl">🔔</div>
+                    <div class="flex-1">
+                        <h4 class="text-dada-gold text-[10px] font-black tracking-[3px] uppercase mb-1">Daily Smaran</h4>
+                        <p class="text-sm text-white/50 leading-relaxed font-light" data-lang="gujarati">સવાર અને સાંજની ભક્તિ માટે પરફેક્ટ ટાઇમ રિમાઈન્ડર સેટ કરો.</p>
+                        <p class="hidden text-sm text-white/50 leading-relaxed font-light font-hindi" data-lang="hindi">सुबह और शाम की आरती के लिए भक्ति रिमाइंडर (सूचना) सेट करें।</p>
+                        <p class="hidden text-sm text-white/50 leading-relaxed font-light" data-lang="english">Set precise automated reminders for your morning and evening rituals.</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Footer -->
-            <footer class="pt-20 pb-40 opacity-20 text-[8px] font-black tracking-[5px] uppercase">
-                SHRISODEVPIRDADA • DIVINE ENGINE V1.0 • MONISH MAHESH GORI
+            <!-- INSTALL GUIDES -->
+            <div id="install-android" class="hidden space-y-12 py-10 border-t border-white/5">
+                <div class="text-center">
+                    <h3 class="font-heading font-black text-4xl uppercase tracking-tighter mb-4">Official Release</h3>
+                    <p class="text-xs text-white/40 tracking-[2px] mb-8" data-lang="gujarati">દાદા ની એપ ડાઉનલોડ કરવા નીચે ક્લિક કરો.</p>
+                    <p class="hidden text-xs text-white/40 tracking-[2px] mb-8 font-hindi" data-lang="hindi">दादा की आधिकारिक ऐप डाउनलोड करने के लिए नीचे क्लिक करें।</p>
+                    <p class="hidden text-xs text-white/40 tracking-[2px] mb-8" data-lang="english">Tap below to visit the official Play Store portal.</p>
+                    <a href="https://play.google.com/store/apps/details?id=com.monishgori.shrisodevpirdada" target="_blank" class="block w-full py-5 bg-dada-gold text-black font-black text-xs tracking-[4px] uppercase rounded-full shadow-[0_0_30px_rgba(255,215,0,0.3)] hover:scale-[1.02] transition-transform">INSTALL FROM GOOGLE PLAY</a>
+                </div>
+            </div>
+
+            <div id="install-ios" class="hidden space-y-12 py-10 border-t border-white/5">
+                <div class="flex flex-col gap-6 text-center">
+                    <h3 class="font-heading font-black text-4xl uppercase tracking-tighter mb-2 saffron-glow">Web Portal</h3>
+                    <p class="text-xs text-white/50 font-light px-8" data-lang="gujarati">iPhone Safari માં 'Share' બટન દબાવી 'Add to Home Screen' પસંદ કરો.</p>
+                    <p class="hidden text-xs text-white/50 font-light px-8 font-hindi" data-lang="hindi">iPhone सफ़ारी में 'Share' बटन दबाकर 'Add to Home Screen' चुनें।</p>
+                    <p class="hidden text-xs text-white/50 font-light px-8" data-lang="english">Tap 'Share' in Safari and select 'Add to Home Screen' (+) for native access.</p>
+                    <a href="https://shrisodevpirdada.vercel.app/" target="_blank" class="block w-full py-5 border border-dada-gold text-dada-gold font-black text-[10px] tracking-[4px] uppercase rounded-full hover:bg-dada-gold hover:text-black transition-all">LAUNCH DIVINE PORTAL</a>
+                </div>
+            </div>
+
+            <footer class="pt-20 pb-40 text-center opacity-10">
+                <p class="text-[7px] tracking-[8px] uppercase font-black">Divine Engine V1.1 • Monish Mahesh Gori</p>
             </footer>
-        </main>
+        </section>
 
-        <!-- Fixed Language Dock (Sticky) -->
-        <nav id="lang-dock" class="hidden fixed bottom-8 left-1/2 -translate-x-1/2 flex gap-4 p-2 glass-card bg-black/60 border border-white/10 rounded-full z-50 animate-fade-up">
-            <button onclick="pickLang('gujarati', true)" class="w-10 h-10 flex items-center justify-center text-[8px] font-black hover:text-dada-gold" id="ld-guj">GUJ</button>
-            <button onclick="pickLang('hindi', true)" class="w-10 h-10 flex items-center justify-center text-[8px] font-black hover:text-dada-gold" id="ld-hin">HIN</button>
-            <button onclick="pickLang('english', true)" class="w-10 h-10 flex items-center justify-center text-[8px] font-black hover:text-dada-gold" id="ld-eng">ENG</button>
+        <!-- STICKY LANG DOCK -->
+        <nav id="lang-dock" class="hidden fixed bottom-8 left-1/2 -translate-x-1/2 flex gap-3 p-1 glass-blur bg-black/60 lux-border rounded-full z-50">
+            <button onclick="switchLang('gujarati')" id="btn-guj" class="w-9 h-9 flex items-center justify-center text-[7px] font-black uppercase text-white/30 hover:text-dada-gold transition-colors">GUJ</button>
+            <button onclick="switchLang('hindi')" id="btn-hin" class="w-9 h-9 flex items-center justify-center text-[7px] font-black uppercase text-white/30 hover:text-dada-gold transition-colors">HIN</button>
+            <button onclick="switchLang('english')" id="btn-eng" class="w-9 h-9 flex items-center justify-center text-[7px] font-black uppercase text-white/30 hover:text-dada-gold transition-colors">ENG</button>
         </nav>
 
+    </main>
+
     <script>
-        let currentLang = localStorage.getItem('guide_lang') || 'gujarati';
-        let currentDevice = '';
+        let currentLang = 'gujarati';
 
-        function pickLang(lang, fromDock = false) {
-            currentLang = lang;
-            localStorage.setItem('guide_lang', lang);
-            
-            // Toggle Visibility
-            document.querySelectorAll('[data-lang-set]').forEach(el => {
-                if (el.getAttribute('data-lang-set') === lang) {
-                    el.classList.remove('hidden');
-                } else {
-                    el.classList.add('hidden');
-                }
-            });
-
-            // Dock UI update
-            document.querySelectorAll('#lang-dock button').forEach(b => b.classList.remove('text-dada-gold'));
-            const map = {'gujarati':'ld-guj', 'hindi':'ld-hin', 'english':'ld-eng'};
-            document.getElementById(map[lang]).classList.add('text-dada-gold');
-
-            if (!fromDock) {
-                document.getElementById('step-language').classList.add('hidden');
-                document.getElementById('step-device').classList.remove('section-hidden');
-                document.getElementById('step-device').classList.add('animate-fade-up');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        }
-
-        function pickDevice(device) {
-            currentDevice = device;
-            document.getElementById('step-device').classList.add('hidden');
-            document.getElementById('step-preview').classList.remove('section-hidden');
-            document.getElementById('step-preview').classList.add('animate-fade-up');
-            document.getElementById('lang-dock').classList.remove('hidden');
-            
-            if (device === 'android') {
-                document.getElementById('guide-android').classList.remove('hidden');
-                document.getElementById('guide-ios').classList.add('hidden');
-            } else {
-                document.getElementById('guide-android').classList.add('hidden');
-                document.getElementById('guide-ios').classList.remove('hidden');
+        function nav(type, value) {
+            if (type === 'lang') {
+                currentLang = value;
+                switchLang(value);
+                document.getElementById('step-lang').classList.add('section-exit');
+                setTimeout(() => {
+                    document.getElementById('step-lang').classList.add('hidden');
+                    const next = document.getElementById('step-device');
+                    next.classList.remove('hidden');
+                    next.classList.add('animate-fade-up');
+                }, 500);
+            } else if (type === 'device') {
+                document.getElementById('step-device').classList.add('section-exit');
+                setTimeout(() => {
+                    document.getElementById('step-device').classList.add('hidden');
+                    const next = document.getElementById('step-showcase');
+                    next.classList.remove('hidden');
+                    next.classList.add('animate-fade-up');
+                    document.getElementById('lang-dock').classList.remove('hidden');
+                    
+                    if(value === 'android') document.getElementById('install-android').classList.remove('hidden');
+                    else document.getElementById('install-ios').classList.remove('hidden');
+                    
+                    initScrollReveal();
+                }, 500);
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Detect device on load for smarter defaults
+        function switchLang(lang) {
+            currentLang = lang;
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                if (el.getAttribute('data-lang') === lang) el.classList.remove('hidden');
+                else el.classList.add('hidden');
+            });
+            document.querySelectorAll('#lang-dock button').forEach(b => b.classList.replace('text-dada-gold', 'text-white/30'));
+            const map = {'gujarati':'btn-guj', 'hindi':'btn-hin', 'english':'btn-eng'};
+            document.getElementById(map[lang]).classList.replace('text-white/30', 'text-dada-gold');
+            localStorage.setItem('guide_lang', lang);
+        }
+
+        function initScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) e.target.classList.add('active');
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
         window.onload = () => {
-             // We start fresh with Language Gate
-             const savedLang = localStorage.getItem('guide_lang');
-             if(savedLang) {
-                // If user returns, we can maybe skip language gate but user wants interactive steps, so we start at step 1
-             }
+             const saved = localStorage.getItem('guide_lang') || 'gujarati';
+             switchLang(saved);
         };
     </script>
 </body>
