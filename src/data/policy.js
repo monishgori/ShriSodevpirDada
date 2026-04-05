@@ -4,7 +4,7 @@ export const policyData = {
         hindi: "गोपनीयता नीति",
         english: "Privacy Policy"
     },
-    lastUpdated: "April 04, 2026",
+    lastUpdated: "April 05, 2026",
     sections: [
         {
             subtitle: {
@@ -25,9 +25,21 @@ export const policyData = {
                 english: "Data Collection"
             },
             text: {
-                gujarati: "અમે અમારા વપરાશકર્તાઓ પાસેથી કોઈ વ્યક્તિગત માહિતી (જેમ કે નામ, ફોન નંબર અથવા ઇમેઇલ) એકત્રિત કરતા નથી. તમારી બધી પસંદગીઓ તમારા ઉપકરણ પર સ્થાનિક રીતે સંગ્રહિત થાય છે.",
-                hindi: "हम अपने उपयोगकर्ताओं से कोई व्यक्तिगत जानकारी (जैसे नाम, फोन नंबर या ईमेल) एकत्र नहीं करते हैं। आपकी सभी प्राथमिकताएं आपके डिवाइस पर स्थानीय रूप से संग्रहीत की जाती हैं।",
-                english: "We do not collect any personal information (such as name, phone number, or email) from our users. All your preferences are stored locally on your device."
+                gujarati: "અમે અમારા વપરાશકર્તાઓ પાસેથી કોઈ પણ વ્યક્તિગત માહિતી (જેમ કે નામ, ફોન નંબર અથવા ઇમેઇલ) સીધી રીતે એકત્રિત કરતા નથી. જો કે, એપ્લિકેશન તૃતીય-પક્ષ સેવાઓનો ઉપયોગ કરે છે જે તમારી ઓળખ કરવા માટે વપરાતી માહિતી એકત્રિત કરી શકે છે.",
+                hindi: "हम अपने उपयोगकर्ताओं से कोई भी व्यक्तिगत जानकारी (जैसे नाम, फोन नंबर या ईमेल) सीधे एकत्र नहीं करते हैं। हालाँकि, ऐप तृतीय-पक्ष सेवाओं का उपयोग करता है जो आपकी पहचान करने के लिए उपयोग की जाने वाली जानकारी एकत्र कर सकते हैं।",
+                english: "We do not collect any personal information (such as name, phone number, or email) directly from our users. However, the app uses third-party services that may collect information used to identify you."
+            }
+        },
+        {
+            subtitle: {
+                gujarati: "તૃતીય-પક્ષ સેવાઓ",
+                hindi: "तृतीय-पक्ष सेवाएं",
+                english: "Third-Party Services"
+            },
+            text: {
+                gujarati: "અમે કેટલીક તૃતીય-પક્ષ સેવાઓનો ઉપયોગ કરીએ છીએ જેની પોતાની ગોપનીયતા નીતિઓ છે:\n• Google Play સેવાઓ\n• AdMob (જહેરાતો માટે)",
+                hindi: "हम कुछ तृतीय-पक्ष सेवाओं का उपयोग करते हैं जिनकी अपनी गोपनीयता नीतियां हैं:\n• Google Play सेवाएं\n• AdMob (विज्ञापनों के लिए)",
+                english: "We use third-party services that have their own Privacy Policies:\n• Google Play Services\n• AdMob (for ads)"
             }
         },
         {
@@ -37,9 +49,9 @@ export const policyData = {
                 english: "Permissions"
             },
             text: {
-                gujarati: "વપરાશકર્તાના અનુભવને સુધારવા માટે અમે વાઇબ્રેશન (હેપ્ટિક ફીડબેક) અને ઇન્ટરનેટ (યુટ્યુબ વીડિયો માટે) જેવી મૂળભૂત પરવાનગીઓનો ઉપયોગ કરીએ છીએ.",
-                hindi: "उपयोगकर्ता अनुभव को बेहतर बनाने के लिए हम वाइब्रेशन (हैप्टिक फीडबैक) और इंटरनेट (यूट्यूब वीडियो के लिए) जैसी बुनियादी अनुमतियों का उपयोग करते हैं।",
-                english: "We use basic permissions like Vibration (for haptic feedback) and Internet (for YouTube videos) to enhance the user experience."
+                gujarati: "વપરાશકર્તાના અનુભવને સુધારવા માટે અમે વાઇબ્રેશન (હેપ્ટિક ફીડબેક) અને ઇન્ટરનેટ (યુટ્યુબ વીડિયો અને જાહેરાતો માટે) જેવી મૂળભૂત પરવાનગીઓનો ઉપયોગ કરીએ છીએ.",
+                hindi: "उपयोगकर्ता अनुभव को बेहतर बनाने के लिए हम वाइब्रेशन (हैप्टिक फीडबैक) और इंटरनेट (यूट्यूब वीडियो और विज्ञापनों के लिए) जैसी बुनियादी अनुमतियों का उपयोग करते हैं।",
+                english: "We use basic permissions like Vibration (for haptic feedback) and Internet (for YouTube videos and ads) to enhance the user experience."
             }
         },
         {
