@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { Capacitor } from '@capacitor/core';
+import { Capacitor, registerPlugin } from '@capacitor/core';
 import { AdMob, BannerAdSize, BannerAdPosition } from '@capacitor-community/admob';
 import { LocalNotifications } from '@capacitor/local-notifications';
 import { chalisaData } from './data/chalisa';
@@ -17,6 +17,9 @@ const ImpactStyle = {
   Medium: 20,
   Heavy: 30
 };
+
+const NativeAudio = registerPlugin('NativeAudio');
+const isNativeAndroid = Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'android';
 
 // Memoized Library Tray to prevent jumping/flickering on re-renders (Critical for iOS Safari)
 const DevotionalLibrary = React.memo(({
@@ -214,6 +217,12 @@ function App() {
     try { return localStorage.getItem('sodev_evening_time') || '18:30'; } catch { return '18:30'; }
   });
 
+  // Ref to track repeatCount without triggering effect re-runs
+  const repeatCountRef = useRef(repeatCount);
+  useEffect(() => {
+    repeatCountRef.current = repeatCount;
+  }, [repeatCount]);
+
   // Handle Notification Scheduling
   useEffect(() => {
     const setupNotifications = async () => {
@@ -388,17 +397,19 @@ function App() {
     if (sleepTimer) {
       if (timerId) clearTimeout(timerId);
       const id = setTimeout(() => {
-        if (audioRef.current) {
+        if (isNativeAndroid) {
+          NativeAudio.pause().catch(error => console.error('Sleep timer pause failed:', error));
+        } else if (audioRef.current) {
           audioRef.current.pause();
-          setIsPlaying(false);
-          setSleepTimer(null);
-          alert("Sleep timer finished. Pooja paused.");
         }
+        setIsPlaying(false);
+        setSleepTimer(null);
+        alert("Sleep timer finished. Pooja paused.");
       }, sleepTimer * 60000);
       setTimerId(id);
     }
     return () => { if (timerId) clearTimeout(timerId); };
-  }, [sleepTimer]);
+  }, [sleepTimer, timerId]);
 
   const shareApp = () => {
     if (navigator.share) {
@@ -420,6 +431,40 @@ function App() {
   const bellAudioRef = useRef(null);
   const shankhAudioRef = useRef(null);
 
+  const pauseMainAudio = useCallback(async () => {
+    if (isNativeAndroid) {
+      try {
+        await NativeAudio.pause();
+      } catch (error) {
+        console.error('Native pause failed:', error);
+      }
+      setIsPlaying(false);
+      return;
+    }
+
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
+    setIsPlaying(false);
+  }, []);
+
+  const ensureNotificationPermission = useCallback(async () => {
+    if (!isNativeAndroid) return true;
+
+    try {
+      const permission = await NativeAudio.hasNotificationPermission();
+      if (permission?.granted) {
+        return true;
+      }
+
+      const requested = await NativeAudio.requestNotificationPermission();
+      return Boolean(requested?.granted);
+    } catch (error) {
+      console.error('Notification permission check failed:', error);
+      return false;
+    }
+  }, []);
+
   // GLOBAL AUDIO CLEANUP (Memory Leak Prevention)
   useEffect(() => {
     return () => {
@@ -430,6 +475,9 @@ function App() {
           ref.current = null;
         }
       });
+      if (isNativeAndroid) {
+        NativeAudio.stop().catch(() => {});
+      }
     };
   }, []);
 
@@ -440,7 +488,11 @@ function App() {
 
   const handleSeekEnd = (e) => {
     const time = Number(e.target.value);
-    if (audioRef.current) {
+    if (isNativeAndroid) {
+      NativeAudio.seekTo({ position: Math.round(time * 1000) }).catch(error => {
+        console.error('Native seek failed:', error);
+      });
+    } else if (audioRef.current) {
       audioRef.current.currentTime = time;
     }
     setIsSeeking(false);
@@ -529,6 +581,51 @@ function App() {
     return audio;
   };
 
+  const getCurrentTrackTitle = () => {
+    if (currentMode === 'chalisa') return "Dada's Chalisa";
+    if (currentMode === 'mantras') return mantras[activeItemIndex]?.name || "Dada's Mantra";
+    if (currentMode === 'bhajans') return bhajans[activeItemIndex]?.name || "Dada's Bhajan";
+    if (currentMode === 'aartis') return "Dada's Aarti";
+    if (currentMode === 'stutis') return "Dada's Stuti";
+    return 'Shri Sodevpir Dada';
+  };
+
+  const prepareNativeTrack = useCallback(async (path) => {
+    try {
+      await ensureNotificationPermission();
+
+      const status = await NativeAudio.prepare({
+        src: path,
+        title: getCurrentTrackTitle(),
+        artist: 'Shri Sodevpir Dada',
+        repeatCount: repeatCountRef.current
+      });
+      
+      const statusData = status || {};
+      setCurrentTime((statusData.currentTime || 0) / 1000);
+      setDuration((statusData.duration || 0) / 1000);
+      setCurrentRepeat(Number(statusData.currentRepeat || 0));
+      setIsPlaying(Boolean(statusData.isPlaying));
+    } catch (error) {
+      console.error('Native prepare failed:', error);
+    }
+  }, [currentMode, activeItemIndex, ensureNotificationPermission]); // Decoupled repeatCount
+
+  const syncNativeStatus = useCallback(async () => {
+    if (!isNativeAndroid) return;
+
+    try {
+      const status = await NativeAudio.getStatus();
+      setIsPlaying(Boolean(status?.isPlaying));
+      if (!isSeeking) {
+        setCurrentTime((status?.currentTime || 0) / 1000);
+      }
+      setDuration((status?.duration || 0) / 1000);
+    } catch (error) {
+      console.error('Native status sync failed:', error);
+    }
+  }, [isSeeking]);
+
   const getAudioPath = () => {
     const audioModes = ['chalisa', 'mantras', 'bhajans', 'aartis', 'stutis'];
     if (!audioModes.includes(currentMode)) return "/assets/audio/chalisa1.mp3";
@@ -554,6 +651,11 @@ function App() {
     setCurrentRepeat(0);
     setIsPlaying(false);
 
+    if (isNativeAndroid) {
+      prepareNativeTrack(path);
+      return;
+    }
+
     // Safari Fix: Only touch the existing instance if it's already there. 
     // If not, it will be created on the first user "PLAY" click.
     if (audioRef.current) {
@@ -569,10 +671,12 @@ function App() {
         audioRef.current.pause();
       }
     };
-  }, [currentMode, activeItemIndex]);
+  }, [activeItemIndex, currentMode]); // Removed prepareNativeTrack to prevent re-preparation on repeatCount change
 
   // ROBUST REPEATER LOGIC: Handles looping with state directly
   useEffect(() => {
+    if (isNativeAndroid) return;
+
     const audio = audioRef.current;
     if (!audio) return;
 
@@ -588,11 +692,56 @@ function App() {
         }, 200);
       } else {
         setIsPlaying(false);
-        setCurrentRepeat(0);
+        // currentRepeat is NOT reset here so the UI can show the final total (e.g. 11/11)
         audio.currentTime = audio.duration || 0;
       }
     };
   }, [currentRepeat, repeatCount]);
+
+  useEffect(() => {
+    if (!isNativeAndroid) return;
+
+    let statusInterval = null;
+    let stateListener = null;
+    let endedListener = null;
+
+    const setupNativeListeners = async () => {
+      stateListener = await NativeAudio.addListener('playbackStateChange', (status) => {
+        setIsPlaying(Boolean(status?.isPlaying));
+        if (!isSeeking) {
+          setCurrentTime((status?.currentTime || 0) / 1000);
+        }
+        setDuration((status?.duration || 0) / 1000);
+        setCurrentRepeat(Number(status?.currentRepeat || 0));
+        if (status?.repeatCount) {
+          setRepeatCount(Number(status.repeatCount));
+        }
+      });
+
+      endedListener = await NativeAudio.addListener('playbackEnded', async () => {
+        // currentRepeat is NOT reset here so the UI can show the final total
+        setIsPlaying(false);
+        await syncNativeStatus();
+      });
+
+      await syncNativeStatus();
+    };
+
+    setupNativeListeners();
+
+    return () => {
+      stateListener?.remove();
+      endedListener?.remove();
+    };
+  }, [isSeeking, syncNativeStatus]);
+
+  useEffect(() => {
+    if (!isNativeAndroid) return;
+
+    NativeAudio.setRepeatCount({ repeatCount }).catch(error => {
+      console.error('Native repeat count update failed:', error);
+    });
+  }, [repeatCount]);
 
   const ringBell = () => {
     triggerHaptic(ImpactStyle.Heavy);
@@ -640,9 +789,8 @@ function App() {
     setIsLyricsVisible(true);
     setIsLibraryOpen(false);
     setActiveItemIndex(0);
-    setIsPlaying(false);
-    if (audioRef.current) audioRef.current.pause();
-  }, [currentMode]);
+    pauseMainAudio();
+  }, [currentMode, pauseMainAudio]);
 
   return (
     <>
@@ -756,6 +904,17 @@ function App() {
                 <button className="dock-play-btn" onClick={(e) => {
                   e.stopPropagation();
                   triggerHaptic(ImpactStyle.Medium);
+
+                  if (isNativeAndroid) {
+                    if (isPlaying) {
+                      pauseMainAudio();
+                    } else {
+                      ensureNotificationPermission().then(() => NativeAudio.play())
+                        .then(() => setIsPlaying(true))
+                        .catch(err => console.error("Dock Play Error:", err));
+                    }
+                    return;
+                  }
 
                   // CRITICAL: Ensure audio instance exists on user interaction for iOS Safari
                   if (!audioRef.current) {
@@ -960,10 +1119,7 @@ function App() {
                   className={`verse glass-panel ${activeItemIndex === index ? 'active-verse' : ''}`}
                   onClick={() => {
                     setActiveItemIndex(index);
-                    setIsPlaying(false);
-                    if (audioRef.current) {
-                      audioRef.current.pause();
-                    }
+                    pauseMainAudio();
                   }}
                 >
                   <div style={{ color: 'var(--secondary)', fontSize: '0.9rem', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '1px' }}>
@@ -984,10 +1140,7 @@ function App() {
                   className={`verse glass-panel ${activeItemIndex === index ? 'active-verse' : ''}`}
                   onClick={() => {
                     setActiveItemIndex(index);
-                    setIsPlaying(false);
-                    if (audioRef.current) {
-                      audioRef.current.pause();
-                    }
+                    pauseMainAudio();
                   }}
                 >
                   <div style={{ color: 'var(--secondary)', fontSize: '0.9rem' }}>

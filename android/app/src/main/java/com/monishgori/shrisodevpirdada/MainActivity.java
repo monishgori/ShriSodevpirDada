@@ -22,6 +22,7 @@ public class MainActivity extends BridgeActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        registerPlugin(NativeAudioPlugin.class);
         super.onCreate(savedInstanceState);
         
         MobileAds.initialize(this, initializationStatus -> {
