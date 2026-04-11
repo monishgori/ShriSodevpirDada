@@ -514,22 +514,31 @@ function App() {
     }
   }, [activeVerse, isLyricsVisible, isPlaying]);
 
-  // Flower Shower Logic - DIVINE BOUQUET V3 (Rich Intensity)
+  // Flower Shower Logic - DIVINE BOUQUET V4 (Performance Optimized)
   const startFlowerShower = () => {
     const flowerTypes = ['🌼', '🌹', '🪷', '💮', '🌻', '🌷', '🏵️', '🌸', '🏵️', '💮'];
-    const newFlowers = Array.from({ length: 80 }).map((_, i) => ({
-      id: Date.now() + i,
-      type: flowerTypes[Math.floor(Math.random() * flowerTypes.length)],
-      left: Math.random() * 100 + '%',
-      delay: Math.random() * 3 + 's', // Wider delay for layered fall
-      duration: 3 + Math.random() * 5 + 's', // Varying speeds
-      sideSway: (Math.random() * 140 - 70) + 'px', // Increased swaying
-      rotateAxis: Math.random() > 0.5 ? 'X' : 'Y'
-    }));
-    setFlowers(prev => [...prev, ...newFlowers]);
+    
+    setFlowers(prev => {
+      // Limit total concurrent flowers to 150 to maintain 60fps on mobile
+      if (prev.length > 150) return prev; 
+      
+      const newFlowers = Array.from({ length: 45 }).map((_, i) => ({
+        id: Math.random().toString(36).substr(2, 9) + i,
+        type: flowerTypes[Math.floor(Math.random() * flowerTypes.length)],
+        left: Math.random() * 100 + '%',
+        delay: Math.random() * 2 + 's', 
+        duration: 4 + Math.random() * 4 + 's', // Slower, more elegant fall
+        sideSway: (Math.random() * 100 - 50) + 'px', 
+        rotateAxis: Math.random() > 0.5 ? 'X' : 'Y'
+      }));
+      
+      return [...prev, ...newFlowers];
+    });
+
+    // Cleanup after 8.5 seconds
     setTimeout(() => {
-      setFlowers(prev => prev.filter(f => !newFlowers.find(nf => nf.id === f.id)));
-    }, 8000);
+      setFlowers(prev => prev.slice(45)); // Efficiently remove oldest batch
+    }, 8500);
   };
 
   const toggleDiya = () => {
@@ -747,23 +756,31 @@ function App() {
   const ringBell = () => {
     triggerHaptic(ImpactStyle.Heavy);
     setIsBellRinging(true);
-    if (!bellAudioRef.current) {
-      bellAudioRef.current = new Audio("/assets/audio/bell.mp3");
-      bellAudioRef.current.onerror = () => console.log("Bell audio failed to load");
+    if (isNativeAndroid) {
+      NativeAudio.bell().catch(error => console.error('Native bell failed:', error));
+    } else {
+      if (!bellAudioRef.current) {
+        bellAudioRef.current = new Audio("/assets/audio/bell.mp3");
+        bellAudioRef.current.onerror = () => console.log("Bell audio failed to load");
+      }
+      bellAudioRef.current.currentTime = 0;
+      bellAudioRef.current.play().catch(() => { });
     }
-    bellAudioRef.current.currentTime = 0;
-    bellAudioRef.current.play().catch(() => { });
     setTimeout(() => setIsBellRinging(false), 500);
   };
 
   const playShankh = () => {
     triggerHaptic(ImpactStyle.Heavy);
-    if (!shankhAudioRef.current) {
-      shankhAudioRef.current = new Audio("/assets/audio/shankh.mp3");
-      shankhAudioRef.current.onerror = () => console.log("Shankh audio failed to load");
+    if (isNativeAndroid) {
+      NativeAudio.shankh().catch(error => console.error('Native shankh failed:', error));
+    } else {
+      if (!shankhAudioRef.current) {
+        shankhAudioRef.current = new Audio("/assets/audio/shankh.mp3");
+        shankhAudioRef.current.onerror = () => console.log("Shankh audio failed to load");
+      }
+      shankhAudioRef.current.currentTime = 0;
+      shankhAudioRef.current.play().catch(() => { });
     }
-    shankhAudioRef.current.currentTime = 0;
-    shankhAudioRef.current.play().catch(() => { });
   };
 
   const startReading = useCallback((mode) => {
