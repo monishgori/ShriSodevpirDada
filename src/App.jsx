@@ -582,8 +582,10 @@ function App() {
       }
     };
 
-    audio.onerror = () => {
+    audio.onerror = (e) => {
+      console.error("AUDIO ERROR:", path, e);
       setIsPlaying(false);
+      // alert("Audio Error: " + path + " - " + (audio.error ? audio.error.code : "unknown"));
     };
 
     audio.onended = null;
