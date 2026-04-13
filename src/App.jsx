@@ -177,6 +177,363 @@ const DevotionalLibrary = React.memo(({
   );
 });
 
+// 1. Memoized Flower Component to prevent unnecessary re-renders of all particles
+const DivineFlowers = React.memo(({ flowers, isAndroid }) => {
+  return (
+    <>
+      {flowers.map(flower => (
+        <div key={flower.id} className="flower" style={{
+          left: flower.left,
+          animationDelay: flower.delay,
+          animationDuration: flower.duration,
+          '--sway': flower.sideSway,
+          '--rot-axis': flower.rotateAxis
+        }}>{flower.type}</div>
+      ))}
+    </>
+  );
+});
+
+// 2. Memoized Particle Background
+const ParticlesBackground = React.memo(() => {
+  return (
+    <div className="particles-container">
+      {Array.from({ length: 15 }).map((_, i) => (
+        <div key={i} className="particle" style={{
+          left: Math.random() * 100 + '%',
+          top: Math.random() * 100 + '%',
+          animationDelay: Math.random() * 5 + 's',
+          width: 2 + Math.random() * 3 + 'px',
+          height: 2 + Math.random() * 3 + 'px'
+        }}></div>
+      ))}
+    </div>
+  );
+});
+
+// 3. Divine Header (Isolated)
+const DivineHeader = React.memo(({ language, greeting, isLyricsVisible, isFocusMode, dailyQuote, onHomeClick }) => {
+  return (
+    <header className="top-bar">
+      <div className="divine-centerpiece">
+        <div className="divine-name" onClick={onHomeClick}>ૐ શ્રી સાદેવપીર દાદાય નમઃ</div>
+      </div>
+
+      <div className="top-bar-side-content">
+        <div className="header-greeting" onClick={onHomeClick}>
+          <div className={`greeting-text lang-${language}`}>{greeting}</div>
+        </div>
+
+        {!isLyricsVisible && !isFocusMode && dailyQuote && (
+          <div className="daily-quote-card glass-panel">
+            <div className="quote-header">
+              <span className="quote-icon">❝</span>
+              <span className="quote-label">
+                {language === 'gujarati' ? 'આજનો વિચાર' : language === 'english' ? 'Thought of the Day' : 'आज का विचार'}
+              </span>
+            </div>
+            <div className="quote-content">
+              <div className="main-quote">
+                {dailyQuote[language] || dailyQuote.english || dailyQuote.hindi}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </header>
+  );
+});
+
+// 4. Lyrics Viewer (Memoized & Performance Optimized)
+const LyricsViewer = React.memo(({
+  currentMode, language, activeVerse, activeItemIndex, activeIncidentIndex,
+  setActiveItemIndex, historyView, setHistoryView, setActiveIncidentIndex,
+  currentRepeat, repeatCount, startReading, triggerHaptic, pauseMainAudio,
+  chalisaData, mantras, bhajans, aartis, stutis, historyData, videos, policyData,
+  setIsLyricsVisible
+}) => {
+  return (
+    <main key={`${currentMode}-${language}`} className="lyrics-container">
+      <div className="top-actions-row">
+        <div className="back-btn glass-panel" onClick={() => setIsLyricsVisible(false)}>
+          <span className="back-icon">←</span> {
+            language === 'gujarati' ? 'વાંચન બંધ કરો' :
+              language === 'english' ? 'Close Reading' : 'पठन बंद करें'
+          }
+        </div>
+        {currentMode === 'history' && historyView !== 'menu' && (
+          <div className="back-btn glass-panel secondary-back" onClick={() => {
+            if (historyView === 'incidentDetail') {
+              setHistoryView('incidents');
+            } else {
+              setHistoryView('menu');
+            }
+            triggerHaptic();
+          }}>
+            <span className="back-icon">↺</span> {
+              language === 'gujarati' ? 'પાછા જાઓ' :
+                language === 'english' ? 'Go Back' : 'वाપસ जाएं'
+            }
+          </div>
+        )}
+      </div>
+
+      <div className="page-header">
+        <div className="page-title">
+          {language === 'gujarati' ? (
+            currentMode === 'chalisa' ? 'દાદા ની ચાલીસા' :
+              currentMode === 'mantras' ? 'દાદા ના સિદ્ધ મંત્ર' :
+                currentMode === 'bhajans' ? 'દાદા ના ભજન' :
+                  currentMode === 'aartis' ? 'દાદા ની આરતી' :
+                    currentMode === 'stutis' ? 'દાદા ની સ્તુતિ' :
+                      currentMode === 'history' ? (
+                        historyView === 'menu' ? 'દાદા નો ઇતિહાસ' :
+                          historyView === 'lifeStory' ? 'દાદા ની જીવન કથા' :
+                            historyView === 'incidentDetail' && activeIncidentIndex !== null ? historyData.incidents[activeIncidentIndex].title[language] : 'દાદા ના ચમત્કારો'
+                      ) :
+                        currentMode === 'videos' ? 'દાદા ના દર્શન' :
+                          currentMode === 'policy' ? 'ગોપનીયતા નીતિ' : 'સોદેવ પૂજા'
+          ) : language === 'english' ? (
+            currentMode === 'chalisa' ? "Dada's Chalisa" :
+              currentMode === 'mantras' ? "Dada's Siddh Mantras" :
+                currentMode === 'bhajans' ? "Dada's Bhajans" :
+                  currentMode === 'aartis' ? "Dada's Aarti" :
+                    currentMode === 'stutis' ? "Dada's Stuti" :
+                      currentMode === 'history' ? (
+                        historyView === 'menu' ? "Dada's History" :
+                          historyView === 'lifeStory' ? "Dada's Life Story" :
+                            historyView === 'incidentDetail' && activeIncidentIndex !== null ? historyData.incidents[activeIncidentIndex].title[language] : "Dada's Miracles"
+                      ) :
+                        currentMode === 'videos' ? "Dada's Darshan" :
+                          currentMode === 'policy' ? 'Privacy Policy' : 'Sodev Pooja'
+          ) : (
+            currentMode === 'chalisa' ? 'दादा की चालीसा' :
+              currentMode === 'mantras' ? 'दादा के सिद्ध मंत्र' :
+                currentMode === 'bhajans' ? 'दादा के भजन' :
+                  currentMode === 'aartis' ? 'दादा की आरती' :
+                    currentMode === 'stutis' ? 'दादा की स्तुति' :
+                      currentMode === 'history' ? (
+                        historyView === 'menu' ? 'दादा का इतिहास' :
+                          historyView === 'lifeStory' ? 'दादा की जीवन कथा' :
+                            historyView === 'incidentDetail' && activeIncidentIndex !== null ? historyData.incidents[activeIncidentIndex].title[language] : 'दादा के चमत्कार'
+                      ) :
+                        currentMode === 'videos' ? 'दादा के दर्शन' :
+                          currentMode === 'policy' ? 'गोपनीयता नीति' : 'सोदेव पूजा'
+          )}
+        </div>
+        <div className="page-subtitle">
+          {['chalisa', 'mantras', 'bhajans', 'aartis', 'stutis'].includes(currentMode) && repeatCount > 1 && (
+            <div className="jaap-counter">
+              Jaap {currentRepeat + 1} of {repeatCount}
+            </div>
+          )}
+          {currentMode === 'videos' && (
+            language === 'gujarati' ? 'સોદેવપીર દર્શન સંગ્રહ' :
+              language === 'english' ? 'Sodevpir Darshan Collection' : 'सोदेवपीर दर्शन संग्रह'
+          )}
+        </div>
+      </div>
+
+      {currentMode === 'chalisa' ? (
+        chalisaData.lyrics.map((verse, index) => (
+          <div key={index} className={`verse glass-panel ${activeVerse === index ? 'active-verse' : ''}`}>
+            <div className="hindi-text">{verse[language] || verse.gujarati || verse.hindi}</div>
+          </div>
+        ))
+      ) : currentMode === 'mantras' ? (
+        mantras.map((mantra, index) => (
+          <div
+            key={index}
+            className={`verse glass-panel ${activeItemIndex === index ? 'active-verse' : ''}`}
+            onClick={() => {
+              setActiveItemIndex(index);
+              pauseMainAudio();
+            }}
+          >
+            <div style={{ color: 'var(--secondary)', fontSize: '0.9rem', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '1px' }}>
+              {mantra.name} {activeItemIndex === index && (
+                language === 'gujarati' ? ' (પસંદ કરેલ)' :
+                  language === 'english' ? ' (Selected)' : ' (चयनित)'
+              )}
+            </div>
+            <div className="hindi-text" style={{ fontSize: '1.2rem' }}>
+              {mantra[language] || mantra.gujarati || mantra.hindi}
+            </div>
+          </div>
+        ))
+      ) : currentMode === 'bhajans' ? (
+        bhajans.map((bhajan, index) => (
+          <div
+            key={index}
+            className={`verse glass-panel ${activeItemIndex === index ? 'active-verse' : ''}`}
+            onClick={() => {
+              setActiveItemIndex(index);
+              pauseMainAudio();
+            }}
+          >
+            <div style={{ color: 'var(--secondary)', fontSize: '0.9rem' }}>
+              {bhajan[language] || bhajan.name} {activeItemIndex === index && (
+                language === 'gujarati' ? ' (પસંદ કરેલ)' :
+                  language === 'english' ? ' (Selected)' : ' (चयनित)'
+              )}
+            </div>
+          </div>
+        ))
+      ) : currentMode === 'aartis' ? (
+        aartis.map((verse, index) => (
+          <div key={index} className="verse glass-panel">
+            <div className="hindi-text">{verse[language] || verse.gujarati || verse.hindi}</div>
+          </div>
+        ))
+      ) : currentMode === 'stutis' ? (
+        stutis.map((verse, index) => (
+          <div key={index} className="verse glass-panel">
+            <div className="hindi-text">{verse[language] || verse.gujarati || verse.hindi}</div>
+          </div>
+        ))
+      ) : currentMode === 'history' ? (
+        <div className="history-section-container">
+          {historyView === 'menu' ? (
+            <>
+              <div className="page-header center-header">
+                <div className="page-subtitle">{language === 'english' ? 'Choose a Section to Read' : 'પઠન માટે વિભાગ પસંદ કરો'}</div>
+              </div>
+              <div className="history-menu-grid">
+                <button className="history-menu-card glass-panel" onClick={() => { setHistoryView('lifeStory'); triggerHaptic(ImpactStyle.Medium); }}>
+                  <div className="menu-card-icon">📖</div>
+                  <div className="menu-card-content">
+                    <div className="menu-card-title">{
+                      language === 'gujarati' ? 'જીવન ચરિત્ર' :
+                        language === 'english' ? 'Life History' : 'जीवन चरित्र'
+                    }</div>
+                    <div className="menu-card-subtitle">{
+                      language === 'english' ? 'Sacred Story & Journey' : 'Life Story & Miracles'
+                    }</div>
+                  </div>
+                </button>
+                <button className="history-menu-card glass-panel" onClick={() => { setHistoryView('incidents'); triggerHaptic(ImpactStyle.Medium); }}>
+                  <div className="menu-card-icon">✨</div>
+                  <div className="menu-card-content">
+                    <div className="menu-card-title">{
+                      language === 'gujarati' ? 'દાદાના ચમત્કારો' :
+                        language === 'english' ? 'Divine Miracles' : 'दादा के चमत्कार'
+                    }</div>
+                    <div className="menu-card-subtitle">{
+                      language === 'english' ? 'True Incidents of Dada' : 'True Incidents Index'
+                    }</div>
+                  </div>
+                </button>
+              </div>
+            </>
+          ) : historyView === 'lifeStory' ? (
+            <>
+              <div className="page-header center-header">
+                <div className="page-subtitle">{language === 'english' ? 'Sacred Journey of Sodevpir Dada' : 'શ્રી સોદેવપીર દાદાની જીવન ગાથા'}</div>
+              </div>
+              {historyData.lifeStory.content.map((item) => (
+                <div key={item.id} className="verse glass-panel">
+                  <div style={{ color: 'var(--secondary)', fontSize: '1.2rem', marginBottom: '15px' }}>
+                    {item.subtitle[language] || item.subtitle.hindi}
+                  </div>
+                  <div className="hindi-text" style={{ fontSize: '1.1rem', textAlign: 'left' }}>
+                    {item.text[language] || item.text.hindi}
+                  </div>
+                </div>
+              ))}
+            </>
+          ) : historyView === 'incidents' ? (
+            <>
+              <div className="page-header center-header">
+                <div className="page-subtitle">{language === 'english' ? 'Select a Miracle to Read' : 'વાંચવા માટે એક ચમત્કાર પસંદ કરો'}</div>
+              </div>
+              <div className="incidents-grid">
+                {historyData.incidents.map((incident, idx) => (
+                  <button
+                    key={incident.id}
+                    className={`incident-select-card glass-panel ${activeIncidentIndex === idx ? 'active' : ''}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveIncidentIndex(idx);
+                      setHistoryView('incidentDetail');
+                      triggerHaptic(ImpactStyle.Light);
+                    }}
+                  >
+                    <span className="incident-number">#{idx + 1}</span>
+                    <span className="incident-title-text">{incident.title[language] || incident.title.hindi}</span>
+                  </button>
+                ))}
+              </div>
+            </>
+          ) : historyView === 'incidentDetail' ? (
+            <div className="selected-incident-viewer-fullscreen active-verse">
+              <div className="page-header center-header">
+                <div className="page-subtitle">{
+                  language === 'gujarati' ? 'ચમત્કારનો ઇતિહાસ' :
+                    language === 'english' ? 'History of Miracle' : 'चमत्कार का इतिहास'
+                }</div>
+              </div>
+              {activeIncidentIndex !== null && historyData.incidents[activeIncidentIndex] && (
+                <div className="hindi-text incident-content-full">
+                  {historyData.incidents[activeIncidentIndex].content[language] || historyData.incidents[activeIncidentIndex].content.hindi}
+                </div>
+              )}
+            </div>
+          ) : null}
+        </div>
+      ) : currentMode === 'videos' ? (
+        <div className="videos-section-container">
+          <div className="videos-grid-flow">
+            {videos.map((vid) => (
+              <div key={vid.id} className="video-premium-card glass-panel">
+                <div className="video-container-wrapper">
+                  <iframe
+                    width="100%"
+                    height="200"
+                    src={`https://www.youtube.com/embed/${vid.youtubeId}?modestbranding=1&rel=0`}
+                    title={vid.title}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+                <div className="video-card-details">
+                  <div className="video-platform-badge">
+                    <span className="youtube-logo">🔴</span> YouTube
+                  </div>
+                  <div className="video-card-title">
+                    {vid[language] || vid.gujarati || vid.hindi}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : currentMode === 'policy' ? (
+        <div className="policy-section-container">
+          <div className="page-header">
+            <div className="page-subtitle">Privacy & Data Transparency</div>
+          </div>
+          <div className="verse glass-panel" style={{ textAlign: 'center', marginBottom: '30px', padding: '15px' }}>
+            <div style={{ color: 'var(--secondary)', fontSize: '0.85rem', opacity: 0.8 }}>
+              Last Updated: {policyData.lastUpdated}
+            </div>
+          </div>
+          {policyData.sections.map((section, idx) => (
+            <div key={idx} className="verse glass-panel">
+              <div style={{ color: 'var(--secondary)', fontSize: '1.2rem', marginBottom: '15px' }}>
+                {section.subtitle[language] || section.subtitle.english}
+              </div>
+              <div className="hindi-text" style={{ fontSize: '1.1rem', textAlign: 'left' }}>
+                {section.text[language] || section.text.english}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : null}
+    </main>
+  );
+});
+
 function App() {
   const [currentMode, setCurrentMode] = useState(() => {
     try { return localStorage.getItem('pooja_mode') || 'chalisa'; } catch { return 'chalisa'; }
@@ -304,6 +661,15 @@ function App() {
   const [isSeeking, setIsSeeking] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
   const [isAppOpenReady, setIsAppOpenReady] = useState(false);
+
+  // Platform Detection & Android Body Class
+  useEffect(() => {
+    if (isNativeAndroid) {
+      document.body.classList.add('is-android');
+    } else {
+      document.body.classList.remove('is-android');
+    }
+  }, []);
 
   // Splash Screen Logic
   useEffect(() => {
@@ -519,10 +885,12 @@ function App() {
     const flowerTypes = ['🌼', '🌹', '🪷', '💮', '🌻', '🌷', '🏵️', '🌸', '🏵️', '💮'];
     
     setFlowers(prev => {
-      // Limit total concurrent flowers to 150 to maintain 60fps on mobile
-      if (prev.length > 150) return prev; 
+      // Limit total concurrent flowers to maintain 60fps on mobile
+      const maxFlowers = isNativeAndroid ? 80 : 150;
+      if (prev.length > maxFlowers) return prev; 
       
-      const newFlowers = Array.from({ length: 45 }).map((_, i) => ({
+      const batchSize = isNativeAndroid ? 25 : 45;
+      const newFlowers = Array.from({ length: batchSize }).map((_, i) => ({
         id: Math.random().toString(36).substr(2, 9) + i,
         type: flowerTypes[Math.floor(Math.random() * flowerTypes.length)],
         left: Math.random() * 100 + '%',
@@ -537,7 +905,8 @@ function App() {
 
     // Cleanup after 8.5 seconds
     setTimeout(() => {
-      setFlowers(prev => prev.slice(45)); // Efficiently remove oldest batch
+      const batchSize = isNativeAndroid ? 25 : 45;
+      setFlowers(prev => prev.slice(batchSize)); // Efficiently remove oldest batch
     }, 8500);
   };
 
@@ -821,28 +1190,10 @@ function App() {
           <div className="diya-base">🪔</div>
         </div>
         {/* Ambient Particles */}
-        <div className="particles-container">
-          {Array.from({ length: 15 }).map((_, i) => (
-            <div key={i} className="particle" style={{
-              left: Math.random() * 100 + '%',
-              top: Math.random() * 100 + '%',
-              animationDelay: Math.random() * 5 + 's',
-              width: 2 + Math.random() * 3 + 'px',
-              height: 2 + Math.random() * 3 + 'px'
-            }}></div>
-          ))}
-        </div>
+        <ParticlesBackground />
 
         {/* Divine Flower Shower */}
-        {flowers.map(flower => (
-          <div key={flower.id} className="flower" style={{
-            left: flower.left,
-            animationDelay: flower.delay,
-            animationDuration: flower.duration,
-            '--sway': flower.sideSway,
-            '--rot-axis': flower.rotateAxis
-          }}>{flower.type}</div>
-        ))}
+        <DivineFlowers flowers={flowers} isAndroid={isNativeAndroid} />
 
         {/* Background Section */}
         <div className="background-slider" onClick={() => setIsLyricsVisible(false)}>
@@ -851,34 +1202,14 @@ function App() {
         </div>
 
         {/* Top Bar */}
-        <header className="top-bar">
-          <div className="divine-centerpiece">
-            <div className="divine-name">ૐ શ્રી સાદેવપીર દાદાય નમઃ</div>
-          </div>
-
-          <div className="top-bar-side-content">
-            <div className="header-greeting" onClick={() => setIsLyricsVisible(false)}>
-              <div className={`greeting-text lang-${language}`}>{getGreeting()}</div>
-            </div>
-
-            {!isLyricsVisible && !isFocusMode && dailyQuote && (
-              <div className="daily-quote-card glass-panel">
-                <div className="quote-header">
-                  <span className="quote-icon">❝</span>
-                  <span className="quote-label">
-                    {language === 'gujarati' ? 'આજનો વિચાર' : language === 'english' ? 'Thought of the Day' : 'आज का विचार'}
-                  </span>
-                </div>
-                <div className="quote-content">
-                  <div className="main-quote">
-                    {dailyQuote[language] || dailyQuote.english || dailyQuote.hindi}
-                  </div>
-                </div>
-              </div>
-            )}
-
-          </div>
-        </header>
+        <DivineHeader 
+          language={language}
+          greeting={getGreeting()}
+          isLyricsVisible={isLyricsVisible}
+          isFocusMode={isFocusMode}
+          dailyQuote={dailyQuote}
+          onHomeClick={() => setIsLyricsVisible(false)}
+        />
 
         <div className="bottom-dashboard-container">
 
@@ -1043,286 +1374,33 @@ function App() {
           setEveningTime={setEveningTime}
         />
 
-        {/* LYRICS VIEW */}
+        {/* LYRICS VIEW (Optimized component) */}
         {isLyricsVisible && (
-          <main key={`${currentMode}-${language}`} className="lyrics-container">
-            <div className="top-actions-row">
-              <div className="back-btn glass-panel" onClick={() => setIsLyricsVisible(false)}>
-                <span className="back-icon">←</span> {
-                  language === 'gujarati' ? 'વાંચન બંધ કરો' :
-                    language === 'english' ? 'Close Reading' : 'पठन बंद करें'
-                }
-              </div>
-              {currentMode === 'history' && historyView !== 'menu' && (
-                <div className="back-btn glass-panel secondary-back" onClick={() => {
-                  if (historyView === 'incidentDetail') {
-                    setHistoryView('incidents');
-                  } else {
-                    setHistoryView('menu');
-                  }
-                  triggerHaptic();
-                }}>
-                  <span className="back-icon">↺</span> {
-                    language === 'gujarati' ? 'પાછા જાઓ' :
-                      language === 'english' ? 'Go Back' : 'वापस जाएं'
-                  }
-                </div>
-              )}
-            </div>
-
-            <div className="page-header">
-              <div className="page-title">
-                {language === 'gujarati' ? (
-                  currentMode === 'chalisa' ? 'દાદા ની ચાલીસા' :
-                    currentMode === 'mantras' ? 'દાદા ના સિદ્ધ મંત્ર' :
-                      currentMode === 'bhajans' ? 'દાદા ના ભજન' :
-                        currentMode === 'aartis' ? 'દાદા ની આરતી' :
-                          currentMode === 'stutis' ? 'દાદા ની સ્તુતિ' :
-                            currentMode === 'history' ? (
-                              historyView === 'menu' ? 'દાદા નો ઇતિહાસ' :
-                                historyView === 'lifeStory' ? 'દાદા ની જીવન કથા' :
-                                  historyView === 'incidentDetail' && activeIncidentIndex !== null ? historyData.incidents[activeIncidentIndex].title[language] : 'દાદા ના ચમત્કારો'
-                            ) :
-                              currentMode === 'videos' ? 'દાદા ના દર્શન' :
-                                currentMode === 'policy' ? 'ગોપનીયતા નીતિ' : 'સોદેવ પૂજા'
-                ) : language === 'english' ? (
-                  currentMode === 'chalisa' ? "Dada's Chalisa" :
-                    currentMode === 'mantras' ? "Dada's Siddh Mantras" :
-                      currentMode === 'bhajans' ? "Dada's Bhajans" :
-                        currentMode === 'aartis' ? "Dada's Aarti" :
-                          currentMode === 'stutis' ? "Dada's Stuti" :
-                            currentMode === 'history' ? (
-                              historyView === 'menu' ? "Dada's History" :
-                                historyView === 'lifeStory' ? "Dada's Life Story" :
-                                  historyView === 'incidentDetail' && activeIncidentIndex !== null ? historyData.incidents[activeIncidentIndex].title[language] : "Dada's Miracles"
-                            ) :
-                              currentMode === 'videos' ? "Dada's Darshan" :
-                                currentMode === 'policy' ? 'Privacy Policy' : 'Sodev Pooja'
-                ) : (
-                  currentMode === 'chalisa' ? 'दादा की चालीसा' :
-                    currentMode === 'mantras' ? 'दादा के सिद्ध मंत्र' :
-                      currentMode === 'bhajans' ? 'दादा के भजन' :
-                        currentMode === 'aartis' ? 'दादा की आरती' :
-                          currentMode === 'stutis' ? 'दादा की स्तुति' :
-                            currentMode === 'history' ? (
-                              historyView === 'menu' ? 'दादा का इतिहास' :
-                                historyView === 'lifeStory' ? 'दादा की जीवन कथा' :
-                                  historyView === 'incidentDetail' && activeIncidentIndex !== null ? historyData.incidents[activeIncidentIndex].title[language] : 'दादा के चमत्कार'
-                            ) :
-                              currentMode === 'videos' ? 'दादा के दर्शन' :
-                                currentMode === 'policy' ? 'गोपनीयता नीति' : 'सोदेव पूजा'
-                )}
-              </div>
-              <div className="page-subtitle">
-                {['chalisa', 'mantras', 'bhajans', 'aartis', 'stutis'].includes(currentMode) && repeatCount > 1 && (
-                  <div className="jaap-counter">
-                    Jaap {currentRepeat + 1} of {repeatCount}
-                  </div>
-                )}
-                {currentMode === 'videos' && (
-                  language === 'gujarati' ? 'સોદેવપીર દર્શન સંગ્રહ' :
-                    language === 'english' ? 'Sodevpir Darshan Collection' : 'सोदेवपीर दर्शन संग्रह'
-                )}
-              </div>
-            </div>
-
-            {currentMode === 'chalisa' ? (
-              chalisaData.lyrics.map((verse, index) => (
-                <div key={index} className={`verse glass-panel ${activeVerse === index ? 'active-verse' : ''}`}>
-                  <div className="hindi-text">{verse[language] || verse.gujarati || verse.hindi}</div>
-                </div>
-              ))
-            ) : currentMode === 'mantras' ? (
-              mantras.map((mantra, index) => (
-                <div
-                  key={index}
-                  className={`verse glass-panel ${activeItemIndex === index ? 'active-verse' : ''}`}
-                  onClick={() => {
-                    setActiveItemIndex(index);
-                    pauseMainAudio();
-                  }}
-                >
-                  <div style={{ color: 'var(--secondary)', fontSize: '0.9rem', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                    {mantra.name} {activeItemIndex === index && (
-                      language === 'gujarati' ? ' (પસંદ કરેલ)' :
-                        language === 'english' ? ' (Selected)' : ' (चयनित)'
-                    )}
-                  </div>
-                  <div className="hindi-text" style={{ fontSize: '1.2rem' }}>
-                    {mantra[language] || mantra.gujarati || mantra.hindi}
-                  </div>
-                </div>
-              ))
-            ) : currentMode === 'bhajans' ? (
-              bhajans.map((bhajan, index) => (
-                <div
-                  key={index}
-                  className={`verse glass-panel ${activeItemIndex === index ? 'active-verse' : ''}`}
-                  onClick={() => {
-                    setActiveItemIndex(index);
-                    pauseMainAudio();
-                  }}
-                >
-                  <div style={{ color: 'var(--secondary)', fontSize: '0.9rem' }}>
-                    {bhajan[language] || bhajan.name} {activeItemIndex === index && (
-                      language === 'gujarati' ? ' (પસંદ કરેલ)' :
-                        language === 'english' ? ' (Selected)' : ' (चयनित)'
-                    )}
-                  </div>
-                </div>
-              ))
-            ) : currentMode === 'aartis' ? (
-              aartis.map((verse, index) => (
-                <div key={index} className="verse glass-panel">
-                  <div className="hindi-text">{verse[language] || verse.gujarati || verse.hindi}</div>
-                </div>
-              ))
-            ) : currentMode === 'stutis' ? (
-              stutis.map((verse, index) => (
-                <div key={index} className="verse glass-panel">
-                  <div className="hindi-text">{verse[language] || verse.gujarati || verse.hindi}</div>
-                </div>
-              ))
-            ) : currentMode === 'history' ? (
-              <div className="history-section-container">
-                {historyView === 'menu' ? (
-                  <>
-                    <div className="page-header center-header">
-                      <div className="page-subtitle">{language === 'english' ? 'Choose a Section to Read' : 'પઠન માટે વિભાગ પસંદ કરો'}</div>
-                    </div>
-                    <div className="history-menu-grid">
-                      <button className="history-menu-card glass-panel" onClick={() => { setHistoryView('lifeStory'); triggerHaptic(ImpactStyle.Medium); }}>
-                        <div className="menu-card-icon">📖</div>
-                        <div className="menu-card-content">
-                          <div className="menu-card-title">{
-                            language === 'gujarati' ? 'જીવન ચરિત્ર' :
-                              language === 'english' ? 'Life History' : 'जीवन चरित्र'
-                          }</div>
-                          <div className="menu-card-subtitle">{
-                            language === 'english' ? 'Sacred Story & Journey' : 'Life Story & Miracles'
-                          }</div>
-                        </div>
-                      </button>
-                      <button className="history-menu-card glass-panel" onClick={() => { setHistoryView('incidents'); triggerHaptic(ImpactStyle.Medium); }}>
-                        <div className="menu-card-icon">✨</div>
-                        <div className="menu-card-content">
-                          <div className="menu-card-title">{
-                            language === 'gujarati' ? 'દાદાના ચમત્કારો' :
-                              language === 'english' ? 'Divine Miracles' : 'दादा के चमत्कार'
-                          }</div>
-                          <div className="menu-card-subtitle">{
-                            language === 'english' ? 'True Incidents of Dada' : 'True Incidents Index'
-                          }</div>
-                        </div>
-                      </button>
-                    </div>
-                  </>
-                ) : historyView === 'lifeStory' ? (
-                  <>
-                    <div className="page-header center-header">
-                      <div className="page-subtitle">{language === 'english' ? 'Sacred Journey of Sodevpir Dada' : 'શ્રી સોદેવપીર દાદાની જીવન ગાથા'}</div>
-                    </div>
-                    {historyData.lifeStory.content.map((item) => (
-                      <div key={item.id} className="verse glass-panel">
-                        <div style={{ color: 'var(--secondary)', fontSize: '1.2rem', marginBottom: '15px' }}>
-                          {item.subtitle[language] || item.subtitle.hindi}
-                        </div>
-                        <div className="hindi-text" style={{ fontSize: '1.1rem', textAlign: 'left' }}>
-                          {item.text[language] || item.text.hindi}
-                        </div>
-                      </div>
-                    ))}
-                  </>
-                ) : historyView === 'incidents' ? (
-                  <>
-                    <div className="page-header center-header">
-                      <div className="page-subtitle">{language === 'english' ? 'Select a Miracle to Read' : 'વાંચવા માટે એક ચમત્કાર પસંદ કરો'}</div>
-                    </div>
-                    <div className="incidents-grid">
-                      {historyData.incidents.map((incident, idx) => (
-                        <button
-                          key={incident.id}
-                          className={`incident-select-card glass-panel ${activeIncidentIndex === idx ? 'active' : ''}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setActiveIncidentIndex(idx);
-                            setHistoryView('incidentDetail');
-                            triggerHaptic(ImpactStyle.Light);
-                          }}
-                        >
-                          <span className="incident-number">#{idx + 1}</span>
-                          <span className="incident-title-text">{incident.title[language] || incident.title.hindi}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </>
-                ) : historyView === 'incidentDetail' ? (
-                  <div className="selected-incident-viewer-fullscreen active-verse">
-                    <div className="page-header center-header">
-                      <div className="page-subtitle">{
-                        language === 'gujarati' ? 'ચમત્કારનો ઇતિહાસ' :
-                          language === 'english' ? 'History of Miracle' : 'चमत्कार का इतिहास'
-                      }</div>
-                    </div>
-                    {activeIncidentIndex !== null && historyData.incidents[activeIncidentIndex] && (
-                      <div className="hindi-text incident-content-full">
-                        {historyData.incidents[activeIncidentIndex].content[language] || historyData.incidents[activeIncidentIndex].content.hindi}
-                      </div>
-                    )}
-                  </div>
-                ) : null}
-              </div>
-            ) : currentMode === 'videos' ? (
-              <div className="videos-section-container">
-                <div className="videos-grid-flow">
-                  {videos.map((vid) => (
-                    <div key={vid.id} className="video-premium-card glass-panel">
-                      <div className="video-container-wrapper">
-                        <iframe
-                          width="100%"
-                          height="200"
-                          src={`https://www.youtube.com/embed/${vid.youtubeId}?modestbranding=1&rel=0`}
-                          title={vid.title}
-                          frameBorder="0"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                        ></iframe>
-                      </div>
-                      <div className="video-card-details">
-                        <div className="video-platform-badge">
-                          <span className="youtube-logo">🔴</span> YouTube
-                        </div>
-                        <div className="video-card-title">
-                          {vid[language] || vid.gujarati || vid.hindi}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : currentMode === 'policy' ? (
-              <div className="policy-section-container">
-                <div className="page-header">
-                  <div className="page-subtitle">Privacy & Data Transparency</div>
-                </div>
-                <div className="verse glass-panel" style={{ textAlign: 'center', marginBottom: '30px', padding: '15px' }}>
-                  <div style={{ color: 'var(--secondary)', fontSize: '0.85rem', opacity: 0.8 }}>
-                    Last Updated: {policyData.lastUpdated}
-                  </div>
-                </div>
-                {policyData.sections.map((section, idx) => (
-                  <div key={idx} className="verse glass-panel">
-                    <div style={{ color: 'var(--secondary)', fontSize: '1.2rem', marginBottom: '15px' }}>
-                      {section.subtitle[language] || section.subtitle.english}
-                    </div>
-                    <div className="hindi-text" style={{ fontSize: '1.1rem', textAlign: 'left' }}>
-                      {section.text[language] || section.text.english}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : null}
-          </main>
+          <LyricsViewer 
+            currentMode={currentMode}
+            language={language}
+            activeVerse={activeVerse}
+            activeItemIndex={activeItemIndex}
+            activeIncidentIndex={activeIncidentIndex}
+            setActiveItemIndex={setActiveItemIndex}
+            historyView={historyView}
+            setHistoryView={setHistoryView}
+            setActiveIncidentIndex={setActiveIncidentIndex}
+            currentRepeat={currentRepeat}
+            repeatCount={repeatCount}
+            startReading={startReading}
+            triggerHaptic={triggerHaptic}
+            pauseMainAudio={pauseMainAudio}
+            chalisaData={chalisaData}
+            mantras={mantras}
+            bhajans={bhajans}
+            aartis={aartis}
+            stutis={stutis}
+            historyData={historyData}
+            videos={videos}
+            policyData={policyData}
+            setIsLyricsVisible={setIsLyricsVisible}
+          />
         )}
 
         {/* Divine Signature Footer */}

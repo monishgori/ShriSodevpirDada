@@ -439,6 +439,21 @@ body {
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ANDROID OPTIMIZATION: REMOVE TEXT BACKGROUNDS */
+.is-android .verse {
+  background: transparent !important;
+  border: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.is-android .glass-panel {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(0, 0, 0, 0.7); /* Fallback to solid transparency */
+}
+
 .verse.active-verse {
   border: 1px solid var(--secondary);
   background: hsla(28, 100%, 50%, 0.1);
@@ -449,6 +464,13 @@ body {
     inset 0 0 15px hsla(45, 100%, 50%, 0.1);
   animation: verse-float 4s infinite ease-in-out;
   z-index: 2;
+}
+
+.is-android .verse.active-verse {
+  background: transparent !important;
+  border-bottom: 2px solid var(--secondary) !important;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.4) !important;
+  text-shadow: 0 0 20px rgba(255, 165, 0, 0.4), 0 2px 4px rgba(0,0,0,0.8) !important;
 }
 
 @keyframes verse-float {
