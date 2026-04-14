@@ -974,11 +974,15 @@ function App() {
     try {
       await ensureNotificationPermission();
 
+      // IF REPEAT COUNT > 1, WE PLAY (N-1) REPEATS NATIVELY, 
+      // THEN JS WILL INTERCEPT THE END TO PLAY BELL, THEN 1 FINAL REPEAT
+      const nativeRepeatCount = repeatCountRef.current > 1 ? repeatCountRef.current - 1 : repeatCountRef.current;
+
       const status = await NativeAudio.prepare({
         src: path,
         title: getCurrentTrackTitle(),
         artist: 'Shri Sodevpir Dada',
-        repeatCount: repeatCountRef.current
+        repeatCount: nativeRepeatCount
       });
       
       const statusData = status || {};
@@ -1062,17 +1066,33 @@ function App() {
 
     audio.onended = () => {
       if (currentRepeat + 1 < repeatCount) {
-        setCurrentRepeat(prev => prev + 1);
-        audio.currentTime = 0;
-        // Small delay protects against "rapid fire" bugs on some mobile OS
-        setTimeout(() => {
-          if (audio) {
-            audio.play().catch(e => console.error("Repeater Error:", e.message));
-          }
-        }, 200);
+        const nextRepeatIndex = currentRepeat + 1;
+        
+        // IF NEXT REPEAT IS THE FINAL ONE, PLAY INDICATOR
+        if (nextRepeatIndex === repeatCount - 1 && repeatCount > 1) {
+          // Play Bell
+          ringBell();
+          
+          // Wait for bell (approx 1s) then play final track
+          setTimeout(() => {
+            setCurrentRepeat(nextRepeatIndex);
+            if (audio) {
+              audio.currentTime = 0;
+              audio.play().catch(e => console.error("Final Repeater Error:", e.message));
+            }
+          }, 1200);
+        } else {
+          // Normal Repeat
+          setCurrentRepeat(nextRepeatIndex);
+          audio.currentTime = 0;
+          setTimeout(() => {
+            if (audio) {
+              audio.play().catch(e => console.error("Repeater Error:", e.message));
+            }
+          }, 200);
+        }
       } else {
         setIsPlaying(false);
-        // currentRepeat is NOT reset here so the UI can show the final total (e.g. 11/11)
         audio.currentTime = audio.duration || 0;
       }
     };
@@ -1099,9 +1119,27 @@ function App() {
       });
 
       endedListener = await NativeAudio.addListener('playbackEnded', async () => {
-        // currentRepeat is NOT reset here so the UI can show the final total
-        setIsPlaying(false);
-        await syncNativeStatus();
+        // ROBUST FINAL REPEAT INDICATOR FOR NATIVE
+        const currentCount = await NativeAudio.getStatus().then(s => Number(s?.currentRepeat || 0));
+        
+        if (repeatCount > 1 && currentCount === repeatCount - 1) {
+          // Play indicator first
+          await NativeAudio.bell().catch(() => {});
+          
+          // Wait 1.5s for bell, then play final loop
+          setTimeout(async () => {
+            try {
+              // Play the track one last time (repeatCount 1)
+              await NativeAudio.play();
+              setIsPlaying(true);
+            } catch (err) {
+              console.error("Final Native Play Error:", err);
+            }
+          }, 1500);
+        } else {
+          setIsPlaying(false);
+          await syncNativeStatus();
+        }
       });
 
       await syncNativeStatus();
