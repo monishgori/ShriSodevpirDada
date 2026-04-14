@@ -212,28 +212,9 @@ const ParticlesBackground = React.memo(() => {
 });
 
 // 3. Divine Header (Isolated)
-const DivineHeader = React.memo(({ language, greeting, isLyricsVisible, isFocusMode, dailyQuote, onHomeClick, onTestNotify }) => {
+const DivineHeader = React.memo(({ language, greeting, isLyricsVisible, isFocusMode, dailyQuote, onHomeClick }) => {
   return (
     <header className="top-bar">
-      {/* TEMP DEBUG BUTTON MOVED HERE TO AVOID ADS */}
-      <button 
-        onClick={onTestNotify}
-        style={{ 
-          position: 'absolute',
-          top: '60px',
-          left: '20px',
-          zIndex: 100,
-          background: 'rgba(0,0,0,0.7)', 
-          color: 'var(--secondary)', 
-          border: '1px solid var(--secondary)',
-          padding: '4px 8px',
-          borderRadius: '10px',
-          fontSize: '0.5rem',
-          cursor: 'pointer'
-        }}
-      >
-        DEBUG: TEST NOTIFY
-      </button>
       <div className="divine-centerpiece">
         <div className="divine-name" onClick={onHomeClick}>ૐ શ્રી સાદેવપીર દાદાય નમઃ</div>
       </div>
@@ -768,26 +749,6 @@ function App() {
     } catch (e) {
       console.error("Retention Notification Error:", e);
     }
-  };
-
-  // DEBUG FUNCTION: TRIGGERS IMMEDIATE NOTIFICATION FOR TESTING
-  const testRetentionNotifications = async () => {
-    if (!isNativeAndroid) {
-      alert("Debug: Retention Notification Test (Simulated on Web)");
-      return;
-    }
-    try {
-      await LocalNotifications.schedule({
-        notifications: [{
-          id: 99,
-          title: "TEST: Dada aapko yaad kar rahe hain! 🔱",
-          body: "Verification: This is how your reminder will look after 3 days. 🙏",
-          schedule: { at: new Date(Date.now() + 5000) }, // 5 SECONDS FROM NOW
-          sound: 'bell.mp3'
-        }]
-      });
-      alert("Success: Notification will arrive in 5 seconds. Close the app to see it!");
-    } catch (e) { alert("Test Error: " + e.message); }
   };
 
   useEffect(() => {
@@ -1372,7 +1333,6 @@ function App() {
           isFocusMode={isFocusMode}
           dailyQuote={dailyQuote}
           onHomeClick={() => setIsLyricsVisible(false)}
-          onTestNotify={testRetentionNotifications}
         />
 
         <div className="bottom-dashboard-container">
