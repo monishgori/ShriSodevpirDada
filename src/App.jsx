@@ -1060,15 +1060,11 @@ function App() {
     try {
       await ensureNotificationPermission();
 
-      // IF REPEAT COUNT > 1, WE PLAY (N-1) REPEATS NATIVELY, 
-      // THEN JS WILL INTERCEPT THE END TO PLAY BELL, THEN 1 FINAL REPEAT
-      const nativeRepeatCount = repeatCountRef.current > 1 ? repeatCountRef.current - 1 : repeatCountRef.current;
-
       const status = await NativeAudio.prepare({
         src: path,
         title: getCurrentTrackTitle(),
         artist: 'Shri Sodevpir Dada',
-        repeatCount: nativeRepeatCount
+        repeatCount: repeatCountRef.current
       });
       
       const statusData = status || {};
@@ -1205,27 +1201,8 @@ function App() {
       });
 
       endedListener = await NativeAudio.addListener('playbackEnded', async () => {
-        // ROBUST FINAL REPEAT INDICATOR FOR NATIVE
-        const currentCount = await NativeAudio.getStatus().then(s => Number(s?.currentRepeat || 0));
-        
-        if (repeatCount > 1 && currentCount === repeatCount - 1) {
-          // Play indicator first
-          await NativeAudio.bell().catch(() => {});
-          
-          // Wait 1.5s for bell, then play final loop
-          setTimeout(async () => {
-            try {
-              // Play the track one last time (repeatCount 1)
-              await NativeAudio.play();
-              setIsPlaying(true);
-            } catch (err) {
-              console.error("Final Native Play Error:", err);
-            }
-          }, 1500);
-        } else {
-          setIsPlaying(false);
-          await syncNativeStatus();
-        }
+        setIsPlaying(false);
+        await syncNativeStatus();
       });
 
       await syncNativeStatus();
