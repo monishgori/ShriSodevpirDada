@@ -212,9 +212,28 @@ const ParticlesBackground = React.memo(() => {
 });
 
 // 3. Divine Header (Isolated)
-const DivineHeader = React.memo(({ language, greeting, isLyricsVisible, isFocusMode, dailyQuote, onHomeClick }) => {
+const DivineHeader = React.memo(({ language, greeting, isLyricsVisible, isFocusMode, dailyQuote, onHomeClick, onTestNotify }) => {
   return (
     <header className="top-bar">
+      {/* TEMP DEBUG BUTTON MOVED HERE TO AVOID ADS */}
+      <button 
+        onClick={onTestNotify}
+        style={{ 
+          position: 'absolute',
+          top: '60px',
+          left: '20px',
+          zIndex: 100,
+          background: 'rgba(0,0,0,0.7)', 
+          color: 'var(--secondary)', 
+          border: '1px solid var(--secondary)',
+          padding: '4px 8px',
+          borderRadius: '10px',
+          fontSize: '0.5rem',
+          cursor: 'pointer'
+        }}
+      >
+        DEBUG: TEST NOTIFY
+      </button>
       <div className="divine-centerpiece">
         <div className="divine-name" onClick={onHomeClick}>ૐ શ્રી સાદેવપીર દાદાય નમઃ</div>
       </div>
@@ -1336,6 +1355,7 @@ function App() {
           isFocusMode={isFocusMode}
           dailyQuote={dailyQuote}
           onHomeClick={() => setIsLyricsVisible(false)}
+          onTestNotify={testRetentionNotifications}
         />
 
         <div className="bottom-dashboard-container">
@@ -1532,24 +1552,6 @@ function App() {
 
         {/* Divine Signature Footer */}
         <footer style={{ textAlign: 'center', padding: '40px 0 120px 0', opacity: 0.25 }}>
-          {/* TEMPORARY TEST BUTTON - REMOVE BEFORE PLAY STORE BUILD */}
-          <div style={{ marginBottom: '15px', pointerEvents: 'auto', opacity: 1 }}>
-            <button 
-              onClick={testRetentionNotifications}
-              style={{ 
-                background: 'rgba(0,0,0,0.5)', 
-                color: 'var(--secondary)', 
-                border: '1px solid var(--secondary)',
-                padding: '6px 12px',
-                borderRadius: '20px',
-                fontSize: '0.65rem',
-                cursor: 'pointer'
-              }}
-            >
-              DEBUG: TEST NOTIFICATIONS
-            </button>
-          </div>
-          
           <div style={{ fontSize: '0.65rem', letterSpacing: '4px', textTransform: 'uppercase', fontWeight: '900' }}>
             {language === 'gujarati' ? 'બનાવ્યું: DS Digital\'s' : language === 'english' ? 'CREATED BY: DS DIGITAL\'S' : 'બનાયા ગયા: DS Digital\'s'}
           </div>
